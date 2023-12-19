@@ -29,6 +29,7 @@
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Günlük Fiyat</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Müsaitlik Durumu</th>
                                         <th class="text-secondary opacity-7"></th>
+                                        <th class="text-secondary opacity-7"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -48,8 +49,13 @@
                                                <span class="badge badge-sm bg-gradient-success">{{$room->is_available == 1 ? 'Müsait': 'Müsait Değil'}}</span>
                                            </td>
                                            <td class="align-middle">
-                                               <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                   Edit
+                                               <a href="{{route('room-management.edit', $room->id)}}" class="btn btn-sm btn-secondary text-secondary text-white font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                   Bilgeri Düzenle
+                                               </a>
+                                           </td>
+                                           <td class="align-middle">
+                                               <a href="{{route('room-management.upload.images.create', $room->id)}}" class="btn btn-sm btn-secondary text-secondary text-white font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                   Resimleri Düzenle
                                                </a>
                                            </td>
                                        </tr>

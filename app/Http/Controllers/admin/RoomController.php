@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\RoomCreateRequest;
+use App\Http\Requests\admin\RoomUpdateRequest;
 use App\Models\Hotel;
 use App\Models\Room;
 use Illuminate\Http\Request;
@@ -79,7 +80,7 @@ class RoomController extends Controller
                ]);
     }
 
-    private function createImage(RoomCreateRequest $request, Room $room, string $hotelName): void
+    private function createImage(Request $request, Room $room, string $hotelName): void
     {
 
         // Eğer dosya yüklendi ise
@@ -93,7 +94,7 @@ class RoomController extends Controller
                     ->move(public_path($hotelName .'/room_images'), $imageName);
 
             // Otel modeline dosyanın yolu ekleniyor
-            $room->base_image = '/room_images/' . $imageName;
+            $room->base_image = "/".$hotelName.'/room_images/' . $imageName;
         }
     }
 
@@ -116,15 +117,34 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-        //
+        return view('admin.roomManagement.edit', compact('room'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Room $room)
+    public function update(RoomUpdateRequest $request, Room $room)
     {
-        //
+        $validated = $request->validated();
+
+        $room->title = $validated['title'];
+        $room->room_type = $validated['room_type'];
+        $room->capacity = $validated['capacity'];
+        $room->description = $validated['description'];
+        $room->price = $validated['price'];
+        $room->is_available = $validated['is_available'];
+
+        if ($request->hasFile('image')) {
+            $this->createImage($request, $room, $room->hotel->name);
+        }
+
+        $room->save();
+
+        return redirect()
+        ->route('room-management.upload.images.create', ['room' => $room])
+        ->with([
+                   'success' => 'Oda başarıyla güncellendi. Şimdi odaya ait resimleri düzenleyebilirsiniz.'
+               ]);
     }
 
     /**

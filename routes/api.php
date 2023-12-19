@@ -19,5 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('test', function () {
-    return \App\Models\Hotel::all();
+    return \App\Models\Room::select('id')->limit(10)->get();
 });

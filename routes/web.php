@@ -24,10 +24,17 @@ Route::middleware(['auth'])->group(function () {
         return view('admin.dashboard.index');
     })->name('dashboard');
 
+    /** Hotel Management routes */
     Route::resource('hotel-management', HotelController::class);
+
+    /** Room Management routes */
     Route::get('room-management/{hotel}/create', [RoomController::class, 'create'])->name('room-management.create');
     Route::post('room-management/{hotel}', [RoomController::class, 'store'])->name('room-management.store');
+
+
     Route::get('upload-room-images/{room}/create', [RoomController::class, 'uploadImagesCreate'])->name('room-management.upload.images.create');
+    Route::get('upload-room-images/{room}/edit', [RoomController::class, 'edit'])->name('room-management.edit');
+    Route::put('upload-room-images/{room}/update', [RoomController::class, 'update'])->name('room-management.update');
     Route::post('upload-room-images/{room}', [RoomController::class, 'uploadImages'])->name('room-management.upload.images');
     Route::post('upload-room-images-delete/{room}/{media}', [RoomController::class, 'deleteImages'])->name('room-management.delete.images');
 
