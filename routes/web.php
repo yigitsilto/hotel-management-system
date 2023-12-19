@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\HotelController;
+use App\Http\Controllers\admin\HotelController;
+use App\Http\Controllers\admin\RoomController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,12 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 
     Route::resource('hotel-management', HotelController::class);
+    Route::get('room-management/{hotel}/create', [RoomController::class, 'create'])->name('room-management.create');
+    Route::post('room-management/{hotel}', [RoomController::class, 'store'])->name('room-management.store');
+    Route::get('upload-room-images/{room}/create', [RoomController::class, 'uploadImagesCreate'])->name('room-management.upload.images.create');
+    Route::post('upload-room-images/{room}', [RoomController::class, 'uploadImages'])->name('room-management.upload.images');
+    Route::post('upload-room-images-delete/{room}/{media}', [RoomController::class, 'deleteImages'])->name('room-management.delete.images');
+
 });
 
 Route::middleware('auth')

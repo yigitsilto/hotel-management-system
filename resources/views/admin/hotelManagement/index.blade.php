@@ -18,11 +18,11 @@
                     <div class="card mb-4">
                         <div class="card-header pb-0 p-3">
                             <div class="row mt-3">
-                                <div class="col-10">
+                                <div class="col-lg-10 col-md-12">
                                     <h6 class="mb-1">Kayıtlı Oteller</h6>
                                     <p class="text-sm">Sisteme kayıt ettiğiniz otel bilgilerini içerir.</p>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-lg-2 col-md-12">
                                     <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('hotel-management.create')}}">
                                         Yeni Kayıt Ekle
                                     </a>
@@ -39,11 +39,11 @@
                             <div class="row">
                                @foreach($hotels as $hotel)
 
-                                    <div class="col-xl-3 col-md-6 mb-xl-0 mb-4 mt-4 {{$hotel->is_available ? '' : 'inactive'}}" id="hotel-card" >
+                                    <div class="col-xl-4 col-md-6 mb-xl-0 mb-4 mt-4 {{$hotel->is_available ? '' : 'inactive'}}" id="hotel-card" >
                                             <div class="card card-blog card-plain">
                                                 <div class="position-relative">
                                                     <a href="{{route('hotel-management.show', $hotel->id)}}" target="_blank" class="d-block shadow-xl border-radius-xl cursor-pointer">
-                                                        <img src="{{ asset($hotel->image) }}" alt="img-blur-shadow" style="width: 400px; height: 250px; object-fit: cover" class="img-fluid shadow border-radius-xl">
+                                                        <img src="{{ asset($hotel->image) }}" alt="img-blur-shadow" style="width: 100%; height: 250px; object-fit: cover" class="img-fluid shadow border-radius-xl">
                                                     </a>
                                                 </div>
                                                 <div class="card-body px-1 pb-0">
