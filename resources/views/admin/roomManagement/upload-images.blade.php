@@ -65,15 +65,17 @@
                                 <div class="col-12">
                                     <form action="{{route('room-management.upload.images', $room->id)}}" class="dropzone" id="myDropzone">
                                         @csrf
-
                                     </form>
-
                                     <br>
-                                   <div class="rightMost" style="display: flex; justify-content: center; flex: 1">
-                                       <a href="{{route('room-management.upload.images.create', $room->id)}}" class="btn btn-primary">Resimleri Kaydet</a>
-                                   </div>
+                                  <div class="row">
+                                      <div class="col-6" style="display: flex; justify-content: center; flex: 1">
+                                          <a href="{{route('room-management.upload.images.create', $room->id)}}" class="btn btn-outline-primary">Kaydet Ve Ekranda Kal</a>
+                                      </div>
+                                      <div class="col-6" style="display: flex; justify-content: center; flex: 1">
+                                          <a href="{{route('hotel-management.show', $room->hotel->id)}}" class="btn btn-outline-primary">Kaydet Ve Geri Dön</a>
+                                      </div>
+                                  </div>
                                 </div>
-
                                 <div class="col-12">
                                     <div class="row">
                                         @foreach($medias as $media)

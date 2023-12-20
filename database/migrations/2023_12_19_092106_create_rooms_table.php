@@ -22,6 +22,7 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->decimal('price', 10, 2);
             $table->boolean('is_available')->default(true); // Otel müsait mi?
+            $table->integer('same_room_count')->default(1); // Aynı odadan kaç tane var?
             $table->timestamps();
         });
     }

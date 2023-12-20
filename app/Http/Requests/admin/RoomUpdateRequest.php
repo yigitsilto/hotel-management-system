@@ -30,6 +30,7 @@ class RoomUpdateRequest extends FormRequest
                 'capacity' => 'nullable|integer|min:0',
                 'is_available' => 'required|boolean',
                 'price' => 'required|numeric|min:0',
+                'same_room_count' => 'required|integer|min:1',
         ];
     }
 }

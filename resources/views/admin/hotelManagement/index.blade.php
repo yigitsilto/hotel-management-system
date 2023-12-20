@@ -42,13 +42,13 @@
                                     <div class="col-xl-4 col-md-6 mb-xl-0 mb-4 mt-4 {{$hotel->is_available ? '' : 'inactive'}}" id="hotel-card" >
                                             <div class="card card-blog card-plain">
                                                 <div class="position-relative">
-                                                    <a href="{{route('hotel-management.show', $hotel->id)}}" target="_blank" class="d-block shadow-xl border-radius-xl cursor-pointer">
+                                                    <a href="{{route('hotel-management.show', $hotel->id)}}"  class="d-block shadow-xl border-radius-xl cursor-pointer">
                                                         <img src="{{ asset($hotel->image) }}" alt="img-blur-shadow" style="width: 100%; height: 250px; object-fit: cover" class="img-fluid shadow border-radius-xl">
                                                     </a>
                                                 </div>
                                                 <div class="card-body px-1 pb-0">
                                                     <p class="text-gradient text-dark mb-2 text-sm">Oda Sayısı: {{$hotel->total_rooms}}</p>
-                                                    <a href="{{route('hotel-management.show', $hotel->id)}}" target="_blank">
+                                                    <a href="{{route('hotel-management.show', $hotel->id)}}">
                                                         <h5>
                                                             {{$hotel->name}}
                                                         </h5>
