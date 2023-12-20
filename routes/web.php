@@ -26,6 +26,7 @@ Route::middleware(['auth'])->group(function () {
 
     /** Hotel Management routes */
     Route::resource('hotel-management', HotelController::class);
+    Route::resource('user-management', \App\Http\Controllers\admin\UserController::class);
 
     /** Room Management routes */
     Route::get('room-management/{hotel}/create', [RoomController::class, 'create'])->name('room-management.create');
