@@ -53,9 +53,9 @@
                                                             {{$hotel->name}}
                                                         </h5>
                                                     </a>
-                                                    <p class="mb-4 text-sm" style="height: 80px">
-                                                        {{ Str::limit($hotel->description, 150) }}
-                                                    </p>
+                                                    <div class="mb-4 text-sm" style="height: 80px">
+                                                        {!! Str::limit($hotel->description, 200) !!}
+                                                    </div>
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <a target="_blank" href="{{route('hotel-management.show', $hotel->id)}}" type="button" class="btn btn-outline-primary btn-sm mb-0">Oda Yönetimi</a>
                                                         <a href="{{route('hotel-management.edit', $hotel->id)}}" class="btn btn-outline-primary btn-sm mb-0">Düzenle</a>
