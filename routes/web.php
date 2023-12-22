@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\HotelController;
 use App\Http\Controllers\admin\RoomController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,9 +18,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check() && Auth::user()->role == 'ADMIN') {
+        return redirect()->route('dashboard');
+    }
+
+    if (Auth::check() && Auth::user()->role == 'USER') {
+        return redirect()->route('user-dashboard');
+    }
+
+    return redirect()->route('login');
 });
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', function () {
         return view('admin.dashboard.index');
     })->name('dashboard');
@@ -38,6 +47,16 @@ Route::middleware(['auth'])->group(function () {
     Route::put('upload-room-images/{room}/update', [RoomController::class, 'update'])->name('room-management.update');
     Route::post('upload-room-images/{room}', [RoomController::class, 'uploadImages'])->name('room-management.upload.images');
     Route::post('upload-room-images-delete/{room}/{media}', [RoomController::class, 'deleteImages'])->name('room-management.delete.images');
+
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user-dashboard', [\App\Http\Controllers\user\DashboardController::class, 'index'])->name('user-dashboard');
+    Route::get('/user-reservation/{hotel}', [\App\Http\Controllers\user\RezervationController::class, 'index'])->name
+    ('user-reservation');
+    Route::get('/user-reservation/detail/{room}', [\App\Http\Controllers\user\RezervationController::class, 'show'])
+         ->name
+    ('user-reservation.show');
 
 });
 
