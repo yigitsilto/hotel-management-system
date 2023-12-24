@@ -37,7 +37,7 @@
                                     <div class="col-xl-3 col-md-6 mb-xl-0 mb-4 mt-4" id="hotel-card" >
                                         <div class="card card-blog card-plain">
                                             <div class="position-relative">
-                                                <a href="{{route('hotel-management.show', $item->id)}}"  class="d-block shadow-xl border-radius-xl cursor-pointer">
+                                                <a href="{{route('user-reservation.showRoom', $item->id)}}"  class="d-block shadow-xl border-radius-xl cursor-pointer">
                                                     <img src="{{ asset($item->base_image) }}" alt="img-blur-shadow" style="width: 100%; height: 250px; object-fit: cover" class="img-fluid shadow border-radius-xl">
                                                 </a>
                                             </div>
@@ -45,16 +45,16 @@
                                                 <p class="text-gradient text-dark mb-2 text-sm">Günlük Ücret: {{moneyFormat($item->price)}}</p>
                                                 <p class="text-gradient text-dark mb-2 text-sm">Oda Tipi: {{$item->room_type}}</p>
                                                 <p class="text-gradient text-dark mb-2 text-sm">Kişi Sayısı: {{$item->capacity}}</p>
-                                                <a href="{{route('user-reservation', $item->id)}}">
+                                                <a href="{{route('user-reservation.showRoom', $item->id)}}">
                                                     <h5>
                                                         {{$item->title}}
                                                     </h5>
                                                 </a>
-                                                <div class="mb-4 text-sm" style="height: 80px">
+                                                <div class="mb-4 text-sm" style="height: 120px">
                                                     {!! Str::limit($item->description, 200) !!}
                                                 </div>
                                                 <div class="d-flex align-items-center justify-content-between">
-                                                    <a href="{{route('user-reservation.show', $item->id)}}" type="button" class="btn btn-outline-primary btn-sm mb-0">Detay</a>
+                                                    <a href="{{route('user-reservation.showRoom', $item->id)}}" type="button" class="btn btn-outline-primary btn-sm mb-0">Detay</a>
                                                 </div>
                                             </div>
                                         </div>

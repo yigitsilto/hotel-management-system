@@ -33,7 +33,6 @@
                             @endif
                             <div class="row">
                                 @foreach($hotels as $hotel)
-
                                     <div class="col-xl-4 col-md-6 mb-xl-0 mb-4 mt-4 {{$hotel->is_available ? '' : 'inactive'}}" id="hotel-card" >
                                         <div class="card card-blog card-plain">
                                             <div class="position-relative">
@@ -61,7 +60,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <footer class="footer pt-3  ">

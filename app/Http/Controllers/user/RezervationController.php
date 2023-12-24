@@ -24,5 +24,11 @@ class RezervationController extends Controller
         return view('user.reservationShow', compact( 'room', 'hotel'));
     }
 
+    public function showRoom(Room $room): View
+    {
+        $hotel = $room->hotel;
+        return view('user.room-detail', compact( 'room', 'hotel'));
+    }
+
 
 }
