@@ -25,7 +25,7 @@
                     <div class="nav-wrapper position-relative end-0">
                         <ul class="nav nav-pills nav-fill p-1 bg-transparent" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link mb-0 px-0 py-1 active " data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="true">
+                                <a class="nav-link mb-0 px-0 py-1 active " href="{{route('user-reservation.createReservation', $room->id)}}" role="tab" aria-selected="true">
                                     <svg class="text-dark" width="16px" height="16px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                             <g transform="translate(-2319.000000, -291.000000)" fill="#FFFFFF" fill-rule="nonzero">
@@ -40,7 +40,7 @@
                                             </g>
                                         </g>
                                     </svg>
-                                    <span class="ms-1">Rezervasyon Yap</span>
+                                        <span class="ms-1">Rezervasyon Yap</span>
                                 </a>
                             </li>
                         </ul>
@@ -58,11 +58,7 @@
                             <div class="col-md-8 d-flex align-items-center">
                                 <h6 class="mb-0">Otel Bilgisi</h6>
                             </div>
-                            <div class="col-md-4 text-end">
-                                <a href="javascript:;">
-                                    <i class="fas fa-user-edit text-secondary text-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Profile"></i>
-                                </a>
-                            </div>
+                            
                         </div>
                     </div>
                     <div class="card-body p-3">

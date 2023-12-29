@@ -62,6 +62,26 @@ Route::middleware(['auth'])->group(function () {
          ->name
          ('user-reservation.showRoom');
 
+    Route::get('/reservation-management/create/{room}', [\App\Http\Controllers\user\RezervationController::class,
+                                                             'createReservation'])
+         ->name
+         ('user-reservation.createReservation');
+
+    Route::get('/my-reservations', [\App\Http\Controllers\user\RezervationController::class,
+                                                         'myReservations'])
+         ->name
+         ('user-reservation.myReservations');
+
+    Route::get('/my-reservations/{reservation}', [\App\Http\Controllers\user\RezervationController::class,
+                                    'myReservationDetail'])
+         ->name
+         ('user-reservation.myReservations.detail');
+
+    Route::delete('/my-reservations/{reservation}', [\App\Http\Controllers\user\RezervationController::class,
+                                                  'requestCancelReservation'])
+         ->name
+         ('user-reservation.myReservations.requestCancelReservation');
+
 
 });
 
