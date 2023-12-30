@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\HotelController;
+use App\Http\Controllers\admin\RezervationManagementController;
 use App\Http\Controllers\admin\RoomController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +37,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     /** Hotel Management routes */
     Route::resource('hotel-management', HotelController::class);
     Route::resource('user-management', \App\Http\Controllers\admin\UserController::class);
+    Route::resource('reservation', RezervationManagementController::class);
 
     /** Room Management routes */
     Route::get('room-management/{hotel}/create', [RoomController::class, 'create'])->name('room-management.create');
