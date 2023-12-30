@@ -30,9 +30,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard.index');
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\admin\DashboardController::class, 'index'])->name('dashboard');
 
     /** Hotel Management routes */
     Route::resource('hotel-management', HotelController::class);
