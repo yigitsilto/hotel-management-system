@@ -167,6 +167,14 @@ return [
         'guests' => 'Kişiler',
         'guests.*.name' => 'Kişi Adı',
         'guests.*.age' => 'Kişi Yaşı',
+        'identity_number' => 'TC Kimlik Numarası',
+        'phone' => 'Telefon Numarası',
+        'email' => 'E-posta Adresi',
+        'password' => 'Parola',
+        'password_confirmation' => 'Parola Doğrulama',
+        'room_id' => 'Oda',
+        'surname' => 'Soyisim',
+
     ],
 
 ];

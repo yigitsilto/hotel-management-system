@@ -341,8 +341,6 @@
                             @if($payment_method == 'credit_card')
 
                                 <div class="row">
-
-
                                     <!-- Kart Üzerinde Yazan İsim Soyisim -->
                                     <div class="col-md-12">
                                         <div class="form-group">

@@ -4,10 +4,23 @@
 
         <!-- Name -->
         <div>
-            <x-input-label for="name" :value="__('İsim Soyisim')" />
+            <x-input-label for="name" :value="__('İsim')" />
             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
+
+        <div>
+            <x-input-label for="surname" :value="__('Soyisim')" />
+            <x-text-input id="surname" class="block mt-1 w-full" type="text" name="surname" :value="old('surname')" required autofocus autocomplete="surname" />
+            <x-input-error :messages="$errors->get('surname')" class="mt-2" />
+        </div>
+
+        <div>
+            <x-input-label for="birthday" :value="__('Doğum Tarihi')" />
+            <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" value="{{old('birthday')}}" type="date" name="birthday"  required autofocus autocomplete="birthday" />
+            <x-input-error :messages="$errors->get('birthday')" class="mt-2" />
+        </div>
+
 
         <!-- Email Address -->
         <div class="mt-4">
