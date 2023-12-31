@@ -78,6 +78,8 @@ class ReservationCreatePage extends Component
             $this->addError('error', 'Bir hata oluştu. Lütfen tekrar deneyiniz.');
         }
 
+        return redirect()->route('user-reservation.myReservations')->with('success', 'Rezervasyonunuz başarıyla oluşturuldu.');
+
     }
 
     private function reservationDuplicateCheck(): bool
@@ -85,14 +87,29 @@ class ReservationCreatePage extends Component
         $exists = Reservation::query()
                              ->where('room_id', $this->room->id)
                              ->where('user_id', auth()->id())
+                             ->where(function ($query) {
+                                 $query->whereBetween('check_in_date', [
+                                     $this->check_in_date,
+                                     $this->check_out_date
+                                 ])
+                                       ->orWhereBetween('check_out_date', [
+                                           $this->check_in_date,
+                                           $this->check_out_date
+                                       ])
+                                       ->orWhere(function ($query) {
+                                           $query->where('check_in_date', '<=', $this->check_in_date)
+                                                 ->where('check_out_date', '>=', $this->check_out_date);
+                                       });
+                             })
                              ->whereIn('reservation_status', [
                                  ReservationStatusEnum::Pending->name,
                                  ReservationStatusEnum::Success->name
                              ])
                              ->exists();
 
+
         if ($exists) {
-            $this->addError('check_in_date', 'Bu oda için rezervasyonunuz bulunmaktadır.');
+            $this->addError('error', 'Bu oda için rezervasyonunuz bulunmaktadır.');
             return true;
         }
 
