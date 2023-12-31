@@ -45,15 +45,15 @@ return [
     'filled' => ':attribute alanının doldurulması zorunludur.',
     'gt' => [
         'numeric' => ':attribute, :value değerinden büyük olmalı.',
-        'file'    => ':attribute, :value KB boyutundan büyük olmalı.',
-        'string'  => ':attribute, :value karakterden uzun olmalı.',
-        'array'   => ':attribute, :value taneden fazla olmalı.',
+        'file' => ':attribute, :value KB boyutundan büyük olmalı.',
+        'string' => ':attribute, :value karakterden uzun olmalı.',
+        'array' => ':attribute, :value taneden fazla olmalı.',
     ],
     'gte' => [
         'numeric' => ':attribute, :value kadar veya daha fazla olmalı.',
-        'file'    => ':attribute, :value KB boyutu kadar veya daha büyük olmalı.',
-        'string'  => ':attribute, :value karakter kadar veya daha uzun olmalı.',
-        'array'   => ':attribute, :value tane veya daha fazla olmalı.',
+        'file' => ':attribute, :value KB boyutu kadar veya daha büyük olmalı.',
+        'string' => ':attribute, :value karakter kadar veya daha uzun olmalı.',
+        'array' => ':attribute, :value tane veya daha fazla olmalı.',
     ],
     'image' => ':attribute alanı resim dosyası olmalıdır.',
     'in' => ':attribute değeri geçersiz.',
@@ -65,15 +65,15 @@ return [
     'json' => ':attribute geçerli bir JSON değişkeni olmalıdır.',
     'lt' => [
         'numeric' => ':attribute, :value değerinden küçük olmalı.',
-        'file'    => ':attribute, :value KB boyutundan küçük olmalı.',
-        'string'  => ':attribute, :value karakterden kısa olmalı.',
-        'array'   => ':attribute, :value taneden az olmalı.',
+        'file' => ':attribute, :value KB boyutundan küçük olmalı.',
+        'string' => ':attribute, :value karakterden kısa olmalı.',
+        'array' => ':attribute, :value taneden az olmalı.',
     ],
     'lte' => [
         'numeric' => ':attribute, :value kadar veya daha küçük olmalı.',
-        'file'    => ':attribute, :value KB boyutu kadar veya daha küçük olmalı.',
-        'string'  => ':attribute, :value karakter kadar veya daha kısa olmalı.',
-        'array'   => ':attribute, :value tane veya daha az olmalı.',
+        'file' => ':attribute, :value KB boyutu kadar veya daha küçük olmalı.',
+        'string' => ':attribute, :value karakter kadar veya daha kısa olmalı.',
+        'array' => ':attribute, :value tane veya daha az olmalı.',
     ],
     'max' => [
         'numeric' => ':attribute değeri :max değerinden küçük olmalıdır.',
@@ -154,6 +154,19 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'check_in_date' => 'Giriş Tarihi',
+        'check_out_date' => 'Çıkış Tarihi',
+        'special_requests' => 'Özel İstekler',
+        'payment_method' => 'Ödeme Yöntemi',
+        'name' => 'İsim',
+        'credit_number' => 'Kredi Kartı Numarası',
+        'month' => 'Ay',
+        'year' => 'Yıl',
+        'cvv' => 'CVV',
+        'guests' => 'Kişiler',
+        'guests.*.name' => 'Kişi Adı',
+        'guests.*.age' => 'Kişi Yaşı',
+    ],
 
 ];

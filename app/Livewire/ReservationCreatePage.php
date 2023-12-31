@@ -10,7 +10,7 @@ use Livewire\Component;
 
 class ReservationCreatePage extends Component
 {
-
+    public $totalPriceToPay;
     public $room;
     public $guestSize = 1;
     public $check_in_date;
@@ -24,6 +24,7 @@ class ReservationCreatePage extends Component
     public $year;
     public $cvv;
     public $guests = [];
+    public $loading = false;
 
 
     protected $rules = [
@@ -44,21 +45,39 @@ class ReservationCreatePage extends Component
 
     public function render()
     {
+        if ($this->check_in_date && $this->check_out_date) {
+            $this->totalPriceToPay = moneyFormat($this->calculateTotalPrice());
+        } else {
+            $this->totalPriceToPay = moneyFormat($this->room->price);
+        }
         return view('livewire.reservation-create-page', [
             'room' => $this->room,
             // Pass the room information to the Livewire view
         ]);
     }
 
+    public function calculateTotalPrice()
+    {
+        $checkInDate = Carbon::parse($this->check_in_date);
+        $checkOutDate = Carbon::parse($this->check_out_date);
+        $totalDayCount = $checkInDate->diffInDays($checkOutDate) == 0 ? 1 : $checkInDate->diffInDays($checkOutDate);
+        return $this->room->price * $totalDayCount;
+    }
+
     public function save()
     {
         $this->validate();
-        if ($this->reservationDuplicateCheck()) {
-            return;
+        try {
+            if ($this->reservationDuplicateCheck()) {
+                return;
+            }
+            $this->createReservation()
+                 ->guests()
+                 ->createMany($this->guests);;
+        } catch (\Exception $exception) {
+            $this->addError('error', 'Bir hata oluştu. Lütfen tekrar deneyiniz.');
         }
-        $this->createReservation()
-             ->guests()
-             ->createMany($this->guests);;
+
     }
 
     private function reservationDuplicateCheck(): bool
@@ -103,6 +122,5 @@ class ReservationCreatePage extends Component
                                    ]);
 
     }
-
 
 }

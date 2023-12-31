@@ -120,9 +120,9 @@
                     <div class="card-body p-3">
                         <div class="row">
                             <div class="container">
-                                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+                                <div class="row">
                                    @foreach($room->getMedia('room_images') as $image)
-                                        <div class="col mt-3 p-0">
+                                        <div class="col-3 mt-3 p-1">
                                             <a href="{{$image->getUrl()}}" target="_blank" rel="noopener noreferrer">
                                                 <img src="{{$image->getUrl()}}" style="width: 400px; height: 200px; object-fit: cover; border: 2px solid #ccc; border-radius: 8px;" class="img-fluid" alt="image">
                                             </a>
