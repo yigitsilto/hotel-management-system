@@ -1,4 +1,9 @@
 <x-guest-layout>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 

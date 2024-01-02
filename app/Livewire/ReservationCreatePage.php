@@ -64,6 +64,7 @@ class ReservationCreatePage extends Component
         return $this->room->price * $totalDayCount;
     }
 
+    //TODO kontroller eklenecek oda tükendi mi vs gibi
     public function save()
     {
         $this->validate();
@@ -71,9 +72,11 @@ class ReservationCreatePage extends Component
             if ($this->reservationDuplicateCheck()) {
                 return;
             }
+
             $this->createReservation()
                  ->guests()
                  ->createMany($this->guests);;
+
         } catch (\Exception $exception) {
             $this->addError('error', 'Bir hata oluştu. Lütfen tekrar deneyiniz.');
         }
@@ -121,6 +124,10 @@ class ReservationCreatePage extends Component
     private function createReservation(): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
     {
         $paidAmount = 0;
+        // TODO kredi kartıysa ödeme işlemleri yapılacak
+        if ($this->payment_method == 'credit_card') {
+
+        }
         $checkInDate = Carbon::parse($this->check_in_date);
         $checkOutDate = Carbon::parse($this->check_out_date);
         $totalDayCount = $checkInDate->diffInDays($checkOutDate);

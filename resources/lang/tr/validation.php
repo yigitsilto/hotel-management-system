@@ -174,6 +174,7 @@ return [
         'password_confirmation' => 'Parola Doğrulama',
         'room_id' => 'Oda',
         'surname' => 'Soyisim',
+        'code' => 'Kod',
 
     ],
 
