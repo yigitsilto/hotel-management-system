@@ -2,6 +2,7 @@
 @section('title', 'Anasayfa')
 @section('content')
     <script src="/assets/ckeditor.js"></script>
+    <!-- Styles -->
 
     <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
         <div class="container-fluid py-4">
@@ -101,6 +102,29 @@
                                             </div>
 
                                             <div class="col-md-12">
+                                                <div class="mb-3 ">
+                                                    <label class="form-check-label" for="blocked_months">Reservasyonun Kapalı Olacağı Aylar</label>
+                                                    <select name="blocked_months" class="form-select" id="multiple-select-field" data-placeholder="Seçiniz" multiple>
+                                                        <option value="01">Ocak</option>
+                                                        <option value="02">Şubat</option>
+                                                        <option value="03">Mart</option>
+                                                        <option value="04">Nisan</option>
+                                                        <option value="05">Mayıs</option>
+                                                        <option value="06">Haziran</option>
+                                                        <option value="07">Temmuz</option>
+                                                        <option value="08">Ağustos</option>
+                                                        <option value="09">Eylül</option>
+                                                        <option value="10">Ekim</option>
+                                                        <option value="11">Kasım</option>
+                                                        <option value="12">Aralık</option>
+                                                    </select>
+                                                    @error('is_available')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
                                                 <div class="mb-3">
                                                     <label for="description" class="form-label">Açıklama</label>
                                                     <textarea class="form-control @error('description') is-invalid @enderror"  id="editor" name="description" rows="3"></textarea>
@@ -128,7 +152,16 @@
 @endsection
 
 @section('script')
+    <!-- Scripts -->
     <script>
+
+        $( '#multiple-select-field' ).select2( {
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            closeOnSelect: false,
+        } );
+
         ClassicEditor
             .create( document.querySelector( '#editor' ))
             .catch( error => {

@@ -21,6 +21,9 @@
     <link href="/assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="/assets/css/soft-ui-dashboard.css?v=1.0.7" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/assets/select2.min.css" />
+    <link rel="stylesheet" href="/assets/select2-bootstrap-5-theme.min.css" />
     <!-- Nepcha Analytics (nepcha.com) -->
     <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
@@ -79,7 +82,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link  " href="{{route('user-management.index')}}">
+                <a class="nav-link  " href="{{route('user.index')}}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>credit-card</title>
@@ -274,6 +277,7 @@
 <script src="/assets/js/plugins/smooth-scrollbar.min.js"></script>
 <script src="/assets/js/plugins/chartjs.min.js"></script>
 <script src="/assets/jquery.js"></script>
+<script src="/assets/select2.full.min.js"></script>
 <!-- Inputmask.js kütüphanesi CDN -->
 <script src="/assets/mask.js"></script>
 

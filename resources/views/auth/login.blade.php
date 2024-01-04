@@ -12,9 +12,9 @@
 
         <!-- Email Address -->
         <div>
-            <x-input-label for="E-Posta" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-input-label for="Telefon Numarası" :value="__('Telefon Numarası (Başında 0 olmadan giriniz)')" />
+            <x-text-input id="phone_number" class="block mt-1 w-full" type="number" name="phone_number" :value="old('phone_number')" required autofocus autocomplete="phone_number" />
+            <x-input-error :messages="$errors->get('phone_number')" class="mt-2" />
         </div>
 
         <!-- Password -->
@@ -39,14 +39,14 @@
 
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Şifreni mi unuttun ? ') }}
-                </a>
+{{--                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">--}}
+{{--                    {{ __('Şifreni mi unuttun ? ') }}--}}
+{{--                </a>--}}
             @endif
 
-                <a href="/register" class="btn btn-primary ms-3">
-                    {{ __('Kayıt Ol') }}
-                </a>
+{{--                <a href="/register" class="btn btn-primary ms-3">--}}
+{{--                    {{ __('Kayıt Ol') }}--}}
+{{--                </a>--}}
 
                 <x-primary-button class="ms-3">
                     {{ __('Giriş Yap') }}

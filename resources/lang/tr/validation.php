@@ -175,6 +175,7 @@ return [
         'room_id' => 'Oda',
         'surname' => 'Soyisim',
         'code' => 'Kod',
+        'phone_number' => 'Telefon Numarası',
 
     ],
 

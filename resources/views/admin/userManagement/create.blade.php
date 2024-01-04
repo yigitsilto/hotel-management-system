@@ -15,7 +15,7 @@
                         <div class="card-body p-3">
                             <div class="row">
                                 <div class="col-12">
-                                    <form action="{{ route('user-management.store') }}" method="POST">
+                                    <form action="{{ route('user.store') }}" method="POST">
                                         @csrf
                                         <div class="row">
                                             <div class="col-md-6">
@@ -57,6 +57,20 @@
                                                         <option value="Belirtmedi">Belirtmek İstemiyorum</option>
                                                     </select>
                                                     @error('gender')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="mb-3">
+                                                    <label for="asd" class="form-label">Rezervasyon Yapma Durumu ?</label>
+                                                    <select class="form-control" name="can_do_reservation" id="">
+                                                        <option value="1" {{ $user->can_do_reservation == 1 ? 'selected' : '' }}>Aktif</option>
+                                                        <option value="0" {{ $user->can_do_reservation == 0 ? 'selected' : '' }}>Pasif</option>
+                                                    </select>
+
+                                                    @error('can_do_reservation')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>

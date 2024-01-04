@@ -322,7 +322,7 @@
                                     <select wire:model.live="payment_method" class="form-control" name="payment_method"
                                             id="payment_method">
                                         <option value="bank_transfer">Havale</option>
-                                        <option value="credit_card">Kredi Kartı</option>
+{{--                                        <option value="credit_card">Kredi Kartı</option>--}}
                                     </select>
                                 </div>
                             </div>

@@ -13,7 +13,7 @@
                                     <p class="text-sm">Sisteme kayıtlı kullanıcı bilgilerini içerir.</p>
                                 </div>
                                 <div class="col-2">
-                                    <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('user-management.create')}}">
+                                    <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('user.create')}}">
                                         Kullanıcı Kayıdı Ekle
                                     </a>
                                 </div>
@@ -28,13 +28,10 @@
                                             İsim Soyisim
                                         </th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Cinsiyet
+                                            T.C. Kimlik No
                                         </th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Telefon Numarası
-                                        </th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            E-Posta
                                         </th>
                                         <th class="text-secondary opacity-7"></th>
                                     </tr>
@@ -46,17 +43,14 @@
                                                 <p class="text-xs font-weight-bold mb-0">{{$user->name}}</p>
                                             </td>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{$user->gender}}</p>
+                                                <p class="text-xs font-weight-bold mb-0">{{$user->identity_number}}</p>
                                             </td>
 
                                             <td class="align-middle text-center">
                                                 <span class="text-secondary text-xs font-weight-bold">{{$user->phone_number}}</span>
                                             </td>
-                                            <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{$user->email}}</span>
-                                            </td>
                                             <td class="align-middle">
-                                                <a href="{{route('user-management.edit', $user->id)}}"
+                                                <a href="{{route('user.edit', $user->id)}}"
                                                    class="btn btn-sm btn-secondary text-secondary text-white font-weight-bold text-xs"
                                                    data-toggle="tooltip" data-original-title="Edit user">
                                                     Bilgeri Düzenle

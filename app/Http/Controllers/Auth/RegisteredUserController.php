@@ -62,7 +62,7 @@ class RegisteredUserController extends Controller
                                    Rules\Password::defaults()
                                ],
                                'identity_number' => 'required|numeric|digits:11|unique:' . User::class,
-                               'phone_number' => 'required|regex:/^\d{3}-\d{3}-\d{4}$/',
+                               'phone_number' => 'required|regex:/^\d{3}-\d{3}-\d{4}$/|unique:' . User::class,
                            ]);
         DB::beginTransaction();
         try {
@@ -85,9 +85,10 @@ class RegisteredUserController extends Controller
                                      'password' => Hash::make($request->password),
                                      'identity_number' => $request->identity_number,
                                      'phone_number' => $phone_number,
+                                     'parent_id' => auth()->id(),
                                  ]);
 
-            $this->smsService->sendVerificationSms($user);
+            //$this->smsService->sendVerificationSms($user);
             DB::commit();
             event(new Registered($user));
 
@@ -102,8 +103,10 @@ class RegisteredUserController extends Controller
 
         //Auth::login($user);
 
-        return redirect()
-            ->route('sms-verification', ['email' => $user->email]);
+//        return redirect()
+//            ->route('sms-verification', ['email' => $user->email]);
+
+        return redirect()->route('profile.edit')->with('success', 'Kayıt işlemi başarılı.');
     }
 
     /**

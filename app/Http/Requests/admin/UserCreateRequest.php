@@ -29,6 +29,7 @@ class UserCreateRequest extends FormRequest
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'password_confirmation' => 'required|string|same:password',
+            'can_do_reservation' => 'required|boolean',
         ];
     }
 }

@@ -39,7 +39,7 @@ class UserController extends Controller
         unset($validated['password_confirmation']);
         User::query()->create($validated);
 
-        return redirect()->route('user-management.index')->with('success', 'Kullanıcı başarıyla oluşturuldu.');
+        return redirect()->route('user.index')->with('success', 'Kullanıcı başarıyla oluşturuldu.');
     }
 
     public function edit($userId): View
@@ -52,6 +52,10 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         $validated['phone_number'] = str_replace('-', '', $validated['phone_number']);
+        
+        if ($request->email != $user->email){
+            return redirect()->back()->withErrors(['email' => 'Email değiştirilemez.']);
+        }
 
         if ($validated['password'] != null){
             $validated['password'] = bcrypt($validated['password']);
@@ -63,9 +67,12 @@ class UserController extends Controller
         }
 
         unset($validated['password_confirmation']);
-        $user->update($validated);
 
-        return redirect()->route('user-management.index')->with('success', 'Kullanıcı başarıyla güncellendi.');
+        $user->update($validated);
+        $user->can_do_reservation = $validated['can_do_reservation'] == '1';
+        $user->save();
+
+        return redirect()->route('user.index')->with('success', 'Kullanıcı başarıyla güncellendi.');
     }
 
 

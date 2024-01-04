@@ -34,7 +34,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     /** Hotel Management routes */
     Route::resource('hotel-management', HotelController::class);
-    Route::resource('user-management', \App\Http\Controllers\admin\UserController::class);
+    Route::resource('user', \App\Http\Controllers\admin\UserController::class);
     Route::resource('reservation', RezervationManagementController::class);
 
     /** Room Management routes */

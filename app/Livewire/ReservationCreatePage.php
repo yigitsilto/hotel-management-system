@@ -4,12 +4,15 @@ namespace App\Livewire;
 
 use App\Enums\ReservationStatusEnum;
 use App\Models\Reservation;
+use App\Models\Room;
+use App\Services\ReservationControlService;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
 class ReservationCreatePage extends Component
 {
+
     public $totalPriceToPay;
     public $room;
     public $guestSize = 1;
@@ -25,8 +28,6 @@ class ReservationCreatePage extends Component
     public $cvv;
     public $guests = [];
     public $loading = false;
-
-
     protected $rules = [
         'check_in_date' => 'required|date',
         'check_out_date' => 'required|date|after:check_in_date',
@@ -41,7 +42,12 @@ class ReservationCreatePage extends Component
         'guests.*.name' => 'required|string',
         'guests.*.age' => 'required|numeric',
     ];
+    private ReservationControlService $reservationControlService;
 
+    public function boot(ReservationControlService $reservationControlService): void
+    {
+        $this->reservationControlService = $reservationControlService;
+    }
 
     public function render()
     {
@@ -52,7 +58,6 @@ class ReservationCreatePage extends Component
         }
         return view('livewire.reservation-create-page', [
             'room' => $this->room,
-            // Pass the room information to the Livewire view
         ]);
     }
 
@@ -73,12 +78,25 @@ class ReservationCreatePage extends Component
                 return;
             }
 
+            // Kontrol etmek istediğimiz oda bilgisi
+            $room = Room::find($this->room->id);
+
+            if (!$this->reservationControlService->isRoomAvailable($room)) {
+                $this->addError('room_id', 'Seçtiğiniz oda türü için müsaitlik bulunmamaktadır.');
+                return redirect()
+                    ->route('user-dashboard')
+                    ->with('error', 'Seçtiğiniz oda türü için müsaitlik bulunmamaktadır.');
+            }
+
             $this->createReservation()
                  ->guests()
-                 ->createMany($this->guests);;
+                 ->createMany($this->guests);
 
         } catch (\Exception $exception) {
             $this->addError('error', 'Bir hata oluştu. Lütfen tekrar deneyiniz.');
+            return redirect()
+                ->back()
+                ->withInput();
         }
 
         return redirect()

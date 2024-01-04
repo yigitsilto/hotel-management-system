@@ -12,19 +12,15 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-                ->name('register');
-
-    Route::post('register', [RegisteredUserController::class, 'store']);
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
                 ->name('login');
 
 
-    Route::get('sms-verification/{email}', [AuthenticatedSessionController::class, 'smsVerification'])
+    Route::get('sms-verification/{phone_number}', [AuthenticatedSessionController::class, 'smsVerification'])
          ->name('sms-verification');
 
-    Route::post('sms-verification/{email}', [AuthenticatedSessionController::class, 'smsVerificationCheck'])
+    Route::post('sms-verification/{phone_number}', [AuthenticatedSessionController::class, 'smsVerificationCheck'])
          ->name('sms-verification-check');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
@@ -43,6 +39,12 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('register', [RegisteredUserController::class, 'create'])
+         ->name('register');
+
+    Route::post('register', [RegisteredUserController::class, 'store']);
+
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 

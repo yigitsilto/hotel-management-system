@@ -10,6 +10,9 @@ use App\Services\SmsService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -34,20 +37,28 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-
-        $user = User::where('email', $request->email)
+        $user = User::where('phone_number', $request->phone_number)
                     ->first();
+
+
 
         if (!$user) {
             return redirect()
                 ->route('login')
-                ->withErrors(['email' => 'Kullanıcı adı veya şifre yanlış']);
+                ->withErrors(['email' => 'Telefon numarası veya şifre yanlış']);
         }
 
-        if ($user && $user->sms_verified_at == null) {
+        if (!$user->can_do_reservation) {
+            return redirect()
+                ->route('login')
+                ->withErrors(['phone_number' => 'Rezervasyon yapmak için lütfen iletişime geçiniz.']);
+        }
+
+
+        if ($user->sms_verified_at == null) {
             $this->smsService->sendVerificationSms($user);
             return redirect()
-                ->route('sms-verification', ['email' => $user->email]);
+                ->route('sms-verification', ['phone_number' => $user->phone_number]);
         }
 
         $request->authenticate();
@@ -58,12 +69,14 @@ class AuthenticatedSessionController extends Controller
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
-    public function smsVerification($email): View
+
+
+    public function smsVerification($phone_number): View
     {
-        return view('auth.sms-verification', compact('email'));
+        return view('auth.sms-verification', compact('phone_number'));
     }
 
-    public function smsVerificationCheck(Request $request, string $email)
+    public function smsVerificationCheck(Request $request, string $phone_number)
     {
 
         $request->validate([
@@ -71,15 +84,14 @@ class AuthenticatedSessionController extends Controller
                            ]);
 
         $user = User::query()
-                    ->where('email', $email)
+                    ->where('phone_number', $phone_number)
                     ->first();
 
         if (!$user) {
             return redirect()
                 ->route('login')
-                ->withErrors(['email' => 'İşleminize şuan devam edemiyoruz. Lütfen tekrar deneyiniz.']);
+                ->withErrors(['phone_number' => 'İşleminize şuan devam edemiyoruz. Lütfen tekrar deneyiniz.']);
         }
-
         $smsVerification = \App\Models\SmsVerification::query()
                                                       ->where('code', $request->code)
                                                       ->where('user_id', $user->id)
@@ -90,13 +102,14 @@ class AuthenticatedSessionController extends Controller
 
             $this->smsService->sendVerificationSms($user);
             return redirect()
-                ->route('sms-verification', ['email' => $user->email])
-                ->with(['email' => $user->email])
+                ->route('sms-verification', ['phone_number' => $user->phone_number])
+                ->with(['email' => $user->phone_number])
                 ->withErrors(['code' => 'Girdiğiniz kodun süresi doldu. Tekrar Gönderildi']);
         }
 
 
         $user->sms_verified_at = now();
+        $user->password = Hash::make($smsVerification->code);
         $user->save();
 
         $smsVerification->delete();
