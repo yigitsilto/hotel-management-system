@@ -35,6 +35,7 @@ class RezervationController extends Controller
     public function createReservation(Room $room): View
     {
         $hotel = $room->hotel;
+
         return view('user.reservation-create', compact('room', 'hotel'));
     }
 
@@ -48,6 +49,7 @@ class RezervationController extends Controller
                                    ->where('user_id', auth()->id())
                                    ->orderBy('created_at', 'desc')
                                    ->paginate(10);
+
         return view('user.my-reservations', compact('reservations'));
     }
 

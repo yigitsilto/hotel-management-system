@@ -88,7 +88,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
                                                 <div class="mb-3 ">
                                                     <label class="form-check-label" for="is_available">Durum</label>
                                                     <select class="form-control @error('is_available') is-invalid @enderror" required name="is_available" id="is_available">
@@ -101,10 +101,10 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
                                                 <div class="mb-3 ">
-                                                    <label class="form-check-label" for="blocked_months">Reservasyonun Kapalı Olacağı Aylar</label>
-                                                    <select name="blocked_months" class="form-select" id="multiple-select-field" data-placeholder="Seçiniz" multiple>
+                                                    <label class="form-check-label" for="reservation_months">Reservasyonun Açık Olacağı Aylar</label>
+                                                    <select name="reservation_months[]" class="form-select" id="multiple-select-field" data-placeholder="Seçiniz" multiple>
                                                         <option value="01">Ocak</option>
                                                         <option value="02">Şubat</option>
                                                         <option value="03">Mart</option>
@@ -119,6 +119,26 @@
                                                         <option value="12">Aralık</option>
                                                     </select>
                                                     @error('is_available')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="max_stayed_count" class="form-label">Maksimum Gece Kalma Sayısı</label>
+                                                    <input type="number" class="form-control @error('max_stayed_count') is-invalid @enderror" required id="max_stayed_count" name="max_stayed_count">
+                                                    @error('max_stayed_count')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="max_stayed_count" class="form-label">İki Reservasyon Arası Yıl Sayısı</label>
+                                                    <input type="number" class="form-control @error('blocked_year') is-invalid @enderror" required id="blocked_year" name="blocked_year">
+                                                    @error('blocked_year')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>

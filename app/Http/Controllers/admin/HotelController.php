@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\HotelCreateRequest;
 use App\Http\Requests\admin\HotelUpdateRequest;
 use App\Models\Hotel;
+use App\Models\ReservationMonth;
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class HotelController extends Controller
@@ -32,18 +34,29 @@ class HotelController extends Controller
 
         $validatedData = $request->validated();
 
-        $hotel = new Hotel([
-                               'name' => $validatedData['name'],
-                               'location' => $validatedData['location'],
-                               'description' => $validatedData['description'],
-                               'total_rooms' => $validatedData['total_rooms'],
-                               'contact_email' => $validatedData['contact_email'],
-                               'contact_phone' => $validatedData['contact_phone'],
-                               'is_available' => $validatedData['is_available'],
-                           ]);
+        DB::transaction(function () use ($request, $validatedData) {
 
-        $this->createImage($request, $hotel);
-        $hotel->save();
+            $hotel = new Hotel([
+                                   'name' => $validatedData['name'],
+                                   'location' => $validatedData['location'],
+                                   'description' => $validatedData['description'],
+                                   'total_rooms' => $validatedData['total_rooms'],
+                                   'contact_email' => $validatedData['contact_email'],
+                                   'contact_phone' => $validatedData['contact_phone'],
+                                   'is_available' => $validatedData['is_available'],
+                                   'max_stayed_count' => $validatedData['max_stayed_count'],
+                                   'blocked_year' => $validatedData['blocked_year'],
+                               ]);
+            $this->createImage($request, $hotel);
+            $hotel->save();
+
+            // Otelin rezervasyon aylarını kaydet
+            foreach ($validatedData['reservation_months'] as $month) {
+                $hotel->reservationMonths()
+                      ->save(new ReservationMonth(['value' => $month]));
+            }
+
+        });
 
 
         // Başarıyla kaydedildiğine dair bir mesaj veya yönlendirme ekleme
@@ -104,7 +117,9 @@ class HotelController extends Controller
     public function show($id)
     {
         $hotel = Hotel::findOrFail($id);
-        $rooms = Room::query()->where('hotel_id', $hotel->id)->get();
+        $rooms = Room::query()
+                     ->where('hotel_id', $hotel->id)
+                     ->get();
 
         return view('admin.hotelManagement.show', compact('hotel', 'rooms'));
     }

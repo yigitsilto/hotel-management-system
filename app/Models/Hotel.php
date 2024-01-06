@@ -15,4 +15,9 @@ class Hotel extends Model
     {
         return $this->hasMany(Room::class);
     }
+
+    public function reservationMonths()
+    {
+        return $this->hasMany(ReservationMonth::class);
+    }
 }

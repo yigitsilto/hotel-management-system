@@ -30,6 +30,9 @@ class HotelCreateRequest extends FormRequest
                 'contact_email' => 'required|email',
                 'contact_phone' => 'required|string',
                 'is_available' => 'required|boolean',
+                'max_stayed_count' => 'nullable|integer|min:0',
+                'blocked_year' => 'nullable|integer|min:0',
+                'reservation_months' => 'nullable|array',
         ];
     }
 }

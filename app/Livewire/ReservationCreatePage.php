@@ -12,7 +12,7 @@ use Livewire\Component;
 
 class ReservationCreatePage extends Component
 {
-
+    public $canDoReservation = true;
     public $totalPriceToPay;
     public $room;
     public $guestSize = 1;
@@ -51,7 +51,17 @@ class ReservationCreatePage extends Component
 
     public function render()
     {
+        $this->canDoReservation = true;
+
         if ($this->check_in_date && $this->check_out_date) {
+            $room = $this->room;
+            if (!$this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
+                                                                   $this->check_out_date)) {
+                $this->addError('room_id', 'Seçtiğiniz oda türü seçilen tarihler arasında müsaitlik bulunmamaktadır.');
+                $this->canDoReservation = false;
+            }
+
+
             $this->totalPriceToPay = moneyFormat($this->calculateTotalPrice());
         } else {
             $this->totalPriceToPay = moneyFormat($this->room->price);
@@ -69,7 +79,6 @@ class ReservationCreatePage extends Component
         return $this->room->price * $totalDayCount;
     }
 
-    //TODO kontroller eklenecek oda tükendi mi vs gibi
     public function save()
     {
         $this->validate();
@@ -79,9 +88,10 @@ class ReservationCreatePage extends Component
             }
 
             // Kontrol etmek istediğimiz oda bilgisi
-            $room = Room::find($this->room->id);
+            $room = Room::findOrFail($this->room->id);
 
-            if (!$this->reservationControlService->isRoomAvailable($room)) {
+            if (!$this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
+                                                                   $this->check_out_date)) {
                 $this->addError('room_id', 'Seçtiğiniz oda türü için müsaitlik bulunmamaktadır.');
                 return redirect()
                     ->route('user-dashboard')
@@ -166,71 +176,4 @@ class ReservationCreatePage extends Component
                                    ]);
 
     }
-
-
-    /**
-     * private function createReservation(): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
-     * {
-     * $checkInDate = Carbon::parse($this->check_in_date);
-     * $checkOutDate = Carbon::parse($this->check_out_date);
-     * $totalDayCount = $checkInDate->diffInDays($checkOutDate);
-     *
-     * // Kontrol 1: 4 ay için yapılacak tatillerde 2 yılda bir 4 gün hakkı
-     * $twoYearsAgo = Carbon::now()->subYears(2);
-     * $reservationCountWithinTwoYears = Reservation::where('user_id', auth()->id())
-     * ->whereBetween('created_at', [$twoYearsAgo, Carbon::now()])
-     * ->count();
-     *
-     * if ($reservationCountWithinTwoYears % 2 === 0 && $totalDayCount <= 4) {
-     * // Kontrol 2: 4 günden az yapabilir
-     * $remainingDays = $this->getRemainingDays(auth()->id());
-     *
-     * if ($totalDayCount <= $remainingDays) {
-     * // Rezervasyon oluştur
-     * return Reservation::query()
-     * ->create([
-     * 'room_id' => $this->room->id,
-     * 'user_id' => auth()->id(),
-     * 'number_of_guests' => $this->guestSize,
-     * 'check_in_date' => $this->check_in_date,
-     * 'check_out_date' => $this->check_out_date,
-     * 'special_requests' => $this->special_requests,
-     * 'payment_method' => $this->payment_method,
-     * 'reservation_status' => ReservationStatusEnum::Pending->name,
-     * 'total_amount' => $this->room->price * $totalDayCount,
-     * 'paid_amount' => 0,
-     * 'transaction_id' => Str::uuid(),
-     * ]);
-     * } else {
-     * // Hata: Kullanılabilir gün sayısı aşıldı
-     * // Uygun bir hata yönetimi ekleyebilirsiniz
-     * return null;
-     * }
-     * } else {
-     * // Hata: Koşullar sağlanmıyor
-     * // Uygun bir hata yönetimi ekleyebilirsiniz
-     * return null;
-     * }
-     * }
-     *
-     * private function getRemainingDays($userId): int
-     * {
-     * // Kontrol 3: 2 yıl geçtikten sonra kalan 4 ayı tekrar kullanabilir
-     * $twoYearsAgo = Carbon::now()->subYears(2);
-     * $reservationsAfterTwoYears = Reservation::where('user_id', $userId)
-     * ->where('created_at', '>', $twoYearsAgo)
-     * ->get();
-     *
-     * $usedDays = 0;
-     * foreach ($reservationsAfterTwoYears as $reservation) {
-     * $usedDays += Carbon::parse($reservation->check_in_date)
-     * ->diffInDays(Carbon::parse($reservation->check_out_date));
-     * }
-     *
-     * $remainingDays = 8 - $usedDays;
-     * return max(0, $remainingDays);
-     * }
-     *
-     */
-
 }
