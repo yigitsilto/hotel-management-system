@@ -15,10 +15,10 @@ return new class extends Migration
             $table->boolean('can_do_reservation')->default(false);
             $table->integer('parent_id')->nullable();
 
-            $table->foreign('parent_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
+//            $table->foreign('parent_id')
+//                ->references('id')
+//                ->on('users')
+//                ->onDelete('cascade');
         });
     }
 
