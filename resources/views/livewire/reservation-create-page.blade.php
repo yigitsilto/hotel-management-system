@@ -256,7 +256,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="check_in_date">Giriş Tarihi:</label>
-                                        <input type="datetime-local" class="form-control" id="check_in_date"
+                                        <input type="date" class="form-control" id="check_in_date"
                                                name="check_in_date" wire:model.live="check_in_date">
                                         @error('check_in_date') <span
                                                 class="text-danger">{{ $message }}</span> @enderror
@@ -267,7 +267,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="check_out_date">Çıkış Tarihi:</label>
-                                        <input type="datetime-local" class="form-control" id="check_out_date"
+                                        <input type="date" class="form-control" id="check_out_date"
                                                name="check_out_date" wire:model.live="check_out_date">
                                         @error('check_out_date') <span
                                                 class="text-danger">{{ $message }}</span> @enderror

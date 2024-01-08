@@ -158,11 +158,11 @@
                                             </td>
 
                                             <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{$item->check_in_date}}</span>
+                                                <span class="text-secondary text-xs font-weight-bold">{{\Carbon\Carbon::make($item->check_in_date)->format('d-m-Y')}}</span>
                                             </td>
 
                                             <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{$item->check_out_date}}</span>
+                                                <span class="text-secondary text-xs font-weight-bold">{{\Carbon\Carbon::make($item->check_out_date)->format('d-m-Y')}}</span>
                                             </td>
                                             <td class="align-middle text-center text-sm">
                                                 <span class="badge badge-sm bg-gradient-info">{{\App\Enums\ReservationStatusEnum::getValueByKey($item->reservation_status)}}</span>
