@@ -66,8 +66,8 @@
                                                 <div class="mb-3">
                                                     <label for="asd" class="form-label">Rezervasyon Yapma Durumu ?</label>
                                                     <select class="form-control" name="can_do_reservation" id="">
-                                                        <option value="1" {{ $user->can_do_reservation == 1 ? 'selected' : '' }}>Aktif</option>
-                                                        <option value="0" {{ $user->can_do_reservation == 0 ? 'selected' : '' }}>Pasif</option>
+                                                        <option value="1">Aktif</option>
+                                                        <option value="0">Pasif</option>
                                                     </select>
 
                                                     @error('can_do_reservation')
