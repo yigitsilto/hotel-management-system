@@ -2,11 +2,12 @@
 @section('title', 'Anasayfa')
 @section('content')
     <style>
-        #hotel-card:hover{
+        #hotel-card:hover {
             transform: translateY(-5px); /* veya istediğiniz miktarda yukarı çıkarmak için bir değer belirleyin */
 
         }
-        .inactive{
+
+        .inactive {
             opacity: 0.5;
         }
     </style>
@@ -23,7 +24,8 @@
                                     <p class="text-sm">Sisteme kayıt ettiğiniz otel bilgilerini içerir.</p>
                                 </div>
                                 <div class="col-lg-2 col-md-12">
-                                    <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('hotel-management.create')}}">
+                                    <a class="btn btn-outline-primary btn-sm mb-0"
+                                       href="{{route('hotel-management.create')}}">
                                         Yeni Kayıt Ekle
                                     </a>
                                 </div>
@@ -33,37 +35,44 @@
                         <div class="card-body p-3">
                             @if(session('success'))
                                 <div class="alert alert-success">
-                                   <span style="color: white;"> {{ session('success') }}</span>
+                                    <span style="color: white;"> {{ session('success') }}</span>
                                 </div>
                             @endif
                             <div class="row">
-                               @foreach($hotels as $hotel)
+                                @foreach($hotels as $hotel)
 
-                                    <div class="col-xl-4 col-md-6 mb-xl-0 mb-4 mt-4 {{$hotel->is_available ? '' : 'inactive'}}" id="hotel-card" >
-                                            <div class="card card-blog card-plain">
-                                                <div class="position-relative">
-                                                    <a href="{{route('hotel-management.show', $hotel->id)}}"  class="d-block shadow-xl border-radius-xl cursor-pointer">
-                                                        <img src="{{ asset($hotel->image) }}" alt="img-blur-shadow" style="width: 100%; height: 250px; object-fit: cover" class="img-fluid shadow border-radius-xl">
-                                                    </a>
-                                                </div>
-                                                <div class="card-body px-1 pb-0">
-                                                    <p class="text-gradient text-dark mb-2 text-sm">Oda Sayısı: {{$hotel->total_rooms}}</p>
-                                                    <a href="{{route('hotel-management.show', $hotel->id)}}">
-                                                        <h5>
-                                                            {{$hotel->name}}
-                                                        </h5>
-                                                    </a>
-                                                    <div class="mb-4 text-sm flex" >
-                                                        {!! Str::limit($hotel->description, 70) !!}
-                                                    </div>
-                                                    <div class="d-flex align-items-center justify-content-between">
-                                                        <a href="{{route('hotel-management.show', $hotel->id)}}" type="button" class="btn btn-outline-primary btn-sm mb-0">Oda Yönetimi</a>
-                                                        <a href="{{route('hotel-management.edit', $hotel->id)}}" class="btn btn-outline-primary btn-sm mb-0">Düzenle</a>
-                                                    </div>
+                                    <div class="col-xl-4 col-md-6 mb-xl-0 mb-4 mt-4 {{$hotel->is_available ? '' : 'inactive'}}"
+                                         id="hotel-card">
+                                        <div class="card card-blog card-plain">
+                                            <div class="position-relative">
+                                                <a href="{{route('hotel-management.show', $hotel->id)}}"
+                                                   class="d-block shadow-xl border-radius-xl cursor-pointer">
+                                                    <img src="{{ asset($hotel->image) }}" alt="img-blur-shadow"
+                                                         style="width: 100%; height: 250px; object-fit: cover"
+                                                         class="img-fluid shadow border-radius-xl">
+                                                </a>
+                                            </div>
+                                            <div class="card-body px-1 pb-0">
+                                                <p class="text-gradient text-dark mb-2 text-sm">Oda
+                                                    Sayısı: {{$hotel->total_rooms}}</p>
+                                                <a href="{{route('hotel-management.show', $hotel->id)}}">
+                                                    <h5>
+                                                        {{$hotel->name}}
+                                                    </h5>
+                                                </a>
+
+
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <a href="{{route('hotel-management.show', $hotel->id)}}"
+                                                       type="button" class="btn btn-outline-primary btn-sm mb-0">Oda
+                                                        Yönetimi</a>
+                                                    <a href="{{route('hotel-management.edit', $hotel->id)}}"
+                                                       class="btn btn-outline-primary btn-sm mb-0">Düzenle</a>
                                                 </div>
                                             </div>
+                                        </div>
                                     </div>
-                               @endforeach
+                                @endforeach
                             </div>
                         </div>
                     </div>
