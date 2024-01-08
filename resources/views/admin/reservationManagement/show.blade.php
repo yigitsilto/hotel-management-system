@@ -144,8 +144,8 @@
                     <div class="card-body p-3">
                         <ul class="list-group">
                             <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Kişi Sayısı: </strong>{{$reservation->number_of_guests}}</li>
-                            <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Giriş Tarihi: </strong>{{$reservation->check_in_date}}</li>
-                            <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Çıkış Tarihi: </strong>{{$reservation->check_out_date}}</li>
+                            <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Giriş Tarihi: </strong>{{\Carbon\Carbon::make($reservation->check_in_date)->format('d-m-Y')}}</li>
+                            <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Çıkış Tarihi: </strong>{{\Carbon\Carbon::make($reservation->check_out_date)->format('d-m-Y')}}</li>
                             @if(!is_null($reservation->special_requests))
                                 <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Not: </strong>{{$reservation->special_requests}}</li>
                             @endif
