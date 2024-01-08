@@ -53,7 +53,7 @@
                                                             {{$hotel->name}}
                                                         </h5>
                                                     </a>
-                                                    <div class="mb-4 text-sm" style="height: 12vh">
+                                                    <div class="mb-4 text-sm" style="height: 15vh">
                                                         {!! Str::limit($hotel->description, 200) !!}
                                                     </div>
                                                     <div class="d-flex align-items-center justify-content-between">
