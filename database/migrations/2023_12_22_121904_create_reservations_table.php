@@ -25,8 +25,8 @@ return new class extends Migration
             $table->string('payment_method'); // Payment method (e.g., credit_card, bank_transfer, etc.)
             $table->string('transaction_id')->nullable(); // Unique identifier for the payment transaction
             $table->timestamps();
-            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+          //  $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
+           // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

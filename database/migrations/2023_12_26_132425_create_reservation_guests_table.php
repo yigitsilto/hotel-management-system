@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('age');
             $table->boolean('is_under_18')->default(false);
             $table->timestamps();
-            $table->foreign('reservation_id')->references('id')->on('reservations')->onDelete('cascade');
+          //  $table->foreign('reservation_id')->references('id')->on('reservations')->onDelete('cascade');
         });
     }
 
