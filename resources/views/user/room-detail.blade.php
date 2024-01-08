@@ -123,7 +123,7 @@
                                 <div class="row">
                                    @foreach($room->getMedia('room_images') as $image)
                                         <div class="col-3 mt-3 p-1">
-                                            <a href="#" target="_blank" rel="noopener noreferrer">
+                                            <a href="#"  rel="noopener noreferrer">
                                                 <img src="{{$image->getUrl()}}" style="width: 400px; height: 200px; object-fit: cover; border: 2px solid #ccc; border-radius: 8px;" class="img-fluid" alt="image">
                                             </a>
                                         </div>

@@ -317,7 +317,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="guest_age_{{ $i }}">{{$i + 1}}. Kişi Yaşı:</label>
+                                            <label for="guest_age_{{ $i }}">{{$i + 1}}. Kişi T.C:</label>
                                             <input type="number" class="form-control" wire:model="guests.{{ $i }}.age"
                                                    id="guest_age_{{ $i }}"
                                                    name="guests.{{ $i }}.age"/>

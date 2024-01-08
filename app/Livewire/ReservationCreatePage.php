@@ -55,11 +55,11 @@ class ReservationCreatePage extends Component
 
         if ($this->check_in_date && $this->check_out_date) {
             $room = $this->room;
-            if (!$this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
-                                                                   $this->check_out_date)) {
-                $this->addError('room_id', 'Seçtiğiniz oda türü seçilen tarihler arasında müsaitlik bulunmamaktadır.');
-                $this->canDoReservation = false;
-            }
+//            if (!$this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
+//                                                                   $this->check_out_date)) {
+//                $this->addError('room_id', 'Seçtiğiniz oda türü seçilen tarihler arasında müsaitlik bulunmamaktadır.');
+//                $this->canDoReservation = false;
+//            }
 
 
             $this->totalPriceToPay = moneyFormat($this->calculateTotalPrice());
@@ -105,6 +105,7 @@ class ReservationCreatePage extends Component
                  ->createMany($this->guests);
 
         } catch (\Exception $exception) {
+            dd($exception);
             $this->addError('error', 'Bir hata oluştu. Lütfen tekrar deneyiniz.');
             return redirect()
                 ->back()

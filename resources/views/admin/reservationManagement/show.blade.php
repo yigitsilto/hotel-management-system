@@ -154,7 +154,7 @@
                                 <thead>
                                 <tr>
                                     <th>İsim</th>
-                                    <th>Soyisim</th>
+                                    <th>T.C.</th>
                                 </tr>
                                 </thead>
 

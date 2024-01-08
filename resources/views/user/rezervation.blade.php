@@ -50,8 +50,8 @@
                                                         {{$item->title}}
                                                     </h5>
                                                 </a>
-                                                <div class="mb-4 text-sm" >
-                                                    {!! Str::limit($item->description, 100) !!}
+                                                <div class="mb-4 text-sm flex" >
+                                                    {!! Str::limit($item->description, 70) !!}
                                                 </div>
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <a href="{{route('user-reservation.showRoom', $item->id)}}" type="button" class="btn btn-outline-primary btn-sm mb-0">Detay</a>
