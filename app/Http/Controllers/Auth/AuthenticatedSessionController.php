@@ -113,7 +113,7 @@ class AuthenticatedSessionController extends Controller
         $user->password = Hash::make("123123123");
         $user->save();
 
-        $smsVerification->delete();
+//        $smsVerification->delete();
 
         return redirect()
             ->route('login')
