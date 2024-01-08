@@ -90,13 +90,15 @@ class ReservationCreatePage extends Component
             // Kontrol etmek istediğimiz oda bilgisi
             $room = Room::findOrFail($this->room->id);
 
-            if (!$this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
-                                                                   $this->check_out_date)) {
-                $this->addError('room_id', 'Seçtiğiniz oda türü için müsaitlik bulunmamaktadır.');
-                return redirect()
-                    ->route('user-dashboard')
-                    ->with('error', 'Seçtiğiniz oda türü için müsaitlik bulunmamaktadır.');
-            }
+
+           // tODO açılacak burası düzeltilip
+//            if (!$this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
+//                                                                   $this->check_out_date)) {
+//                $this->addError('room_id', 'Seçtiğiniz oda türü için müsaitlik bulunmamaktadır.');
+//                return redirect()
+//                    ->route('user-dashboard')
+//                    ->with('error', 'Seçtiğiniz oda türü için müsaitlik bulunmamaktadır.');
+//            }
 
             $this->createReservation()
                  ->guests()
