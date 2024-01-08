@@ -50,7 +50,7 @@
                                                         {{$item->title}}
                                                     </h5>
                                                 </a>
-                                                <div class="mb-4 text-sm" style="height: 120px">
+                                                <div class="mb-4 text-sm" style="height: 14vh">
                                                     {!! Str::limit($item->description, 200) !!}
                                                 </div>
                                                 <div class="d-flex align-items-center justify-content-between">
