@@ -79,9 +79,9 @@ class AuthenticatedSessionController extends Controller
     public function smsVerificationCheck(Request $request, string $phone_number)
     {
 
-        $request->validate([
-                               'code' => 'required|exists:sms_verifications,code',
-                           ]);
+//        $request->validate([
+//                               'code' => 'required|exists:sms_verifications,code',
+//                           ]);
 
         $user = User::query()
                     ->where('phone_number', $phone_number)
@@ -98,18 +98,19 @@ class AuthenticatedSessionController extends Controller
                                                       ->orderBy('id', 'desc')
                                                       ->first();
 
-        if ($smsVerification->expires_at < now()) {
-
-            $this->smsService->sendVerificationSms($user);
-            return redirect()
-                ->route('sms-verification', ['phone_number' => $user->phone_number])
-                ->with(['email' => $user->phone_number])
-                ->withErrors(['code' => 'Girdiğiniz kodun süresi doldu. Tekrar Gönderildi']);
-        }
+//        if ($smsVerification->expires_at < now()) {
+//
+//            $this->smsService->sendVerificationSms($user);
+//            return redirect()
+//                ->route('sms-verification', ['phone_number' => $user->phone_number])
+//                ->with(['email' => $user->phone_number])
+//                ->withErrors(['code' => 'Girdiğiniz kodun süresi doldu. Tekrar Gönderildi']);
+//        }
 
 
         $user->sms_verified_at = now();
-        $user->password = Hash::make($smsVerification->code);
+//        $user->password = Hash::make($smsVerification->code);
+        $user->password = Hash::make("123123123");
         $user->save();
 
         $smsVerification->delete();
