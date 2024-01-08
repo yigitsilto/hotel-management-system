@@ -1,4 +1,8 @@
 <div>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- Ek kütüphane bağlantıları -->
 
     <style>
         /* Absolute Center Spinner */
@@ -257,7 +261,7 @@
                                     <div class="form-group">
                                         <label for="check_in_date">Giriş Tarihi:</label>
                                         <input type="date" class="form-control" id="check_in_date"
-                                               name="check_in_date" wire:model.live="check_in_date">
+                                               name="check_in_date" wire:model="check_in_date">
                                         @error('check_in_date') <span
                                                 class="text-danger">{{ $message }}</span> @enderror
                                     </div>
@@ -267,8 +271,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="check_out_date">Çıkış Tarihi:</label>
-                                        <input type="date" class="form-control" id="check_out_date"
-                                               name="check_out_date" wire:model.live="check_out_date">
+                                        <input type="date" disabled class="form-control" id="check_out_date"
+                                               name="check_out_date" wire:model="check_out_date">
                                         @error('check_out_date') <span
                                                 class="text-danger">{{ $message }}</span> @enderror
                                     </div>
@@ -443,6 +447,46 @@
 
 
         </div>
-</div>
 </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var checkInDateInput = document.getElementById("check_in_date");
+            var checkOutDateInput = document.getElementById("check_out_date");
+
+            // Bugünden önceki tarihleri pasif yapmak için
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+            var yyyy = today.getFullYear();
+            today = yyyy + '-' + mm + '-' + dd;
+
+            checkInDateInput.setAttribute("min", today);
+
+            checkOutDateInput.setAttribute("min", today);
+
+            checkInDateInput.addEventListener("change", function () {
+                var checkInDate = new Date(this.value);
+                var checkOutDate = new Date(checkOutDateInput.value);
+
+                if (checkOutDate < checkInDate) {
+                    checkOutDateInput.value = this.value;
+                }
+
+                checkOutDateInput.setAttribute("min", this.value);
+                checkOutDateInput.disabled = false;
+            });
+
+            checkOutDateInput.addEventListener("change", function () {
+                var checkInDate = new Date(checkInDateInput.value);
+                var checkOutDate = new Date(this.value);
+
+                if (checkOutDate < checkInDate) {
+                    this.value = checkInDateInput.value;
+                }
+
+                checkInDateInput.setAttribute("max", this.value);
+            });
+        });
+    </script>
 </div>
