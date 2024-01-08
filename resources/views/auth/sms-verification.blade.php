@@ -6,8 +6,13 @@
         @csrf
         <!-- Email Address -->
         <div>
-            <x-input-label for="code" :value="__('Sms Kodu')" />
-            <x-text-input id="code" class="block mt-1 w-full" type="text" name="code" required autofocus />
+            @if($user->sms_verified_at == null)
+                <x-input-label for="code" :value="__('Sms Kodu')" />
+
+                @else
+                <x-input-label for="code" :value="__('Şifre')" />
+            @endif
+            <x-text-input id="code" class="block mt-1 w-full" type="password" name="code" required autofocus />
             <x-input-error :messages="$errors->get('code')" class="mt-2" />
         </div>
 

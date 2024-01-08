@@ -35,11 +35,10 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request)
     {
         $user = User::where('phone_number', $request->phone_number)
                     ->first();
-
 
 
         if (!$user) {
@@ -54,21 +53,18 @@ class AuthenticatedSessionController extends Controller
                 ->withErrors(['phone_number' => 'Rezervasyon yapmak için lütfen iletişime geçiniz.']);
         }
 
+        $phone_number = $user->phone_number;
 
-        if ($user->sms_verified_at == null) {
-            $this->smsService->sendVerificationSms($user);
-            return redirect()
-                ->route('sms-verification', ['phone_number' => $user->phone_number]);
-        }
 
-        $request->authenticate();
+        return view('auth.sms-verification', compact('phone_number', 'user'));
 
-        $request->session()
-                ->regenerate();
+//        $request->authenticate();
+//
+//        $request->session()
+//                ->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // return redirect()->intended(RouteServiceProvider::HOME);
     }
-
 
 
     public function smsVerification($phone_number): View
@@ -98,6 +94,7 @@ class AuthenticatedSessionController extends Controller
                                                       ->orderBy('id', 'desc')
                                                       ->first();
 
+
 //        if ($smsVerification->expires_at < now()) {
 //
 //            $this->smsService->sendVerificationSms($user);
@@ -108,18 +105,63 @@ class AuthenticatedSessionController extends Controller
 //        }
 
 
-        $user->sms_verified_at = now();
+        if($user->sms_verified_at == null){
+            $user->sms_verified_at = now();
 //        $user->password = Hash::make($smsVerification->code);
-        $user->password = Hash::make("123123123");
-        $user->save();
+            $user->password = Hash::make("123123123");
+            $user->save();
+
+            if (!Auth::attempt([
+                                   'phone_number' => $phone_number,
+                                   'password' => '123123123'
+                               ], true
+            )) {
+
+                dd(2);
+
+
+                return redirect()
+                    ->back()
+                    ->withErrors(['code' => 'Kod yanlış']);
+            }
+
 
 //        $smsVerification->delete();
 
-        return redirect()
-            ->route('login')
-            ->with('success', 'Sms doğrulaması başarılı. Lütfen giriş yapınız');
+            return redirect()->intended(RouteServiceProvider::HOME);
+
+
+        }else {
+
+            if (!Auth::attempt([
+                                   'phone_number' => $phone_number,
+                                   'password' => $request->code
+                               ], true
+            )) {
+
+
+                return redirect()
+                    ->route('login')
+                    ->withErrors(['phone_number' => 'Telefon numarası veya şifre yanlış']);
+            }
+
+
+//        $smsVerification->delete();
+
+            return redirect()->intended(RouteServiceProvider::HOME);
+
+        }
+
+
+
+
+
+//        return redirect()
+//            ->route('login')
+//            ->with('success', 'Sms doğrulaması başarılı. Lütfen giriş yapınız');
 
     }
+
 
     /**
      * Destroy an authenticated session.
@@ -137,4 +179,6 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
+
+
 }
