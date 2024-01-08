@@ -53,8 +53,8 @@
                                                             {{$hotel->name}}
                                                         </h5>
                                                     </a>
-                                                    <div class="mb-4 text-sm" style="height: 15vh">
-                                                        {!! Str::limit($hotel->description, 200) !!}
+                                                    <div class="mb-4 text-sm" >
+                                                        {!! Str::limit($hotel->description, 100) !!}
                                                     </div>
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <a href="{{route('hotel-management.show', $hotel->id)}}" type="button" class="btn btn-outline-primary btn-sm mb-0">Oda Yönetimi</a>
