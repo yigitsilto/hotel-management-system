@@ -462,14 +462,13 @@
             today = yyyy + '-' + mm + '-' + dd;
 
             checkInDateInput.setAttribute("min", today);
-
             checkOutDateInput.setAttribute("min", today);
 
             checkInDateInput.addEventListener("change", function () {
                 var checkInDate = new Date(this.value);
                 var checkOutDate = new Date(checkOutDateInput.value);
 
-                if (checkOutDate < checkInDate) {
+                if (checkInDate > checkOutDate) {
                     checkOutDateInput.value = this.value;
                 }
 
@@ -477,16 +476,6 @@
                 checkOutDateInput.disabled = false;
             });
 
-            checkOutDateInput.addEventListener("change", function () {
-                var checkInDate = new Date(checkInDateInput.value);
-                var checkOutDate = new Date(this.value);
-
-                if (checkOutDate < checkInDate) {
-                    this.value = checkInDateInput.value;
-                }
-
-                checkInDateInput.setAttribute("max", this.value);
-            });
         });
     </script>
 </div>
