@@ -117,9 +117,6 @@ class AuthenticatedSessionController extends Controller
                                ], true
             )) {
 
-                dd(2);
-
-
                 return redirect()
                     ->back()
                     ->withErrors(['code' => 'Kod yanlış']);
