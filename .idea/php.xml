@@ -142,6 +142,8 @@
       <path value="$PROJECT_DIR$/vendor/spiral/roadrunner-cli" />
       <path value="$PROJECT_DIR$/vendor/spiral/roadrunner-worker" />
       <path value="$PROJECT_DIR$/vendor/spiral/goridge" />
+      <path value="$PROJECT_DIR$/vendor/opcodesio/log-viewer" />
+      <path value="$PROJECT_DIR$/vendor/opcodesio/mail-parser" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />

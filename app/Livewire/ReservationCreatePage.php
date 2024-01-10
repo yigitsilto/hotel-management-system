@@ -98,13 +98,19 @@ class ReservationCreatePage extends Component
                 }
             }
 
-            if ($under18count > 1) {
+
+            if ($under18count > 3) {
                 $this->addError('guests', '18 yaşından küçük misafir sayısı 3\'ten fazla olamaz.');
                 return;
             }
 
             if ($above18count > 3) {
                 $this->addError('guests', '18 yaşından büyük misafir sayısı 3\'ten fazla olamaz.');
+                return;
+            }
+
+            if ($above18count < 1){
+                $this->addError('guests', '18 yaşından büyük misafir sayısı en az 1 olmalıdır.');
                 return;
             }
 
