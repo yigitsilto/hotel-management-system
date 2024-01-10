@@ -112,8 +112,6 @@ class ReservationCreatePage extends Component
                 return;
             }
 
-
-
             // Kontrol etmek istediğimiz oda bilgisi
             $room = Room::findOrFail($this->room->id);
 
