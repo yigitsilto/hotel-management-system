@@ -10,7 +10,7 @@ class ReservationControlService
 {
     public array $errors = [];
 
-    public function isRoomAvailable($room, $checkInDate, $checkOutDate): bool
+    public function isRoomAvailable($room, $checkInDate, $checkOutDate): array
     {
         // oda rezervasyon sayısı kontrolü
         $reservationCountCheck = $this->checkReservationCountAvailability($room, $checkInDate);
@@ -26,7 +26,12 @@ class ReservationControlService
 
         $monthsAvailabilityCheck = $this->checkMonthsAvailability($room, $checkInDate, $userReservations);
 
-        return $reservationCountCheck && $monthsAvailabilityCheck && $maxDayCountCheck;
+        $check = $reservationCountCheck && $monthsAvailabilityCheck && $maxDayCountCheck;
+
+        return [
+            'status' => $check,
+            'errors' => $this->errors
+        ];
     }
 
     private function checkReservationCountAvailability($room, $checkInDate): bool
@@ -95,7 +100,7 @@ class ReservationControlService
 
 
         if (now()->lessThan($blockedUntil)) {
-            $this->errors[] = 'Seçtiğiniz oda türü için ' . $blockedYearInterval . ' yıl içerisinde rezervasyon yapmış olduğunuz için yaz aylarında rezervasyon yapamazsınız.';
+            $this->errors[] = 'Seçtiğiniz oda türü için daha önce rezervasyonunuz bulunduğu için ' . $blockedYearInterval . ' yıl içerisinde yaz aylarında rezervasyon yapamazsınız.';
             return false; // Kullanıcı engellendiği için rezervasyon yapılamaz
         }
 

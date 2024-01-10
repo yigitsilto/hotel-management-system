@@ -54,14 +54,6 @@ class ReservationCreatePage extends Component
         $this->canDoReservation = true;
 
         if ($this->check_in_date && $this->check_out_date) {
-            $room = $this->room;
-            if (!$this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
-                                                                   $this->check_out_date)) {
-                $this->addError('room_id', 'Seçtiğiniz oda türü seçilen tarihler arasında müsaitlik bulunmamaktadır.');
-                $this->canDoReservation = false;
-            }
-
-
             $this->totalPriceToPay = moneyFormat($this->calculateTotalPrice());
         } else {
             $this->totalPriceToPay = moneyFormat($this->room->price);
@@ -90,13 +82,16 @@ class ReservationCreatePage extends Component
             // Kontrol etmek istediğimiz oda bilgisi
             $room = Room::findOrFail($this->room->id);
 
+            $isRoomAvailable = $this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
+                                                                                 $this->check_out_date);
 
-            if (!$this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
-                                                                   $this->check_out_date)) {
-                $this->addError('room_id', 'Seçtiğiniz oda türü için müsaitlik bulunmamaktadır.');
-                return redirect()
-                    ->route('user-dashboard')
-                    ->with('error', 'Seçtiğiniz oda türü için müsaitlik bulunmamaktadır.');
+            if (!$isRoomAvailable['status']) {
+                foreach ($isRoomAvailable['errors'] as $error) {
+                    $this->addError('room_id', $error);
+                }
+                $this->check_out_date = null;
+                $this->check_in_date = null;
+                return false;
             }
 
             $this->createReservation()
