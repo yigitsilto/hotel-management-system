@@ -85,9 +85,34 @@ class ReservationCreatePage extends Component
     {
         $this->validate();
         try {
+
+            $under18count = 0;
+            $above18count = 0;
+            foreach ($this->guests as $item) {
+                if ($item['age'] < 18) {
+                    $under18count++;
+                }
+
+                if ($item['age'] >= 18) {
+                    $above18count++;
+                }
+            }
+
+            if ($under18count > 1) {
+                $this->addError('guests', '18 yaşından küçük misafir sayısı 3\'ten fazla olamaz.');
+                return;
+            }
+
+            if ($above18count > 3) {
+                $this->addError('guests', '18 yaşından büyük misafir sayısı 3\'ten fazla olamaz.');
+                return;
+            }
+
             if ($this->reservationDuplicateCheck()) {
                 return;
             }
+
+
 
             // Kontrol etmek istediğimiz oda bilgisi
             $room = Room::findOrFail($this->room->id);
