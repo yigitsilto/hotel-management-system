@@ -8,58 +8,78 @@ use Carbon\Carbon;
 
 class ReservationControlService
 {
-
+    public array $errors = [];
 
     public function isRoomAvailable($room, $checkInDate, $checkOutDate): bool
     {
+        // oda rezervasyon sayısı kontrolü
         $reservationCountCheck = $this->checkReservationCountAvailability($room, $checkInDate);
-        $monthsAvailabilityCheck = $this->checkMonthsAvailability($room, $checkInDate);
+
+        // max 4 gün rezervasyon yapılabilir
         $maxDayCountCheck = $this->checkMaxDayCount($room, $checkInDate, $checkOutDate);
-        $blockedYearCheck = $this->checkBlockedYear($room, $checkInDate, $checkOutDate);
-
-        return $reservationCountCheck && $monthsAvailabilityCheck && $maxDayCountCheck && $blockedYearCheck;
-    }
-
-    private function checkReservationCountAvailability($room, $checkInDate): bool
-    {
-        // check out date i geçmemiş rezervasyon sayısı
-        return $room->same_room_count > $room->reservations()
-                                             ->where('check_out_date', '>', $checkInDate)
-                                             ->count();
-    }
-
-    private function checkMonthsAvailability($room, $checkInDate): bool
-    {
-        $hotel = $room->hotel;
-        $hotelReservationMonths = $hotel->reservationMonths()
-                                        ->pluck('value')
-                                        ->toArray();
-        $arrivalDate = Carbon::parse($checkInDate);
-        $selectedMonth = $arrivalDate->format('m');
-        return in_array($selectedMonth, $hotelReservationMonths);
-
-    }
-
-
-    private function checkMaxDayCount($room, $checkInDate, $checkOutDate): bool
-    {
-
-        $maxDayCount = $room->hotel->max_stayed_count; // Buraya max_day_count değerini ekleyebilirsiniz
-        $stayDuration = Carbon::parse($checkOutDate)
-                              ->diffInDays($checkInDate);
-
-        return $stayDuration <= $maxDayCount;
-    }
-
-    private function checkBlockedYear($room, $checkInDate, $checkOutDate): bool
-    {
-        $blockedYearInterval = $room->hotel->blocked_year; // engelleme süresi
 
         $userReservations = Reservation::query()
                                        ->where('user_id', auth()->id())
                                        ->where('reservation_status', '!=', ReservationStatusEnum::Rejected->name)
                                        ->orderBy('check_out_date', 'desc')
                                        ->first();
+
+        $monthsAvailabilityCheck = $this->checkMonthsAvailability($room, $checkInDate, $userReservations);
+
+        return $reservationCountCheck && $monthsAvailabilityCheck && $maxDayCountCheck;
+    }
+
+    private function checkReservationCountAvailability($room, $checkInDate): bool
+    {
+
+        $check = ($room->same_room_count - 1) > $room->reservations()
+                                                     ->where('check_out_date', '>', $checkInDate)
+                                                     ->count();
+
+        if (!$check) {
+            $this->errors[] = 'Seçtiğiniz oda türü seçilen tarihler arasında müsaitlik bulunmamaktadır.';
+        }
+
+        return $check;
+
+    }
+
+    private function checkMaxDayCount($room, $checkInDate, $checkOutDate): bool
+    {
+
+        $maxDayCount = $room->hotel->max_stayed_count;
+        $stayDuration = Carbon::parse($checkOutDate)
+                              ->diffInDays($checkInDate);
+
+        $check = $stayDuration <= $maxDayCount;
+
+        if (!$check) {
+            $this->errors[] = 'Seçtiğiniz oda türü için maksimum ' . $maxDayCount . ' gece rezervasyon yapabilirsiniz.';
+        }
+
+        return $check;
+    }
+
+    private function checkMonthsAvailability($room, $checkInDate, $userReservations): bool
+    {
+        $hotel = $room->hotel;
+        $hotelReservationMonths = $hotel->reservationMonths()
+                                        ->pluck('value')
+                                        ->toArray();
+
+        $arrivalDate = Carbon::parse($checkInDate);
+        $selectedMonth = $arrivalDate->format('m');
+
+        if (!in_array($selectedMonth, $hotelReservationMonths)) {
+            return $this->checkBlockedYear($room, $userReservations);
+        }
+
+        return true;
+    }
+
+    private function checkBlockedYear($room, $userReservations): bool
+    {
+        $blockedYearInterval = $room->hotel->blocked_year; // engelleme süresi
 
 
         if (!$userReservations) {
@@ -75,6 +95,7 @@ class ReservationControlService
 
 
         if (now()->lessThan($blockedUntil)) {
+            $this->errors[] = 'Seçtiğiniz oda türü için ' . $blockedYearInterval . ' yıl içerisinde rezervasyon yapmış olduğunuz için yaz aylarında rezervasyon yapamazsınız.';
             return false; // Kullanıcı engellendiği için rezervasyon yapılamaz
         }
 
