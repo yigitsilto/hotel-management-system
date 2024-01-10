@@ -42,7 +42,7 @@
                                                 </a>
                                             </div>
                                             <div class="card-body px-1 pb-0">
-                                                <p class="text-gradient text-dark mb-2 text-sm">Oda Sayısı: {{$hotel->total_rooms}}</p>
+                                                <p class="text-gradient text-dark mb-2 text-sm">Lokasyon: {{$hotel->location}}</p>
                                                 <a href="{{route('user-reservation', $hotel->id)}}">
                                                     <h5>
                                                         {{$hotel->name}}
