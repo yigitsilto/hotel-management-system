@@ -12,6 +12,8 @@ use Livewire\Component;
 
 class ReservationCreatePage extends Component
 {
+    protected $listeners = ['refresh-script'];
+
     public $canDoReservation = true;
     public $totalPriceToPay;
     public $room;
@@ -91,6 +93,7 @@ class ReservationCreatePage extends Component
                 }
                 $this->check_out_date = null;
                 $this->check_in_date = null;
+                $this->scriptUpdated();
                 return false;
             }
 
@@ -171,5 +174,10 @@ class ReservationCreatePage extends Component
                                        'transaction_id' => Str::uuid(),
                                    ]);
 
+    }
+
+    public function scriptUpdated()
+    {
+        $this->dispatchBrowserEvent('refresh-script');
     }
 }

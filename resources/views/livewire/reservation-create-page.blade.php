@@ -450,7 +450,8 @@
 </form>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+
+        function initDate() {
             var checkInDateInput = document.getElementById("check_in_date");
             var checkOutDateInput = document.getElementById("check_out_date");
 
@@ -475,7 +476,14 @@
                 checkOutDateInput.setAttribute("min", this.value);
                 checkOutDateInput.disabled = false;
             });
+        }
 
+        document.addEventListener("DOMContentLoaded", function () {
+            initDate();
         });
+
+        window.addEventListener('refresh-script', event => {
+            initDate();
+        })
     </script>
 </div>
