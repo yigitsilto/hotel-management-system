@@ -24,7 +24,7 @@ class ReservationControlService
                                        ->orderBy('check_out_date', 'desc')
                                        ->first();
 
-        $monthsAvailabilityCheck = $this->checkMonthsAvailability($room, $checkInDate, $userReservations);
+        $monthsAvailabilityCheck = $this->checkMonthsAvailability($room, $checkInDate,$checkOutDate, $userReservations);
 
         $check = $reservationCountCheck && $monthsAvailabilityCheck && $maxDayCountCheck;
 
@@ -65,7 +65,7 @@ class ReservationControlService
         return $check;
     }
 
-    private function checkMonthsAvailability($room, $checkInDate, $userReservations): bool
+    private function checkMonthsAvailability($room, $checkInDate, $checkOutDate, $userReservations): bool
     {
         $hotel = $room->hotel;
         $hotelReservationMonths = $hotel->reservationMonths()
@@ -76,6 +76,13 @@ class ReservationControlService
         $selectedMonth = $arrivalDate->format('m');
 
         if (!in_array($selectedMonth, $hotelReservationMonths)) {
+            return $this->checkBlockedYear($room, $userReservations);
+        }
+
+        $dateForCheckout = Carbon::parse($checkOutDate);
+        $selectedMonthForCheckout = $dateForCheckout->format('m');
+
+        if (!in_array($selectedMonthForCheckout, $hotelReservationMonths)) {
             return $this->checkBlockedYear($room, $userReservations);
         }
 
