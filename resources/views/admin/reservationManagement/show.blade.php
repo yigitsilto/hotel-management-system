@@ -155,6 +155,7 @@
                                 <tr>
                                     <th>İsim</th>
                                     <th>T.C.</th>
+                                    <th>Yaş</th>
                                 </tr>
                                 </thead>
 
@@ -162,6 +163,7 @@
                                 @foreach($reservation->guests as $guest)
                                     <tr>
                                         <td>{{$guest->name}}</td>
+                                        <td>{{$guest->tc}}</td>
                                         <td>{{$guest->age}}</td>
                                     </tr>
                                 @endforeach

@@ -16,6 +16,7 @@ class ReservationCreatePage extends Component
 
     public $canDoReservation = true;
     public $totalPriceToPay;
+    public $totalPrice;
     public $room;
     public $guestSize = 1;
     public $check_in_date;
@@ -43,6 +44,7 @@ class ReservationCreatePage extends Component
         'guests' => 'required|array',
         'guests.*.name' => 'required|string',
         'guests.*.age' => 'required|numeric',
+        'guests.*.tc' => 'required|numeric|digits:11',
     ];
     private ReservationControlService $reservationControlService;
 
@@ -56,9 +58,11 @@ class ReservationCreatePage extends Component
         $this->canDoReservation = true;
 
         if ($this->check_in_date && $this->check_out_date) {
-            $this->totalPriceToPay = moneyFormat($this->calculateTotalPrice());
+            $this->totalPriceToPay = moneyFormat(($this->calculateTotalPrice() * 30) / 100);
+            $this->totalPrice = moneyFormat($this->calculateTotalPrice());
         } else {
-            $this->totalPriceToPay = moneyFormat($this->room->price);
+            $this->totalPriceToPay = moneyFormat(($this->room->price * 30) / 100);
+            $this->totalPrice = moneyFormat($this->room->price);
         }
         return view('livewire.reservation-create-page', [
             'room' => $this->room,
@@ -70,8 +74,12 @@ class ReservationCreatePage extends Component
         $checkInDate = Carbon::parse($this->check_in_date);
         $checkOutDate = Carbon::parse($this->check_out_date);
         $totalDayCount = $checkInDate->diffInDays($checkOutDate) == 0 ? 1 : $checkInDate->diffInDays($checkOutDate);
-        return $this->room->price * $totalDayCount;
+
+        $price = $this->room->price * $totalDayCount;
+
+        return $price;
     }
+
 
     public function save()
     {
@@ -159,6 +167,8 @@ class ReservationCreatePage extends Component
         $checkOutDate = Carbon::parse($this->check_out_date);
         $totalDayCount = $checkInDate->diffInDays($checkOutDate);
 
+        $totalPriceToPay = (($this->room->price * $totalDayCount) * 30) / 100;
+
         return Reservation::query()
                           ->create([
                                        'room_id' => $this->room->id,
@@ -169,7 +179,7 @@ class ReservationCreatePage extends Component
                                        'special_requests' => $this->special_requests,
                                        'payment_method' => $this->payment_method,
                                        'reservation_status' => ReservationStatusEnum::Pending->name,
-                                       'total_amount' => $this->room->price * $totalDayCount,
+                                       'total_amount' => $totalPriceToPay,
                                        'paid_amount' => $paidAmount,
                                        'transaction_id' => Str::uuid(),
                                    ]);

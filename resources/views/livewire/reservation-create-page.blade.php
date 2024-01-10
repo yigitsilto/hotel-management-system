@@ -154,8 +154,13 @@
                                 {{$room->title}}
                             </h5>
                             <p class="mb-0 text-md">
-                                Toplam Ödenmesi Gereken Ücret: <span
+                                Bugün Ödenmesi Gereken Ücret: <span
                                         class="font-weight-bold">{{$totalPriceToPay}}</span>
+                            </p>
+
+                            <p class="mb-0 text-md">
+                                Toplam Ücret: <span
+                                        class="font-weight-bold">{{$totalPrice}}</span>
                             </p>
                         </div>
                     </div>
@@ -261,7 +266,7 @@
                                     <div class="form-group">
                                         <label for="check_in_date">Giriş Tarihi:</label>
                                         <input type="date" class="form-control" id="check_in_date"
-                                               name="check_in_date" wire:model="check_in_date">
+                                               name="check_in_date" wire:model.live="check_in_date" wire:ignore.self>
                                         @error('check_in_date') <span
                                                 class="text-danger">{{ $message }}</span> @enderror
                                     </div>
@@ -272,7 +277,7 @@
                                     <div class="form-group">
                                         <label for="check_out_date">Çıkış Tarihi:</label>
                                         <input type="date" disabled class="form-control" id="check_out_date"
-                                               name="check_out_date" wire:model="check_out_date">
+                                               name="check_out_date" wire:model.live="check_out_date" wire:ignore.self>
                                         @error('check_out_date') <span
                                                 class="text-danger">{{ $message }}</span> @enderror
                                     </div>
@@ -308,9 +313,9 @@
                                 @endif
 
                                 @for ($i = 0; $i < $guestSize; $i++)
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="guest_name_{{ $i }}">{{$i + 1}}. Kişi Adı:</label>
+                                            <label for="guest_name_{{ $i }}">{{$i + 1}}. Kişi İsim Soyisim:</label>
                                             <input type="text" class="form-control" wire:model="guests.{{ $i }}.name"
                                                    id="guest_name_{{ $i }}"
                                                    name="guests.{{ $i }}.name"/>
@@ -319,17 +324,29 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="guest_age_{{ $i }}">{{$i + 1}}. Kişi T.C:</label>
-                                            <input type="number" class="form-control" wire:model="guests.{{ $i }}.age"
-                                                   id="guest_age_{{ $i }}"
-                                                   name="guests.{{ $i }}.age"/>
-                                            @error('guests.'.$i.'.age')
+                                            <label for="guest_tc_{{ $i }}">{{$i + 1}}. Kişi T.C:</label>
+                                            <input type="number" class="form-control" wire:model="guests.{{ $i }}.tc"
+                                                   id="guest_tc_{{ $i }}"
+                                                   name="guests.{{ $i }}.tc"/>
+                                            @error('guests.'.$i.'.tc')
                                             <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="guest_age_{{ $i }}">{{$i + 1}}. Kişi Yaş:</label>
+                                                <input type="number" class="form-control" wire:model="guests.{{ $i }}.age"
+                                                       id="guest_age_{{ $i }}"
+                                                       name="guests.{{ $i }}.age"/>
+                                                @error('guests.'.$i.'.age')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
                                 @endfor
 
                             </div>
