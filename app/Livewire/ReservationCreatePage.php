@@ -31,7 +31,7 @@ class ReservationCreatePage extends Component
     public $note;
     public $pan = '4531444531442283';
     public $Ecom_Payment_Card_ExpDate_Month = '12';
-    public $Ecom_Payment_Card_ExpDate_Year = '2026';
+    public $Ecom_Payment_Card_ExpDate_Year = '26';
     public $cvv = '001';
     public $guests = [];
     public $loading = false;
@@ -41,11 +41,6 @@ class ReservationCreatePage extends Component
         'check_out_date' => 'required|date|after:check_in_date',
         'special_requests' => 'nullable|string',
         'payment_method' => 'required|in:bank_transfer,credit_card',
-        'name' => 'nullable|string',
-        'credit_number' => 'nullable|numeric|digits_between:13,19',
-        'month' => 'nullable|digits:2',
-        'year' => 'nullable|digits:4',
-        'cvv' => 'nullable|numeric|digits:3',
         'guests' => 'required|array',
         'guests.*.name' => 'required|string',
         'guests.*.age' => 'required|numeric',
@@ -118,10 +113,7 @@ class ReservationCreatePage extends Component
     public function save()
     {
 
-
-
         $this->paymentProcess();
-
 
         $this->validate();
         try {
@@ -275,6 +267,8 @@ class ReservationCreatePage extends Component
         // Burada form verilerini kaydedebilirsiniz.
 
         // Şimdi POST isteğini NestPay API'larına gönderin
+        $endpoint = "https://entegrasyon.asseco-see.com.tr/fim/est3Dgate";
+
 
         $postData = [
             'clientid' => $this->clientId,
@@ -298,7 +292,7 @@ class ReservationCreatePage extends Component
         ];
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://entegrasyon.asseco-see.com.tr/fim/est3Dgate');
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -306,7 +300,9 @@ class ReservationCreatePage extends Component
         $response = curl_exec($ch);
         curl_close($ch);
 
-        dd($response);
+        // redirect to enpoint url
+        return redirect($endpoint);
+
 
         if ($response === false) {
             die('POST isteği başarısız oldu: ' . curl_error($ch));
@@ -321,7 +317,7 @@ class ReservationCreatePage extends Component
         // Değerleri başlangıçta ayarla
         $this->amount = $this->totalPriceToPayUnformatted;
         $this->clientId = config('payment.client_id');
-        $this->oid = 111; // Order Id. This can be generated dynamically if needed.
+        $this->oid = 1111111; // Order Id. This can be generated dynamically if needed.
         $this->okUrl = config('payment.ok_url');
         $this->failUrl = config('payment.fail_url');
         $this->transactionType = config('payment.transaction_type');

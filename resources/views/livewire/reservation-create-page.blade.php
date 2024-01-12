@@ -135,7 +135,7 @@
     @if($payment_method == 'bank_transfer')
         <form wire:submit="save">
     @else
-                <form method="post" action="https://entegrasyon.asseco-see.com.tr/fim/est3Dgate">
+                <form method="post" action=" https://entegrasyon.asseco-see.com.tr/fim/est3Dgate">
                     @csrf
     @endif
         <div wire:loading class="loading">Loading&#8230;</div>
@@ -406,7 +406,7 @@
                                         <div class="form-group">
                                             <label for="name">Kart Üzerinde Yazan İsim Soyisim</label>
                                             <input type="text" class="form-control" id="name" name="name"
-                                                   wire:model="name">
+                                                   wire:model.live="name">
                                             @error('name') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
@@ -416,7 +416,7 @@
                                         <div class="form-group">
                                             <label for="pan">Kart Numarası</label>
                                             <input type="text" class="form-control" id="pan"
-                                                   name="pan" wire:model="pan">
+                                                   name="pan" wire:model.live="pan">
                                             @error('pan') <span
                                                     class="text-danger">{{ $message }}</span> @enderror
                                         </div>
@@ -426,20 +426,20 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="Ecom_Payment_Card_ExpDate_Month">Ay</label>
-                                            <select class="form-control" name="Ecom_Payment_Card_ExpDate_Month" id="Ecom_Payment_Card_ExpDate_Month" wire:model="Ecom_Payment_Card_ExpDate_Month">
+                                            <select class="form-control"  wire:model="Ecom_Payment_Card_ExpDate_Month">
                                                 <option value="" selected>Seçiniz</option>
-                                                <option>01</option>
-                                                <option>02</option>
-                                                <option>03</option>
-                                                <option>04</option>
-                                                <option>05</option>
-                                                <option>06</option>
-                                                <option>07</option>
-                                                <option>08</option>
-                                                <option>09</option>
-                                                <option>10</option>
-                                                <option>11</option>
-                                                <option>12</option>
+                                                <option value="01">01</option>
+                                                <option value="02">02</option>
+                                                <option value="03">03</option>
+                                                <option value="04">04</option>
+                                                <option value="05">05</option>
+                                                <option value="06">06</option>
+                                                <option value="07">07</option>
+                                                <option value="08">08</option>
+                                                <option value="09">09</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
                                             </select>
                                             @error('Ecom_Payment_Card_ExpDate_Month') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
@@ -449,18 +449,18 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="year">Yıl</label>
-                                            <select class="form-control" name="Ecom_Payment_Card_ExpDate_Year" id="Ecom_Payment_Card_ExpDate_Year" wire:model="Ecom_Payment_Card_ExpDate_Year">
+                                            <select class="form-control" id="Ecom_Payment_Card_ExpDate_Year" wire:model="Ecom_Payment_Card_ExpDate_Year">
                                                 <option value="" selected>Seçiniz</option>
-                                                <option value="2024">2024</option>
-                                                <option value="2025">2025</option>
-                                                <option value="2026">2026</option>
-                                                <option value="2027">2027</option>
-                                                <option value="2028">2028</option>
-                                                <option value="2029">2029</option>
-                                                <option value="2030">2030</option>
-                                                <option value="2031">2031</option>
-                                                <option value="2032">2032</option>
-                                                <option value="2033">2033</option>
+                                                <option value="24">24</option>
+                                                <option value="25">25</option>
+                                                <option value="26">26</option>
+                                                <option value="27">27</option>
+                                                <option value="28">28</option>
+                                                <option value="29">29</option>
+                                                <option value="30">30</option>
+                                                <option value="31">31</option>
+                                                <option value="32">32</option>
+                                                <option value="33">33</option>
                                             </select>
                                             @error('Ecom_Payment_Card_ExpDate_Year') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
@@ -477,6 +477,8 @@
                                     </div>
 
 
+                                    <input type="text" name="Ecom_Payment_Card_ExpDate_Year" wire:model="Ecom_Payment_Card_ExpDate_Year"/>
+                                    <input type="text" name="Ecom_Payment_Card_ExpDate_Month" wire:model="Ecom_Payment_Card_ExpDate_Month"/>
                                     <input type="text" name="clientid" wire:model="clientId"/>
                                     <input type="text" name="amount" wire:model="amount"/>
                                     <input type="text" name="islemtipi" wire:model="transactionType"/>
@@ -489,7 +491,6 @@
                                     <input type="text" name="storetype" wire:model="storetype"/>
                                     <input type="text" name="lang" wire:model="lang"/>
                                     <input type="text" name="currency" wire:model="currencyVal"/>
-
                                     <input type="text" name="refreshtime" value="100"/>
 {{--                                    <button type="submit" class="btn btn-primary">Submit</button>--}}
 
