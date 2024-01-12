@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/fail-payment', function (\Illuminate\Http\Request $request) {
+Route::post('/fail-payment', function (\Illuminate\Http\Request $request) {
     dd($request->all());
 });
 
