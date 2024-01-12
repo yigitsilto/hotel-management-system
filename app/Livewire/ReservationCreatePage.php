@@ -7,6 +7,7 @@ use App\Jobs\SendIbanSmsJob;
 use App\Models\Reservation;
 use App\Models\Room;
 use App\Models\User;
+use App\Services\EstPosService;
 use App\Services\ReservationControlService;
 use App\Services\SmsService;
 use Carbon\Carbon;
@@ -16,7 +17,9 @@ use Livewire\Component;
 class ReservationCreatePage extends Component
 {
     public $canDoReservation = true;
+
     public $totalPriceToPay;
+    public $totalPriceToPayUnformatted;
     public $totalPrice;
     public $room;
     public $guestSize = 1;
@@ -24,12 +27,12 @@ class ReservationCreatePage extends Component
     public $check_out_date;
     public $special_requests;
     public $payment_method = 'bank_transfer';
-    public $name;
+    public $name = "asdasd asdasd";
     public $note;
-    public $credit_number;
-    public $month;
-    public $year;
-    public $cvv;
+    public $pan = '4531444531442283';
+    public $Ecom_Payment_Card_ExpDate_Month = '12';
+    public $Ecom_Payment_Card_ExpDate_Year = '2026';
+    public $cvv = '001';
     public $guests = [];
     public $loading = false;
     protected $listeners = ['refresh-script'];
@@ -51,7 +54,26 @@ class ReservationCreatePage extends Component
     private ReservationControlService $reservationControlService;
     private SmsService $smsService;
 
-    public function boot(ReservationControlService $reservationControlService, SmsService $smsService): void
+
+    public $amount;
+    public $clientId;
+    public $oid;
+    public $okUrl;
+    public $failUrl;
+    public $transactionType;
+    public $instalment;
+    public $rnd;
+    public $storekey;
+    public $storetype;
+    public $lang;
+    public $currencyVal;
+    public $hash;
+
+
+
+
+    public function boot(ReservationControlService $reservationControlService, SmsService $smsService
+    ): void
     {
         $this->reservationControlService = $reservationControlService;
         $this->smsService = $smsService;
@@ -63,11 +85,19 @@ class ReservationCreatePage extends Component
 
         if ($this->check_in_date && $this->check_out_date) {
             $this->totalPriceToPay = moneyFormat(($this->calculateTotalPrice() * 30) / 100);
+            $this->totalPriceToPayUnformatted = ($this->calculateTotalPrice() * 30) / 100;
             $this->totalPrice = moneyFormat($this->calculateTotalPrice());
         } else {
             $this->totalPriceToPay = moneyFormat(($this->room->price * 30) / 100);
+            $this->totalPriceToPayUnformatted = ($this->room->price * 30) / 100;
             $this->totalPrice = moneyFormat($this->room->price);
         }
+
+        if ($this->payment_method == 'credit_card') {
+           $this->getForm();
+        }
+
+
         return view('livewire.reservation-create-page', [
             'room' => $this->room,
         ]);
@@ -87,6 +117,12 @@ class ReservationCreatePage extends Component
 
     public function save()
     {
+
+
+
+        $this->paymentProcess();
+
+
         $this->validate();
         try {
 
@@ -232,4 +268,95 @@ class ReservationCreatePage extends Component
                                    ]);
 
     }
+
+
+    private function paymentProcess(){
+        $this->getForm();
+        // Burada form verilerini kaydedebilirsiniz.
+
+        // Şimdi POST isteğini NestPay API'larına gönderin
+
+        $postData = [
+            'clientid' => $this->clientId,
+            'amount' => 120.0,
+            'islemtipi' => $this->transactionType,
+            'taksit' => 1,
+            'oid' => $this->oid,
+            'okUrl' => $this->okUrl,
+            'failUrl' => $this->failUrl,
+            'rnd' => $this->rnd,
+            'hash' => $this->hash,
+            'storetype' => $this->storetype,
+            'lang' => $this->lang,
+            'currency' => $this->currencyVal,
+            'refreshtime' => 100,
+            'name' => $this->name,
+            'pan' => $this->pan,
+            'Ecom_Payment_Card_ExpDate_Month' => $this->Ecom_Payment_Card_ExpDate_Month,
+            'Ecom_Payment_Card_ExpDate_Year' => $this->Ecom_Payment_Card_ExpDate_Year,
+            'cvv' => $this->cvv,
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://entegrasyon.asseco-see.com.tr/fim/est3Dgate');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        dd($response);
+
+        if ($response === false) {
+            die('POST isteği başarısız oldu: ' . curl_error($ch));
+        }
+    }
+
+
+    public function getForm()
+    {
+        $amount = $this->totalPriceToPayUnformatted;
+
+        // Değerleri başlangıçta ayarla
+        $this->amount = $this->totalPriceToPayUnformatted;
+        $this->clientId = config('payment.client_id');
+        $this->oid = 111; // Order Id. This can be generated dynamically if needed.
+        $this->okUrl = config('payment.ok_url');
+        $this->failUrl = config('payment.fail_url');
+        $this->transactionType = config('payment.transaction_type');
+        $this->instalment = 1;
+        $this->rnd = microtime();
+        $this->storekey = config('payment.store_key');
+        $this->storetype = config('payment.store_type');
+        $this->lang = config('payment.lang');
+        $this->currencyVal = config('payment.currency');
+
+
+        // Hash değerini hesapla
+        $hashstr = $this->clientId.$this->oid.$this->amount.$this->okUrl.$this->failUrl.$this->transactionType.$this->instalment.$this->rnd.$this->storekey;
+        $this->hash = base64_encode(pack('H*', sha1($hashstr)));
+
+//        return view(
+//            'payment::payment',
+//            compact(
+//                'clientId',
+//                'amount',
+//                'oid',
+//                'okUrl',
+//                'failUrl',
+//                'transactionType',
+//                'instalment',
+//                'rnd',
+//                'storekey',
+//                'storetype',
+//                'lang',
+//                'currencyVal',
+//                'hash'
+//            )
+//        );
+    }
+
+
+
 }

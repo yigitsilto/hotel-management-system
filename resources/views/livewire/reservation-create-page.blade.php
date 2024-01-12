@@ -132,7 +132,12 @@
     </style>
 
 
-    <form wire:submit="save">
+    @if($payment_method == 'bank_transfer')
+        <form wire:submit="save">
+    @else
+                <form method="post" action="https://entegrasyon.asseco-see.com.tr/fim/est3Dgate">
+                    @csrf
+    @endif
         <div wire:loading class="loading">Loading&#8230;</div>
 
 
@@ -377,7 +382,7 @@
                                     <select wire:model.live="payment_method" class="form-control" name="payment_method"
                                             id="payment_method">
                                         <option value="bank_transfer">Havale</option>
-{{--                                        <option value="credit_card">Kredi Kartı</option>--}}
+                                        <option value="credit_card">Kredi Kartı</option>
                                     </select>
                                 </div>
                             </div>
@@ -409,10 +414,10 @@
                                     <!-- Kart Numarası -->
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="credit_number">Kart Numarası</label>
-                                            <input type="text" class="form-control" id="credit_number"
-                                                   name="credit_number" wire:model="credit_number">
-                                            @error('credit_number') <span
+                                            <label for="pan">Kart Numarası</label>
+                                            <input type="text" class="form-control" id="pan"
+                                                   name="pan" wire:model="pan">
+                                            @error('pan') <span
                                                     class="text-danger">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
@@ -420,11 +425,23 @@
                                     <!-- Ay -->
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="month">Ay</label>
-                                            <select class="form-control" name="month" id="month" wire:model="month">
+                                            <label for="Ecom_Payment_Card_ExpDate_Month">Ay</label>
+                                            <select class="form-control" name="Ecom_Payment_Card_ExpDate_Month" id="Ecom_Payment_Card_ExpDate_Month" wire:model="Ecom_Payment_Card_ExpDate_Month">
+                                                <option value="" selected>Seçiniz</option>
                                                 <option>01</option>
+                                                <option>02</option>
+                                                <option>03</option>
+                                                <option>04</option>
+                                                <option>05</option>
+                                                <option>06</option>
+                                                <option>07</option>
+                                                <option>08</option>
+                                                <option>09</option>
+                                                <option>10</option>
+                                                <option>11</option>
+                                                <option>12</option>
                                             </select>
-                                            @error('month') <span class="text-danger">{{ $message }}</span> @enderror
+                                            @error('Ecom_Payment_Card_ExpDate_Month') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
 
@@ -432,10 +449,20 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="year">Yıl</label>
-                                            <select class="form-control" name="year" id="year" wire:model="year">
-                                                <option>2024</option>
+                                            <select class="form-control" name="Ecom_Payment_Card_ExpDate_Year" id="Ecom_Payment_Card_ExpDate_Year" wire:model="Ecom_Payment_Card_ExpDate_Year">
+                                                <option value="" selected>Seçiniz</option>
+                                                <option value="2024">2024</option>
+                                                <option value="2025">2025</option>
+                                                <option value="2026">2026</option>
+                                                <option value="2027">2027</option>
+                                                <option value="2028">2028</option>
+                                                <option value="2029">2029</option>
+                                                <option value="2030">2030</option>
+                                                <option value="2031">2031</option>
+                                                <option value="2032">2032</option>
+                                                <option value="2033">2033</option>
                                             </select>
-                                            @error('year') <span class="text-danger">{{ $message }}</span> @enderror
+                                            @error('Ecom_Payment_Card_ExpDate_Year') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
 
@@ -448,6 +475,24 @@
                                             @error('cvv') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
+
+
+                                    <input type="text" name="clientid" wire:model="clientId"/>
+                                    <input type="text" name="amount" wire:model="amount"/>
+                                    <input type="text" name="islemtipi" wire:model="transactionType"/>
+                                    <input type="text" name="taksit" wire:model="instalment"/>
+                                    <input type="text" name="oid" wire:model="oid"/>
+                                    <input type="text" name="okUrl" wire:model="okUrl"/>
+                                    <input type="text" name="failUrl" wire:model="failUrl"/>
+                                    <input type="text" name="rnd" wire:model="rnd"/>
+                                    <input type="text" name="hash" wire:model="hash"/>
+                                    <input type="text" name="storetype" wire:model="storetype"/>
+                                    <input type="text" name="lang" wire:model="lang"/>
+                                    <input type="text" name="currency" wire:model="currencyVal"/>
+
+                                    <input type="text" name="refreshtime" value="100"/>
+{{--                                    <button type="submit" class="btn btn-primary">Submit</button>--}}
+
 
                                 </div>
 

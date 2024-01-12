@@ -36,7 +36,6 @@ class ReservationControlService
 
     private function checkReservationCountAvailability($room, $checkInDate): bool
     {
-
         $check = ($room->same_room_count - 1) > $room->reservations()
                                                      ->where('check_out_date', '>', $checkInDate)
                                                      ->count();

@@ -18,6 +18,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+Route::get('/fail-payment', function (\Illuminate\Http\Request $request) {
+    dd($request->all());
+});
+
+
 Route::get('/', function () {
     if (Auth::check() && Auth::user()->role == 'ADMIN') {
         return redirect()->route('dashboard');
