@@ -2,15 +2,27 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Enums\ReservationStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendOrderApprovedSmsJob;
 use App\Models\Hotel;
 use App\Models\Reservation;
 use App\Models\Room;
+use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class RezervationManagementController extends Controller
 {
+
+    private SmsService $smsService;
+
+    public function __construct(SmsService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
+
+
     public function index(): View
     {
         $reservations = Reservation::query()
@@ -45,6 +57,11 @@ class RezervationManagementController extends Controller
                                  'reservation_status' => $request->reservation_status,
                                  'paid_amount' => $request->paid_amount,
                              ]);
+
+
+        if ($reservation->reservation_status == ReservationStatusEnum::Success->name) {
+            SendOrderApprovedSmsJob::dispatch($this->smsService, $reservation->user);
+        }
 
         return redirect()
             ->back()

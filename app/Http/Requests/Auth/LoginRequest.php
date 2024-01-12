@@ -28,6 +28,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'phone_number' => 'required|numeric|digits:10',
+            'with_sms' => 'nullable',
            // 'password' => ['required', 'string'],
         ];
     }

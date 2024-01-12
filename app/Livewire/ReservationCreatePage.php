@@ -3,17 +3,18 @@
 namespace App\Livewire;
 
 use App\Enums\ReservationStatusEnum;
+use App\Jobs\SendIbanSmsJob;
 use App\Models\Reservation;
 use App\Models\Room;
+use App\Models\User;
 use App\Services\ReservationControlService;
+use App\Services\SmsService;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
 class ReservationCreatePage extends Component
 {
-    protected $listeners = ['refresh-script'];
-
     public $canDoReservation = true;
     public $totalPriceToPay;
     public $totalPrice;
@@ -31,6 +32,7 @@ class ReservationCreatePage extends Component
     public $cvv;
     public $guests = [];
     public $loading = false;
+    protected $listeners = ['refresh-script'];
     protected $rules = [
         'check_in_date' => 'required|date',
         'check_out_date' => 'required|date|after:check_in_date',
@@ -47,10 +49,12 @@ class ReservationCreatePage extends Component
         'guests.*.tc' => 'required|numeric|digits:11',
     ];
     private ReservationControlService $reservationControlService;
+    private SmsService $smsService;
 
-    public function boot(ReservationControlService $reservationControlService): void
+    public function boot(ReservationControlService $reservationControlService, SmsService $smsService): void
     {
         $this->reservationControlService = $reservationControlService;
+        $this->smsService = $smsService;
     }
 
     public function render()
@@ -109,7 +113,7 @@ class ReservationCreatePage extends Component
                 return;
             }
 
-            if ($above18count < 1){
+            if ($above18count < 1) {
                 $this->addError('guests', '18 yaşından büyük misafir sayısı en az 1 olmalıdır.');
                 return;
             }
@@ -138,6 +142,14 @@ class ReservationCreatePage extends Component
                  ->guests()
                  ->createMany($this->guests);
 
+
+            if ($this->payment_method == 'bank_transfer') {
+                $user = User::query()
+                            ->where('id', auth()->id())
+                            ->first();
+                SendIbanSmsJob::dispatch($this->smsService, $user);
+            }
+
         } catch (\Exception $exception) {
             $this->addError('error', 'Bir hata oluştu. Lütfen tekrar deneyiniz.');
             return redirect()
@@ -147,7 +159,8 @@ class ReservationCreatePage extends Component
 
         return redirect()
             ->route('user-reservation.myReservations')
-            ->with('success', 'Rezervasyonunuz başarıyla oluşturuldu.');
+            ->with('success',
+                   'Rezervasyonunuz başarıyla oluşturuldu. Havale işlemleri için 10 dakika içinde göndermemeniz durumunda rezervasyonunuz iptal edilecektir.');
 
     }
 
@@ -185,6 +198,11 @@ class ReservationCreatePage extends Component
         return false;
     }
 
+    public function scriptUpdated()
+    {
+        $this->dispatchBrowserEvent('refresh-script');
+    }
+
     private function createReservation(): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
     {
         $paidAmount = 0;
@@ -213,10 +231,5 @@ class ReservationCreatePage extends Component
                                        'transaction_id' => Str::uuid(),
                                    ]);
 
-    }
-
-    public function scriptUpdated()
-    {
-        $this->dispatchBrowserEvent('refresh-script');
     }
 }
