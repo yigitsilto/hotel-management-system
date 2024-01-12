@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Setting;
 use App\Models\SmsVerification;
 use App\Models\User;
 
@@ -24,6 +25,8 @@ class SmsService
         $rand = rand(111111, 999999);
         $gsm = $user->phone_number;
 
+        $msg = Setting::query()->where('key', 'login_sms')->first()->value .": ".  $rand;
+
       try{
           $curl = curl_init();
 
@@ -45,7 +48,7 @@ class SmsService
                 <username>'.$this->username.'</username>
                 <password>'.$this->password.'</password>
                 <header>MEDYA IS</header>
-                <msg>Sms Kodunuz ve aynı zamanda yeni şifreniz : '.$rand.'</msg>
+                <msg>'.$msg.'</msg>
                 <gsm>'.$gsm.'</gsm>
                 <filter>0</filter>
                 <encoding>TR</encoding>
@@ -83,6 +86,7 @@ class SmsService
     public function sendBankInformationSms($user)
     {
         $gsm = $user->phone_number;
+        $msg = Setting::query()->where('key', 'iban_sms')->first()->value;
 
         try{
             $curl = curl_init();
@@ -105,7 +109,7 @@ class SmsService
                 <username>'.$this->username.'</username>
                 <password>'.$this->password.'</password>
                 <header>MEDYA IS</header>
-                <msg>Banka Bilgilerimiz : TR1231231123123  </msg>
+                <msg>'.$msg.'</msg>
                 <gsm>'.$gsm.'</gsm>
                 <filter>0</filter>
                 <encoding>TR</encoding>
@@ -132,6 +136,7 @@ class SmsService
     public function sendOrderApprovedSms($user)
     {
         $gsm = $user->phone_number;
+        $msg = Setting::query()->where('key', 'reservation_approved_sms')->first()->value;
 
         try{
             $curl = curl_init();
@@ -154,7 +159,7 @@ class SmsService
                 <username>'.$this->username.'</username>
                 <password>'.$this->password.'</password>
                 <header>MEDYA IS</header>
-                <msg>Rezervasyonunuz onaylanmıştır.</msg>
+                <msg>'.$msg.'</msg>
                 <gsm>'.$gsm.'</gsm>
                 <filter>0</filter>
                 <encoding>TR</encoding>
@@ -181,6 +186,7 @@ class SmsService
     public function sendPaymentSuccessSms($user)
     {
         $gsm = $user->phone_number;
+        $msg = Setting::query()->where('key', 'payment_success_sms')->first()->value;
 
         try{
             $curl = curl_init();
@@ -203,7 +209,7 @@ class SmsService
                 <username>'.$this->username.'</username>
                 <password>'.$this->password.'</password>
                 <header>MEDYA IS</header>
-                <msg>Ödemeniz için teşekkürler.</msg>
+                <msg>'.$msg.'</msg>
                 <gsm>'.$gsm.'</gsm>
                 <filter>0</filter>
                 <encoding>TR</encoding>

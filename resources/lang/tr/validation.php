@@ -197,8 +197,6 @@ return [
         'guests.6.tc' => 'TC Kimlik Numarası',
         'guests.6.name' => 'İsim',
         'guests.6.age' => 'Yaş',
-
-
     ],
 
 ];
