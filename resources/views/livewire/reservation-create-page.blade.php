@@ -491,6 +491,7 @@
 
     <form id="myForm" method="post" action=" https://entegrasyon.asseco-see.com.tr/fim/est3Dgate">
 {{--    <form id="myForm" method="post" action=" http://rezervasyon.piza.com.tr/fail-payment">--}}
+        <input type="text" name="cvv" wire:model="cvv"/>
         <input type="text" name="Ecom_Payment_Card_ExpDate_Year" wire:model="Ecom_Payment_Card_ExpDate_Year"/>
         <input type="text" name="Ecom_Payment_Card_ExpDate_Month" wire:model="Ecom_Payment_Card_ExpDate_Month"/>
         <input type="text" name="pan" wire:model="pan"/>
