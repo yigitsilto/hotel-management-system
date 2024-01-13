@@ -412,7 +412,7 @@
                                         <div class="form-group">
                                             <label for="pan">Kart Numarası</label>
                                             <input type="text" class="form-control" id="pan"
-                                                   name="pan" wire:model.live="pan">
+                                                   name="pan" wire:model="pan">
                                             @error('pan') <span
                                                     class="text-danger">{{ $message }}</span> @enderror
                                         </div>
@@ -508,7 +508,6 @@
         <input type="hidden" name="currency" wire:model="currencyVal"/>
         <input type="hidden" name="refreshtime" value="100"/>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
 
     </form>
 

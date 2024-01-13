@@ -221,7 +221,7 @@ class ReservationCreatePage extends Component
                 $this->check_out_date = null;
                 $this->check_in_date = null;
                 $this->scriptUpdated();
-                return false;
+                return;
             }
 
             $this->createReservation()
