@@ -516,7 +516,7 @@
         document.addEventListener('creditCardRedirection', function () {
             setTimeout(function () {
                 submitForm();
-            }, 1000);
+            }, 1500);
         });
 
         // JavaScript
