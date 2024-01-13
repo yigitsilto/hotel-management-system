@@ -17,7 +17,7 @@ use Livewire\Component;
 class ReservationCreatePage extends Component
 {
     public $canDoReservation = true;
-
+    public $creditCardRedirection = false;
     public $totalPriceToPay;
     public $totalPriceToPayUnformatted;
     public $totalPrice;
@@ -27,12 +27,12 @@ class ReservationCreatePage extends Component
     public $check_out_date;
     public $special_requests;
     public $payment_method = 'bank_transfer';
-    public $name = "asdasd asdasd";
+    public $name;
     public $note;
-    public $pan = '4531444531442283';
-    public $Ecom_Payment_Card_ExpDate_Month = '12';
-    public $Ecom_Payment_Card_ExpDate_Year = '26';
-    public $cvv = '001';
+    public $pan;
+    public $Ecom_Payment_Card_ExpDate_Month;
+    public $Ecom_Payment_Card_ExpDate_Year;
+    public $cvv;
     public $guests = [];
     public $loading = false;
     protected $listeners = ['refresh-script'];
@@ -65,6 +65,9 @@ class ReservationCreatePage extends Component
     public $hash;
 
 
+    private $reservation;
+
+
 
 
     public function boot(ReservationControlService $reservationControlService, SmsService $smsService
@@ -87,12 +90,6 @@ class ReservationCreatePage extends Component
             $this->totalPriceToPayUnformatted = ($this->room->price * 30) / 100;
             $this->totalPrice = moneyFormat($this->room->price);
         }
-
-        if ($this->payment_method == 'credit_card') {
-           $this->getForm();
-        }
-
-
         return view('livewire.reservation-create-page', [
             'room' => $this->room,
         ]);
@@ -109,13 +106,74 @@ class ReservationCreatePage extends Component
         return $price;
     }
 
+    public function sendFormData()
+    {
+        // Endpoint URL
+        $endpoint = "https://entegrasyon.asseco-see.com.tr/fim/est3Dgate";
+
+        // Form verileri
+        $postData = [
+            'Ecom_Payment_Card_ExpDate_Year' => $this->Ecom_Payment_Card_ExpDate_Year,
+            'Ecom_Payment_Card_ExpDate_Month' => $this->Ecom_Payment_Card_ExpDate_Month,
+            'pan' => $this->pan,
+            'clientid' => $this->clientId,
+            'amount' => $this->amount,
+            'islemtipi' => $this->transactionType,
+            'taksit' => $this->instalment,
+            'oid' => $this->oid,
+            'okUrl' => $this->okUrl,
+            'failUrl' => $this->failUrl,
+            'rnd' => $this->rnd,
+            'hash' => $this->hash,
+            'storetype' => $this->storetype,
+            'lang' => $this->lang,
+            'currency' => $this->currencyVal,
+            'refreshtime' => 100,
+        ];
+
+
+        // Curl ayarları
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Curl işlemini gerçekleştir
+        $response = curl_exec($ch);
+
+        // Curl işlemini kapat
+        curl_close($ch);
+
+
+        // Curl isteği başarısız ise hata döndür
+        if ($response === false) {
+            die('POST isteği başarısız oldu: ' . curl_error($ch));
+        }
+
+        // İstek başarılıysa dönen veriyi incele
+    }
+
+
+    public function validateCreditCard() {
+        $this->validate([
+            'pan' => 'required|numeric|digits:16',
+            'Ecom_Payment_Card_ExpDate_Month' => 'required|numeric|digits:2',
+            'Ecom_Payment_Card_ExpDate_Year' => 'required|numeric|digits:2',
+            'cvv' => 'required|numeric|digits:3',
+        ]);
+    }
+
 
     public function save()
     {
 
-        $this->paymentProcess();
-
+        if ($this->payment_method == 'credit_card') {
+            // do the validations for credit card
+            $this->validateCreditCard();
+        }
         $this->validate();
+
         try {
 
             $under18count = 0;
@@ -176,6 +234,15 @@ class ReservationCreatePage extends Component
                             ->where('id', auth()->id())
                             ->first();
                 SendIbanSmsJob::dispatch($this->smsService, $user);
+            }
+
+            if ($this->payment_method == 'credit_card') {
+                $this->getForm();
+                $this->amount = $this->totalPriceToPayUnformatted;
+                $this->oid = $this->reservation->id;
+                $this->creditCardRedirection = true;
+                $this->dispatch('creditCardRedirection');
+                return;
             }
 
         } catch (\Exception $exception) {
@@ -244,80 +311,34 @@ class ReservationCreatePage extends Component
 
         $totalPriceToPay = (($this->room->price * $totalDayCount) * 30) / 100;
 
-        return Reservation::query()
-                          ->create([
-                                       'room_id' => $this->room->id,
-                                       'user_id' => auth()->id(),
-                                       'number_of_guests' => $this->guestSize,
-                                       'check_in_date' => $this->check_in_date,
-                                       'check_out_date' => $this->check_out_date,
-                                       'special_requests' => $this->special_requests,
-                                       'payment_method' => $this->payment_method,
-                                       'reservation_status' => ReservationStatusEnum::Pending->name,
-                                       'total_amount' => $totalPriceToPay,
-                                       'paid_amount' => $paidAmount,
-                                       'transaction_id' => Str::uuid(),
-                                   ]);
+
+        $reservation = Reservation::query()
+                                  ->create([
+                                               'room_id' => $this->room->id,
+                                               'user_id' => auth()->id(),
+                                               'number_of_guests' => $this->guestSize,
+                                               'check_in_date' => $this->check_in_date,
+                                               'check_out_date' => $this->check_out_date,
+                                               'special_requests' => $this->special_requests,
+                                               'payment_method' => $this->payment_method,
+                                               'reservation_status' => ReservationStatusEnum::Pending->name,
+                                               'total_amount' => $totalPriceToPay,
+                                               'paid_amount' => $paidAmount,
+                                               'transaction_id' => Str::uuid(),
+                                           ]);
+
+        $this->reservation = $reservation;
+
+        return $reservation;
 
     }
 
-
-    private function paymentProcess(){
-        $this->getForm();
-        // Burada form verilerini kaydedebilirsiniz.
-
-        // Şimdi POST isteğini NestPay API'larına gönderin
-        $endpoint = "https://entegrasyon.asseco-see.com.tr/fim/est3Dgate";
-
-
-        $postData = [
-            'clientid' => $this->clientId,
-            'amount' => 120.0,
-            'islemtipi' => $this->transactionType,
-            'taksit' => 1,
-            'oid' => $this->oid,
-            'okUrl' => $this->okUrl,
-            'failUrl' => $this->failUrl,
-            'rnd' => $this->rnd,
-            'hash' => $this->hash,
-            'storetype' => $this->storetype,
-            'lang' => $this->lang,
-            'currency' => $this->currencyVal,
-            'refreshtime' => 100,
-            'name' => $this->name,
-            'pan' => $this->pan,
-            'Ecom_Payment_Card_ExpDate_Month' => $this->Ecom_Payment_Card_ExpDate_Month,
-            'Ecom_Payment_Card_ExpDate_Year' => $this->Ecom_Payment_Card_ExpDate_Year,
-            'cvv' => $this->cvv,
-        ];
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $endpoint);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        // redirect to enpoint url
-        return redirect($endpoint);
-
-
-        if ($response === false) {
-            die('POST isteği başarısız oldu: ' . curl_error($ch));
-        }
-    }
 
 
     public function getForm()
     {
-        $amount = $this->totalPriceToPayUnformatted;
-
         // Değerleri başlangıçta ayarla
-        $this->amount = $this->totalPriceToPayUnformatted;
         $this->clientId = config('payment.client_id');
-        $this->oid = 1111111; // Order Id. This can be generated dynamically if needed.
         $this->okUrl = config('payment.ok_url');
         $this->failUrl = config('payment.fail_url');
         $this->transactionType = config('payment.transaction_type');
