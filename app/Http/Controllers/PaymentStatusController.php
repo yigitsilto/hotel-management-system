@@ -18,6 +18,9 @@ class PaymentStatusController extends Controller
             $reservation->save();
         }
 
+
+        dd($request->all());
+
         return view('user.success-payment');
 
 
@@ -30,6 +33,9 @@ class PaymentStatusController extends Controller
         $reservation = \App\Models\Reservation::query()->where('id', $oid)->first();
 
         $reservation?->delete();
+
+        dd($request->all());
+
 
         return view('user.fail-payment');
 

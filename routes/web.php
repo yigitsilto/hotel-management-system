@@ -19,8 +19,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/fail-payment',[App\Http\Controllers\PaymentStatusController::class,'failed']);
-Route::get('/success-payment',[App\Http\Controllers\PaymentStatusController::class,'success']);
+Route::post('/fail-payment',[App\Http\Controllers\PaymentStatusController::class,'failed']);
+Route::post('/success-payment',[App\Http\Controllers\PaymentStatusController::class,'success']);
 
 
 
