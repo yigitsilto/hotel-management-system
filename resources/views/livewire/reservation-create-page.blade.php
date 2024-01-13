@@ -491,22 +491,22 @@
 
     <form id="myForm" method="post" action=" https://entegrasyon.asseco-see.com.tr/fim/est3Dgate">
 {{--    <form id="myForm" method="post" action=" http://rezervasyon.piza.com.tr/fail-payment">--}}
-        <input type="hidden" name="Ecom_Payment_Card_ExpDate_Year" wire:model="Ecom_Payment_Card_ExpDate_Year"/>
-        <input type="hidden" name="Ecom_Payment_Card_ExpDate_Month" wire:model="Ecom_Payment_Card_ExpDate_Month"/>
-        <input type="hidden" name="pan" wire:model="pan"/>
-        <input type="hidden" name="clientid" wire:model="clientId"/>
-        <input type="hidden" name="amount" wire:model="amount"/>
-        <input type="hidden" name="islemtipi" wire:model="transactionType"/>
-        <input type="hidden" name="taksit" wire:model="instalment"/>
-        <input type="hidden" name="oid" wire:model="oid"/>
-        <input type="hidden" name="okUrl" wire:model="okUrl"/>
-        <input type="hidden" name="failUrl" wire:model="failUrl"/>
-        <input type="hidden" name="rnd" wire:model="rnd"/>
-        <input type="hidden" name="hash" wire:model="hash"/>
-        <input type="hidden" name="storetype" wire:model="storetype"/>
-        <input type="hidden" name="lang" wire:model="lang"/>
-        <input type="hidden" name="currency" wire:model="currencyVal"/>
-        <input type="hidden" name="refreshtime" value="100"/>
+        <input type="text" name="Ecom_Payment_Card_ExpDate_Year" wire:model="Ecom_Payment_Card_ExpDate_Year"/>
+        <input type="text" name="Ecom_Payment_Card_ExpDate_Month" wire:model="Ecom_Payment_Card_ExpDate_Month"/>
+        <input type="text" name="pan" wire:model="pan"/>
+        <input type="text" name="clientid" wire:model="clientId"/>
+        <input type="text" name="amount" wire:model="amount"/>
+        <input type="text" name="islemtipi" wire:model="transactionType"/>
+        <input type="text" name="taksit" wire:model="instalment"/>
+        <input type="text" name="oid" wire:model="oid"/>
+        <input type="text" name="okUrl" wire:model="okUrl"/>
+        <input type="text" name="failUrl" wire:model="failUrl"/>
+        <input type="text" name="rnd" wire:model="rnd"/>
+        <input type="text" name="hash" wire:model="hash"/>
+        <input type="text" name="storetype" wire:model="storetype"/>
+        <input type="text" name="lang" wire:model="lang"/>
+        <input type="text" name="currency" wire:model="currencyVal"/>
+        <input type="text" name="refreshtime" value="100"/>
 
 
     </form>
