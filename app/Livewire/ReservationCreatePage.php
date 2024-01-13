@@ -7,7 +7,6 @@ use App\Jobs\SendIbanSmsJob;
 use App\Models\Reservation;
 use App\Models\Room;
 use App\Models\User;
-use App\Services\EstPosService;
 use App\Services\ReservationControlService;
 use App\Services\SmsService;
 use Carbon\Carbon;
@@ -35,21 +34,6 @@ class ReservationCreatePage extends Component
     public $cvv;
     public $guests = [];
     public $loading = false;
-    protected $listeners = ['refresh-script'];
-    protected $rules = [
-        'check_in_date' => 'required|date',
-        'check_out_date' => 'required|date|after:check_in_date',
-        'special_requests' => 'nullable|string',
-        'payment_method' => 'required|in:bank_transfer,credit_card',
-        'guests' => 'required|array',
-        'guests.*.name' => 'required|string',
-        'guests.*.age' => 'required|numeric',
-        'guests.*.tc' => 'required|numeric|digits:11',
-    ];
-    private ReservationControlService $reservationControlService;
-    private SmsService $smsService;
-
-
     public $amount;
     public $clientId;
     public $oid;
@@ -63,11 +47,20 @@ class ReservationCreatePage extends Component
     public $lang;
     public $currencyVal;
     public $hash;
-
-
+    protected $listeners = ['refresh-script'];
+    protected $rules = [
+        'check_in_date' => 'required|date',
+        'check_out_date' => 'required|date|after:check_in_date',
+        'special_requests' => 'nullable|string',
+        'payment_method' => 'required|in:bank_transfer,credit_card',
+        'guests' => 'required|array',
+        'guests.*.name' => 'required|string',
+        'guests.*.age' => 'required|numeric',
+        'guests.*.tc' => 'required|numeric|digits:11',
+    ];
+    private ReservationControlService $reservationControlService;
+    private SmsService $smsService;
     private $reservation;
-
-
 
 
     public function boot(ReservationControlService $reservationControlService, SmsService $smsService
@@ -153,17 +146,6 @@ class ReservationCreatePage extends Component
 
         // İstek başarılıysa dönen veriyi incele
     }
-
-
-    public function validateCreditCard() {
-        $this->validate([
-            'pan' => 'required|numeric|digits:16',
-            'Ecom_Payment_Card_ExpDate_Month' => 'required|numeric|digits:2',
-            'Ecom_Payment_Card_ExpDate_Year' => 'required|numeric|digits:2',
-            'cvv' => 'required|numeric|digits:3',
-        ]);
-    }
-
 
     public function save()
     {
@@ -259,6 +241,16 @@ class ReservationCreatePage extends Component
 
     }
 
+    public function validateCreditCard()
+    {
+        $this->validate([
+                            'pan' => 'required|numeric|digits:16',
+                            'Ecom_Payment_Card_ExpDate_Month' => 'required|numeric|digits:2',
+                            'Ecom_Payment_Card_ExpDate_Year' => 'required|numeric|digits:2',
+                            'cvv' => 'required|numeric|digits:3',
+                        ]);
+    }
+
     private function reservationDuplicateCheck(): bool
     {
         $exists = Reservation::query()
@@ -300,11 +292,7 @@ class ReservationCreatePage extends Component
 
     private function createReservation(): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
     {
-        $paidAmount = 0;
-        // TODO kredi kartıysa ödeme işlemleri yapılacak
-        if ($this->payment_method == 'credit_card') {
 
-        }
         $checkInDate = Carbon::parse($this->check_in_date);
         $checkOutDate = Carbon::parse($this->check_out_date);
         $totalDayCount = $checkInDate->diffInDays($checkOutDate);
@@ -323,8 +311,10 @@ class ReservationCreatePage extends Component
                                                'payment_method' => $this->payment_method,
                                                'reservation_status' => ReservationStatusEnum::Pending->name,
                                                'total_amount' => $totalPriceToPay,
-                                               'paid_amount' => $paidAmount,
+                                               'paid_amount' => 0,
                                                'transaction_id' => Str::uuid(),
+                                               'payment_status' => $this->payment_method == 'credit_card' ? 0 :
+                                                   1,
                                            ]);
 
         $this->reservation = $reservation;
@@ -332,7 +322,6 @@ class ReservationCreatePage extends Component
         return $reservation;
 
     }
-
 
 
     public function getForm()
@@ -351,7 +340,7 @@ class ReservationCreatePage extends Component
 
 
         // Hash değerini hesapla
-        $hashstr = $this->clientId.$this->oid.$this->amount.$this->okUrl.$this->failUrl.$this->transactionType.$this->instalment.$this->rnd.$this->storekey;
+        $hashstr = $this->clientId . $this->oid . $this->amount . $this->okUrl . $this->failUrl . $this->transactionType . $this->instalment . $this->rnd . $this->storekey;
         $this->hash = base64_encode(pack('H*', sha1($hashstr)));
 
 //        return view(
@@ -373,7 +362,6 @@ class ReservationCreatePage extends Component
 //            )
 //        );
     }
-
 
 
 }
