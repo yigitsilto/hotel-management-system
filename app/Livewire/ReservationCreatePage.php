@@ -182,7 +182,7 @@ class ReservationCreatePage extends Component
                 $this->getForm($this->amount);
                 //format amount
 
-                $this->oid = $this->reservation->id;
+                $this->oid = $this->reservation->id. '-' .Str::uuid(). '-' .time();
                 $this->creditCardRedirection = true;
                 $this->dispatch('creditCardRedirection');
                 return;
