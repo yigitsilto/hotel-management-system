@@ -12,7 +12,7 @@ class PaymentStatusController extends Controller
 
        $oidValue = explode('-', $oid)[0];
 
-        $reservation = \App\Models\Reservation::query()->where('id', $oidValue)->first();
+        $reservation = \App\Models\Reservation::query()->withoutGlobalScope('payment_status')->where('id', $oidValue)->first();
 
         dd($oidValue, $reservation);
 
@@ -37,7 +37,7 @@ class PaymentStatusController extends Controller
 
         $oidValue = explode('-', $oid)[0];
 
-        $reservation = \App\Models\Reservation::query()->where('id', $oidValue)->first();
+        $reservation = \App\Models\Reservation::query()->withoutGlobalScope('payment_status')->where('id', $oidValue)->first();
 
         if (!empty($reservation)){
             $reservation?->delete();
