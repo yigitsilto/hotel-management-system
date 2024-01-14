@@ -2,10 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendPaymentSuccessSmsJob;
+use App\Services\SmsService;
 use Illuminate\Http\Request;
 
 class PaymentStatusController extends Controller
 {
+
+    private SmsService $smsService;
+
+    public function __construct(SmsService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
+
+
     public function success(Request $request)
     {
         $oid = isset($request->oid) ? $request->oid : $request->ReturnOid;
@@ -21,6 +32,12 @@ class PaymentStatusController extends Controller
             $reservation->payment_status = true;
             $reservation->save();
         }
+
+
+        $user = $reservation->user;
+
+        $sendSms = SendPaymentSuccessSmsJob::dispatch($this->smsService, $user);
+
 
         return view('user.success-payment');
 
