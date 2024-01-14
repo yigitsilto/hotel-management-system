@@ -86,6 +86,7 @@ class ReservationCreatePage extends Component
             $this->totalPrice = moneyFormat($this->room->price);
         }
 
+
         return view('livewire.reservation-create-page', [
             'room' => $this->room,
         ]);
@@ -97,10 +98,53 @@ class ReservationCreatePage extends Component
         $checkOutDate = Carbon::parse($this->check_out_date);
         $totalDayCount = $checkInDate->diffInDays($checkOutDate) == 0 ? 1 : $checkInDate->diffInDays($checkOutDate);
 
-        $price = $this->room->price * $totalDayCount;
+        $basePrice = $this->room->price * $totalDayCount;
 
-        return $price;
+        // Ek ücretler için başlangıç değeri
+        $extraCharge = 0;
+
+        $under12Count = 0;
+        $between12and18Count = 0;
+        $above18Count = 0;
+
+        // find under 12 age guests
+        foreach ($this->guests as $guest) {
+            $age = $guest['age'];
+            if ($age < 12) {
+                $under12Count++;
+            }
+
+            if ($age >= 12 && $age < 18) {
+                $between12and18Count++;
+            }
+
+            if ($age >= 18) {
+                $above18Count++;
+            }
+        }
+
+        // 2 den fazla 12 yaşından küçük misafir var ise her misafir başına 0.5 günlük ücret alınır.
+        if ($under12Count > 2) {
+            $extraCharge += ($under12Count - 2) * ($this->room->price / 2);
+        }
+
+        //  12-18 yaş arası misafir var ise her misafir başına 0.5 ücret alınır.
+        if ($between12and18Count > 0) {
+            $extraCharge += $between12and18Count * ($this->room->price / 2);
+        }
+
+        // 18 yaşından büyük misafir kendisi dışında var ise 1 günlük ücret alınır
+        if ($above18Count > 1) {
+            $extraCharge += ($above18Count - 1) * $this->room->price;
+        }
+
+
+
+        $totalPrice = $basePrice + $extraCharge;
+
+        return $totalPrice;
     }
+
 
     public function save()
     {
@@ -175,7 +219,6 @@ class ReservationCreatePage extends Component
 
             if ($this->payment_method == 'credit_card') {
                 $this->amount = number_format($this->totalPriceToPayUnformatted, 2, '.', '');
-
 
                 $this->oid = $this->reservation->id. '-' .Str::uuid(). '-' .time();
 

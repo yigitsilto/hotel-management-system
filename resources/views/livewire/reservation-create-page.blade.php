@@ -134,7 +134,7 @@
 
         <form wire:submit="save">
 
-        <div wire:loading class="loading">Loading&#8230;</div>
+        <div wire:loading class="loading" wire:target="save">Loading&#8230;</div>
 
 
         <div class="container-fluid">
@@ -340,7 +340,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="guest_age_{{ $i }}">{{$i + 1}}. Kişi Yaş:</label>
-                                                <input type="number" class="form-control" wire:model="guests.{{ $i }}.age"
+                                                <input type="number" class="form-control" wire:model.live="guests.{{ $i }}.age"
                                                        id="guest_age_{{ $i }}"
                                                        name="guests.{{ $i }}.age"/>
                                                 @error('guests.'.$i.'.age')
