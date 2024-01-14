@@ -26,6 +26,12 @@
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
     @livewireStyles
 
+    <style>
+        .alert{
+            color: white;
+        }
+    </style>
+
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
