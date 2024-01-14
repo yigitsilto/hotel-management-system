@@ -26,12 +26,12 @@ class ReservationCreatePage extends Component
     public $check_out_date;
     public $special_requests;
     public $payment_method = 'bank_transfer';
-    public $name;
+    public $name = "asdasd asdasd";
     public $note;
-    public $pan;
-    public $Ecom_Payment_Card_ExpDate_Month;
-    public $Ecom_Payment_Card_ExpDate_Year;
-    public $cvv;
+    public $pan = '4531444531442283';
+    public $Ecom_Payment_Card_ExpDate_Month = '12';
+    public $Ecom_Payment_Card_ExpDate_Year = '26';
+    public $cvv = '001';
     public $guests = [];
     public $loading = false;
     public $amount;
@@ -63,6 +63,7 @@ class ReservationCreatePage extends Component
     private $reservation;
 
 
+
     public function boot(ReservationControlService $reservationControlService, SmsService $smsService
     ): void
     {
@@ -83,6 +84,10 @@ class ReservationCreatePage extends Component
             $this->totalPriceToPayUnformatted = ($this->room->price * 30) / 100;
             $this->totalPrice = moneyFormat($this->room->price);
         }
+
+        $this->getForm();
+        $this->amount = 30;
+        $this->oid = 30000;
         return view('livewire.reservation-create-page', [
             'room' => $this->room,
         ]);
