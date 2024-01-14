@@ -18,6 +18,7 @@ class PaymentStatusController extends Controller
         if (!empty($reservation)){
             $reservation->paid_amount = $request->amount;
             $reservation->reservation_status = \App\Enums\ReservationStatusEnum::Success->name;
+            $reservation->payment_status = true;
             $reservation->save();
         }
 
