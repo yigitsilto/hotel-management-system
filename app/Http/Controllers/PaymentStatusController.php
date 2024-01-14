@@ -10,7 +10,9 @@ class PaymentStatusController extends Controller
     {
         $oid = isset($request->oid) ? $request->oid : $request->ReturnOid;
 
-        $reservation = \App\Models\Reservation::query()->where('id', $oid)->first();
+       $oidValue = explode('-', $oid)[0];
+
+        $reservation = \App\Models\Reservation::query()->where('id', $oidValue)->first();
 
         if ($reservation){
             $reservation->paid_amount = $request->amount;
@@ -30,7 +32,10 @@ class PaymentStatusController extends Controller
     public function failed(Request $request)
     {
         $oid = isset($request->oid) ? $request->oid : $request->ReturnOid;
-        $reservation = \App\Models\Reservation::query()->where('id', $oid)->first();
+
+        $oidValue = explode('-', $oid)[0];
+
+        $reservation = \App\Models\Reservation::query()->where('id', $oidValue)->first();
 
         $reservation?->delete();
 
