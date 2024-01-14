@@ -109,6 +109,9 @@ class ReservationCreatePage extends Component
 
         // find under 12 age guests
         foreach ($this->guests as $guest) {
+            if (!isset($guest['age'])) {
+                continue;
+            }
             $age = $guest['age'];
             if ($age < 12) {
                 $under12Count++;
@@ -326,7 +329,7 @@ class ReservationCreatePage extends Component
         $checkOutDate = Carbon::parse($this->check_out_date);
         $totalDayCount = $checkInDate->diffInDays($checkOutDate);
 
-        $totalPriceToPay = $this->room->price * $totalDayCount;
+        $totalPriceToPay = $this->calculateTotalPrice();
 
 
         $reservation = Reservation::query()
