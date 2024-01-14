@@ -283,7 +283,7 @@ class ReservationCreatePage extends Component
         $checkOutDate = Carbon::parse($this->check_out_date);
         $totalDayCount = $checkInDate->diffInDays($checkOutDate);
 
-        $totalPriceToPay = (($this->room->price * $totalDayCount) * 30) / 100;
+        $totalPriceToPay = $this->room->price * $totalDayCount;
 
 
         $reservation = Reservation::query()
