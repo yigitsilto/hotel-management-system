@@ -520,12 +520,18 @@
 
         document.addEventListener('creditCardRedirection', function () {
             setTimeout(function () {
+                document.getElementsByClassName("loading")[0].classList.remove("d-none");
+                document.getElementsByClassName("loading")[0].classList.add("d-block");
+            }, 400);
+
+            setTimeout(function () {
                 submitForm();
             }, 1500);
         });
 
         // JavaScript
         function submitForm() {
+
             document.getElementById("myForm").submit();
         }
 
@@ -557,7 +563,9 @@
         }
 
         document.addEventListener("DOMContentLoaded", function () {
+
             initDate();
+
         });
 
         document.addEventListener('refresh-script', event => {
