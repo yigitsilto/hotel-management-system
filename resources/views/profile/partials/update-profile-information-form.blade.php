@@ -10,7 +10,7 @@
 
         <hr>
         <br>
-        <a href="{{route('register')}}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">Yeni Üye Ekle</a>
+        <a href="{{route('register')}}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">Üye Yakını Kaydet</a>
     </header>
 
     <br>
@@ -43,7 +43,7 @@
 
         <div>
             <x-input-label for="identity_number" :value="__('T.C Kimlik Numarası')" />
-            <x-text-input id="identity_number" name="identity_number" type="text" class="mt-1 block w-full" :value="old('identity_number', $user->identity_number)" required autofocus autocomplete="phone_number" />
+            <x-text-input id="identity_number" disabled="true" name="identity_number" type="text" class="mt-1 block w-full" :value="old('identity_number', $user->identity_number)" required autofocus autocomplete="phone_number" />
             <x-input-error class="mt-2" :messages="$errors->get('identity_number')" />
         </div>
 
