@@ -85,9 +85,10 @@ class ReservationCreatePage extends Component
             $this->totalPrice = moneyFormat($this->room->price);
         }
 
-        $this->getForm();
-        $this->amount = 30;
-        $this->oid = 30000;
+        $this->amount = number_format($this->totalPriceToPayUnformatted, 2, '.', '');
+
+        $this->getForm($this->amount);
+
         return view('livewire.reservation-create-page', [
             'room' => $this->room,
         ]);
@@ -102,54 +103,6 @@ class ReservationCreatePage extends Component
         $price = $this->room->price * $totalDayCount;
 
         return $price;
-    }
-
-    public function sendFormData()
-    {
-        // Endpoint URL
-        $endpoint = "https://entegrasyon.asseco-see.com.tr/fim/est3Dgate";
-
-        // Form verileri
-        $postData = [
-            'Ecom_Payment_Card_ExpDate_Year' => $this->Ecom_Payment_Card_ExpDate_Year,
-            'Ecom_Payment_Card_ExpDate_Month' => $this->Ecom_Payment_Card_ExpDate_Month,
-            'pan' => $this->pan,
-            'clientid' => $this->clientId,
-            'amount' => $this->amount,
-            'islemtipi' => $this->transactionType,
-            'taksit' => $this->instalment,
-            'oid' => $this->oid,
-            'okUrl' => $this->okUrl,
-            'failUrl' => $this->failUrl,
-            'rnd' => $this->rnd,
-            'hash' => $this->hash,
-            'storetype' => $this->storetype,
-            'lang' => $this->lang,
-            'currency' => $this->currencyVal,
-            'refreshtime' => 100,
-        ];
-
-
-        // Curl ayarları
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $endpoint);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // Curl işlemini gerçekleştir
-        $response = curl_exec($ch);
-
-        // Curl işlemini kapat
-        curl_close($ch);
-
-
-        // Curl isteği başarısız ise hata döndür
-        if ($response === false) {
-            die('POST isteği başarısız oldu: ' . curl_error($ch));
-        }
-
-        // İstek başarılıysa dönen veriyi incele
     }
 
     public function save()
@@ -224,8 +177,11 @@ class ReservationCreatePage extends Component
             }
 
             if ($this->payment_method == 'credit_card') {
-                $this->getForm();
-                $this->amount = $this->totalPriceToPayUnformatted;
+                $this->amount = number_format($this->totalPriceToPayUnformatted, 2, '.', '');
+
+                $this->getForm($this->amount);
+                //format amount
+
                 $this->oid = $this->reservation->id;
                 $this->creditCardRedirection = true;
                 $this->dispatch('creditCardRedirection');
@@ -329,7 +285,7 @@ class ReservationCreatePage extends Component
     }
 
 
-    public function getForm()
+    public function getForm($amount)
     {
         // Değerleri başlangıçta ayarla
         $this->clientId = config('payment.client_id');
@@ -345,7 +301,8 @@ class ReservationCreatePage extends Component
 
 
         // Hash değerini hesapla
-        $hashstr = $this->clientId . $this->oid . $this->amount . $this->okUrl . $this->failUrl . $this->transactionType . $this->instalment . $this->rnd . $this->storekey;
+        $hashstr = $this->clientId . $this->oid . $amount . $this->okUrl . $this->failUrl . $this->transactionType .
+            $this->instalment . $this->rnd . $this->storekey;
         $this->hash = base64_encode(pack('H*', sha1($hashstr)));
 
 //        return view(
