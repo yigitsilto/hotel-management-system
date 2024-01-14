@@ -14,7 +14,9 @@ class PaymentStatusController extends Controller
 
         $reservation = \App\Models\Reservation::query()->where('id', $oidValue)->first();
 
-        if ($reservation){
+        dd($oidValue, $reservation);
+
+        if (!empty($reservation)){
             $reservation->paid_amount = $request->amount;
             $reservation->status = \App\Enums\ReservationStatusEnum::Success->name;
             $reservation->save();
@@ -37,7 +39,9 @@ class PaymentStatusController extends Controller
 
         $reservation = \App\Models\Reservation::query()->where('id', $oidValue)->first();
 
-        $reservation?->delete();
+        if (!empty($reservation)){
+            $reservation?->delete();
+        }
 
         dd($request->all());
 
