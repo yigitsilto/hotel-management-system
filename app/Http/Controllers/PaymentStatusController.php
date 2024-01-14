@@ -14,7 +14,6 @@ class PaymentStatusController extends Controller
 
         $reservation = \App\Models\Reservation::query()->withoutGlobalScope('payment_status')->where('id', $oidValue)->first();
 
-        dd($oidValue, $reservation);
 
         if (!empty($reservation)){
             $reservation->paid_amount = $request->amount;
@@ -22,12 +21,7 @@ class PaymentStatusController extends Controller
             $reservation->save();
         }
 
-
-        dd($request->all());
-
         return view('user.success-payment');
-
-
 
     }
 
@@ -42,8 +36,6 @@ class PaymentStatusController extends Controller
         if (!empty($reservation)){
             $reservation?->delete();
         }
-
-        dd($request->all());
 
 
         return view('user.fail-payment');
