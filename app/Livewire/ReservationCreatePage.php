@@ -15,6 +15,7 @@ use Livewire\Component;
 
 class ReservationCreatePage extends Component
 {
+    public $form;
     public $canDoReservation = true;
     public $creditCardRedirection = false;
     public $totalPriceToPay;
@@ -84,10 +85,6 @@ class ReservationCreatePage extends Component
             $this->totalPriceToPayUnformatted = ($this->room->price * 30) / 100;
             $this->totalPrice = moneyFormat($this->room->price);
         }
-
-        $this->amount = number_format($this->totalPriceToPayUnformatted, 2, '.', '');
-
-        $this->getForm($this->amount);
 
         return view('livewire.reservation-create-page', [
             'room' => $this->room,
@@ -179,10 +176,12 @@ class ReservationCreatePage extends Component
             if ($this->payment_method == 'credit_card') {
                 $this->amount = number_format($this->totalPriceToPayUnformatted, 2, '.', '');
 
-                $this->getForm($this->amount);
-                //format amount
 
                 $this->oid = $this->reservation->id. '-' .Str::uuid(). '-' .time();
+
+                $this->getForm($this->amount);
+                $this->form = $this->createForm();
+
                 $this->creditCardRedirection = true;
                 $this->dispatch('creditCardRedirection');
                 return;
@@ -200,6 +199,32 @@ class ReservationCreatePage extends Component
             ->with('success',
                    'Rezervasyonunuz başarıyla oluşturuldu. Havale işlemleri için 10 dakika içinde göndermemeniz durumunda rezervasyonunuz iptal edilecektir.');
 
+    }
+
+    public function createForm()
+    {
+        $form = '<form id="myForm" method="post" action="https://entegrasyon.asseco-see.com.tr/fim/est3Dgate">';
+        $form .= '<input type="text" name="Ecom_Payment_Card_ExpDate_Year" value="'.$this->Ecom_Payment_Card_ExpDate_Year.'" />';
+        $form .= '<input type="text" name="Ecom_Payment_Card_ExpDate_Month" value="'.$this->Ecom_Payment_Card_ExpDate_Month.'" />';
+        $form .= '<input type="text" name="cc_owner" value="'.$this->name.'" />';
+        $form .= '<input type="text" name="cv2" value="'.$this->cvv.'" />';
+        $form .= '<input type="text" name="cvv" value="'.$this->cvv.'" />';
+        $form .= '<input type="text" name="pan" value="'.$this->pan.'" />';
+        $form .= '<input type="text" name="clientid" value="'.$this->clientId.'" />';
+        $form .= '<input type="text" name="amount" value="'.$this->amount.'" />';
+        $form .= '<input type="text" name="islemtipi" value="'.$this->transactionType.'" />';
+        $form .= '<input type="text" name="taksit" value="'.$this->instalment.'" />';
+        $form .= '<input type="text" name="oid" value="'.$this->oid.'" />';
+        $form .= '<input type="text" name="okUrl" value="'.$this->okUrl.'" />';
+        $form .= '<input type="text" name="failUrl" value="'.$this->failUrl.'" />';
+        $form .= '<input type="text" name="rnd" value="'.$this->rnd.'" />';
+        $form .= '<input type="text" name="hash" value="'.$this->hash.'" />';
+        $form .= '<input type="text" name="storetype" value="'.$this->storetype.'" />';
+        $form .= '<input type="text" name="lang" value="'.$this->lang.'" />';
+        $form .= '<input type="text" name="currency" value="'.$this->currencyVal.'" />';
+        $form .= '</form>';
+
+        return $form;
     }
 
     public function validateCreditCard()

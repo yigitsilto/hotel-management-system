@@ -489,28 +489,9 @@
         </div>
 </form>
 
-    <form id="myForm" method="post" action="https://entegrasyon.asseco-see.com.tr/fim/est3Dgate">
-{{--            <form id="myForm" method="post" action=" http://rezervasyon.piza.com.tr/fail-payment">--}}
-        <input type="hidden" name="Ecom_Payment_Card_ExpDate_Year" wire:model="Ecom_Payment_Card_ExpDate_Year"/>
-        <input type="hidden" name="Ecom_Payment_Card_ExpDate_Month" wire:model="Ecom_Payment_Card_ExpDate_Month"/>
-        <input type="hidden" name="cc_owner" wire:model="name"/>
-        <input type="hidden" name="cv2" wire:model="cvv"/>
-        <input type="hidden" name="cvv" wire:model="cvv"/>
-        <input type="hidden" name="pan" wire:model="pan"/>
-        <input type="hidden" name="clientid" wire:model="clientId"/>
-        <input type="hidden" name="amount" wire:model="amount"/>
-        <input type="hidden" name="islemtipi" wire:model="transactionType"/>
-        <input type="hidden" name="taksit" wire:model="instalment"/>
-        <input type="hidden" name="oid" wire:model="oid"/>
-        <input type="hidden" name="okUrl" wire:model="okUrl"/>
-        <input type="hidden" name="failUrl" wire:model="failUrl"/>
-        <input type="hidden" name="rnd" wire:model="rnd"/>
-        <input type="hidden" name="hash" wire:model="hash"/>
-        <input type="hidden" name="storetype" wire:model="storetype"/>
-        <input type="hidden" name="lang" wire:model="lang"/>
-        <input type="hidden" name="currency" wire:model="currencyVal"/>
-
-    </form>
+    <div style="visibility: hidden">
+        {!! $form !!}
+    </div>
 
 {{--    <form id="myForm" method="post" action=" https://entegrasyon.asseco-see.com.tr/fim/est3Dgate">--}}
 {{--        --}}{{--    <form id="myForm" method="post" action=" http://rezervasyon.piza.com.tr/fail-payment">--}}
