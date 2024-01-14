@@ -76,6 +76,20 @@ class ReservationCreatePage extends Component
         $this->canDoReservation = true;
 
         if ($this->check_in_date && $this->check_out_date) {
+
+            $isRoomAvailable = $this->reservationControlService->isRoomAvailable($this->room, $this->check_in_date,
+                                                                                 $this->check_out_date);
+            if (!$isRoomAvailable['status']) {
+                foreach ($isRoomAvailable['errors'] as $error) {
+                    $this->addError('room_id', $error);
+                }
+
+                return view('livewire.reservation-create-page', [
+                    'room' => $this->room,
+                ]);
+            }
+
+
             $this->totalPriceToPay = moneyFormat(($this->calculateTotalPrice() * 30) / 100);
             $this->totalPriceToPayUnformatted = ($this->calculateTotalPrice() * 30) / 100;
             $this->totalPrice = moneyFormat($this->calculateTotalPrice());
@@ -158,8 +172,7 @@ class ReservationCreatePage extends Component
                 foreach ($isRoomAvailable['errors'] as $error) {
                     $this->addError('room_id', $error);
                 }
-                $this->check_out_date = null;
-                $this->check_in_date = null;
+
                 $this->scriptUpdated();
                 return;
             }
@@ -248,7 +261,7 @@ class ReservationCreatePage extends Component
 
     public function scriptUpdated()
     {
-        $this->dispatchBrowserEvent('refresh-script');
+        $this->dispatch('refresh-script');
     }
 
     private function createReservation(): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model

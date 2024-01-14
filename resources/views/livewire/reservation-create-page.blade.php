@@ -579,7 +579,7 @@
             initDate();
         });
 
-        window.addEventListener('refresh-script', event => {
+        document.addEventListener('refresh-script', event => {
             initDate();
         })
     </script>
