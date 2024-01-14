@@ -63,7 +63,11 @@ class ReservationCreatePage extends Component
     private SmsService $smsService;
     private $reservation;
 
-
+    public function updatedGuestSize()
+    {
+        // guests dizisini guestSize'a uygun olarak güncelle
+        $this->guests = array_slice($this->guests, 0, $this->guestSize);
+    }
 
     public function boot(ReservationControlService $reservationControlService, SmsService $smsService
     ): void
