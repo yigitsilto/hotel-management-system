@@ -266,7 +266,7 @@ class ReservationCreatePage extends Component
         $form .= '<input type="text" name="clientid" value="'.$this->clientId.'" />';
         $form .= '<input type="text" name="amount" value="'.$this->amount.'" />';
         $form .= '<input type="text" name="islemtipi" value="'.$this->transactionType.'" />';
-       // $form .= '<input type="text" name="taksit" value="'.$this->instalment.'" />';
+        $form .= '<input type="text" name="taksit" value="'.$this->instalment.'" />';
         $form .= '<input type="text" name="oid" value="'.$this->oid.'" />';
         $form .= '<input type="text" name="okUrl" value="'.$this->okUrl.'" />';
         $form .= '<input type="text" name="failUrl" value="'.$this->failUrl.'" />';
