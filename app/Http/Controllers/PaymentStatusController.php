@@ -55,10 +55,11 @@ class PaymentStatusController extends Controller
             $reservation?->delete();
         }
 
-        dd($request->all());
+        $errMsg = $request->ErrMsg;
 
 
-        return view('user.fail-payment');
+
+        return view('user.fail-payment', compact('errMsg'));
 
     }
 }

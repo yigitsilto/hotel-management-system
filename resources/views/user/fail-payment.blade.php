@@ -26,6 +26,7 @@
                                     </div>
                                     <div class="text-center">
                                         <h5>Ödemeniz alınırken bir hata meydana geldi.!</h5>
+                                         <p>{{$errMsg}}</p>
                                         <a href="/" class="btn btn-primary">Anasayfaya Git</a>
                                     </div>
                                 </div>
