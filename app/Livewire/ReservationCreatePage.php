@@ -90,7 +90,6 @@ class ReservationCreatePage extends Component
             $this->totalPrice = moneyFormat($this->room->price);
         }
 
-
         return view('livewire.reservation-create-page', [
             'room' => $this->room,
         ]);
@@ -253,7 +252,11 @@ class ReservationCreatePage extends Component
 
     public function createForm()
     {
-        $form = '<form id="myForm" method="post" action="https://entegrasyon.asseco-see.com.tr/fim/est3Dgate">';
+
+        $url = env('PAYMENT_URL');
+
+//        $form = '<form id="myForm" method="post" action="https://entegrasyon.asseco-see.com.tr/fim/est3Dgate">';
+        $form = '<form id="myForm" method="post" action="'.$url.'">';
         $form .= '<input type="text" name="Ecom_Payment_Card_ExpDate_Year" value="'.$this->Ecom_Payment_Card_ExpDate_Year.'" />';
         $form .= '<input type="text" name="Ecom_Payment_Card_ExpDate_Month" value="'.$this->Ecom_Payment_Card_ExpDate_Month.'" />';
         $form .= '<input type="text" name="cc_owner" value="'.$this->name.'" />';
