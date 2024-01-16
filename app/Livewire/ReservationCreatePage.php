@@ -370,7 +370,7 @@ class ReservationCreatePage extends Component
         $this->okUrl = config('payment.ok_url');
         $this->failUrl = config('payment.fail_url');
         $this->transactionType = config('payment.transaction_type');
-        $this->instalment = 1;
+        $this->instalment = 0;
         $this->rnd = microtime();
         $this->storekey = config('payment.store_key');
         $this->storetype = config('payment.store_type');
