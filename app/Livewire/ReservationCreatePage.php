@@ -27,12 +27,12 @@ class ReservationCreatePage extends Component
     public $check_out_date;
     public $special_requests;
     public $payment_method = 'bank_transfer';
-    public $name = "asdasd asdasd";
+    public $name;
     public $note;
-    public $pan = '4531444531442283';
-    public $Ecom_Payment_Card_ExpDate_Month = '12';
-    public $Ecom_Payment_Card_ExpDate_Year = '26';
-    public $cvv = '001';
+    public $pan;
+    public $Ecom_Payment_Card_ExpDate_Month;
+    public $Ecom_Payment_Card_ExpDate_Year;
+    public $cvv;
     public $guests = [];
     public $loading = false;
     public $amount;
