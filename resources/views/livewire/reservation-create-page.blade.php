@@ -384,11 +384,10 @@
                             </div>
 
                             @if($payment_method == 'bank_transfer')
-
                                 <div>
-                                    <h3 style="text-align: center">Ziraat Bankası</h3>
-                                    <p style="text-align: center">Hesap No: 1231211HBSS</p>
-                                    <p style="text-align: center">TR12312391293912391291239</p>
+                                    <h3 style="text-align: center">Şube : 1380/KEÇİÖĞREN FATİH ŞUBEŞİ/ANKAR</h3>
+                                    <p style="text-align: center">Hesap No: 10100733</p>
+                                    <p style="text-align: center">TR680001200138000010100733</p>
                                 </div>
 
                             @endif
