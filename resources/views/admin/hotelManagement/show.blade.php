@@ -30,6 +30,7 @@
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Müsaitlik Durumu</th>
                                         <th class="text-secondary opacity-7"></th>
                                         <th class="text-secondary opacity-7"></th>
+                                        <th class="text-secondary opacity-7"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -56,6 +57,11 @@
                                            <td class="align-middle">
                                                <a href="{{route('room-management.upload.images.create', $room->id)}}" class="btn btn-sm btn-secondary text-secondary text-white font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                                    Resimleri Düzenle
+                                               </a>
+                                           </td>
+                                           <td class="align-middle">
+                                               <a href="{{route('reservation-management.manuel.create', $room->id)}}" class="btn btn-sm btn-primary text-secondary text-white font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                   Manuel Rezervasyon Yap
                                                </a>
                                            </td>
                                        </tr>

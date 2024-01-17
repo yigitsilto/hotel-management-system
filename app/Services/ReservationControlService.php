@@ -52,6 +52,10 @@ class ReservationControlService
     {
 
         $maxDayCount = $room->hotel->max_stayed_count;
+
+        if ($maxDayCount == 0) {
+            return true;
+        }
         $stayDuration = Carbon::parse($checkOutDate)
                               ->diffInDays($checkInDate);
 

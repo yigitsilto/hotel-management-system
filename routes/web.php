@@ -57,6 +57,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     /** Room Management routes */
     Route::get('room-management/{hotel}/create', [RoomController::class, 'create'])->name('room-management.create');
     Route::post('room-management/{hotel}', [RoomController::class, 'store'])->name('room-management.store');
+    Route::get('reservation-management/manuel-reservation-page/{room}',
+               [\App\Http\Controllers\user\RezervationController::class, 'manuelCreate'])->name
+    ('reservation-management.manuel.create');
 
 
     Route::get('upload-room-images/{room}/create', [RoomController::class, 'uploadImagesCreate'])->name('room-management.upload.images.create');

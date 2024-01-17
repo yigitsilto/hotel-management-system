@@ -20,6 +20,11 @@ class RezervationController extends Controller
         return view('user.rezervation', compact('hotel', 'rooms'));
     }
 
+    public function manuelCreate(Room $room): View
+    {
+        $hotel = $room->hotel;
+        return view('admin.reservationManagement.reservation-create', compact('room', 'hotel'));
+    }
     public function show(Room $room): View
     {
         $hotel = $room->hotel;
