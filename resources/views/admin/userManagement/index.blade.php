@@ -8,13 +8,15 @@
                     <div class="card mb-4">
                         <div class="card-header pb-0">
                             <div class="row mt-3">
-                                <div class="col-10">
+                                <div class="col-9">
                                     <h6>Kullanıcı Bilgileri</h6>
                                     <p class="text-sm">Sisteme kayıtlı kullanıcı bilgilerini içerir.</p>
                                 </div>
-                                <div class="col-2">
+
+
+                                <div class="col-3">
                                     <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('user.create')}}">
-                                        Kullanıcı Kayıdı Ekle
+                                        Manuel Kullanıcı Kayıdı Ekle
                                     </a>
                                 </div>
                             </div>

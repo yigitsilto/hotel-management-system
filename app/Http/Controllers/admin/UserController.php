@@ -7,14 +7,19 @@ use App\Http\Requests\admin\HotelCreateRequest;
 use App\Http\Requests\admin\HotelUpdateRequest;
 use App\Http\Requests\admin\UserCreateRequest;
 use App\Http\Requests\admin\UserUpdateEquest;
+use App\Imports\UsersImport;
 use App\Models\Hotel;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
+    public function importFile(){
+        return view('admin.userManagement.import');
+    }
     public function index(): View
     {
         $users = User::query()
@@ -75,5 +80,23 @@ class UserController extends Controller
         return redirect()->route('user.index')->with('success', 'Kullanıcı başarıyla güncellendi.');
     }
 
+
+    public function exampleDownload(){
+        return response()->download(public_path('example-file.xlsx'));
+    }
+
+    public function importDownload(Request $request){
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv'
+        ]);
+
+        Excel::import(new UsersImport(),request()->file('file'));
+
+        return redirect()->back()->with('success', 'Kullanıcılar başarıyla eklendi.');
+
+//        $path = $request->file('file')->getRealPath();
+//        $data = \Excel::import(new \App\Imports\UsersImport, $path);
+//        return redirect()->route('user.index')->with('success', 'Kullanıcılar başarıyla eklendi.');
+    }
 
 }

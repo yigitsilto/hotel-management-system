@@ -144,6 +144,11 @@
       <path value="$PROJECT_DIR$/vendor/spiral/goridge" />
       <path value="$PROJECT_DIR$/vendor/opcodesio/log-viewer" />
       <path value="$PROJECT_DIR$/vendor/opcodesio/mail-parser" />
+      <path value="$PROJECT_DIR$/vendor/phpoffice/phpspreadsheet" />
+      <path value="$PROJECT_DIR$/vendor/maatwebsite/excel" />
+      <path value="$PROJECT_DIR$/vendor/markbaker/matrix" />
+      <path value="$PROJECT_DIR$/vendor/markbaker/complex" />
+      <path value="$PROJECT_DIR$/vendor/ezyang/htmlpurifier" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />

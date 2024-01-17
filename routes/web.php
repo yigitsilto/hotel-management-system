@@ -36,6 +36,15 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::get('/import-file',[\App\Http\Controllers\admin\UserController::class,'importFile'])->name('import.file.page');
+    Route::get('/download-example-file-user',[\App\Http\Controllers\admin\UserController::class,'exampleDownload'])
+         ->name
+    ('example.file.download');
+    Route::post('/import-excel-file-user',[\App\Http\Controllers\admin\UserController::class,'importDownload'])->name
+    ('import.file');
+
+
     Route::get('/dashboard', [\App\Http\Controllers\admin\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/settings', [\App\Http\Controllers\admin\SettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings', [\App\Http\Controllers\admin\SettingsController::class, 'update'])->name('settings.update');
