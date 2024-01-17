@@ -61,18 +61,21 @@
 
 
 
+                            @if(count($failedRows) > 0)
+
                             <div class="alert alert-danger">
-                              <ul>
-                                  @foreach($failedRows as $item)
+                                <ul>
+                                    @foreach($failedRows as $item)
 
-                                  <li>
-                                      <p> {{$item->reason}} -  {{$item->value}}</p>
-                                  </li>
-                                  @endforeach
+                                        <li>
+                                            <p> {{$item->reason}} -  {{$item->value}}</p>
+                                        </li>
+                                    @endforeach
 
 
-                              </ul>
+                                </ul>
                             </div>
+                            @endif
 
 
 
