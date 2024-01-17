@@ -20,9 +20,18 @@
                                 </div>
                             </div>
                         </div>
+
+
                         <div class="card-body p-3">
                             <div class="row">
                                 <div class="col-12">
+
+                                    <div class="alert alert-warning">
+                                        <p>Kullanıcı Eklemek için gerekli excel şablonu sırası şu şekilde olmalıdır : </p>
+
+                                        <p>Adı Soyadı(Tek bir satırda), T.C Numarası, E-Posta, Telefon numarası(Başında 0 olmadan)</p>
+                                    </div>
+
                                     <form action="{{ route('import.file') }}" enctype="multipart/form-data" method="POST">
                                         @csrf
                                         <div class="row">

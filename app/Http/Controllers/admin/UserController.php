@@ -82,7 +82,7 @@ class UserController extends Controller
 
 
     public function exampleDownload(){
-        return response()->download(public_path('example-file.xlsx'));
+        return response()->download(public_path('example-file-user.xlsx'));
     }
 
     public function importDownload(Request $request){
@@ -92,7 +92,7 @@ class UserController extends Controller
 
         Excel::import(new UsersImport(),request()->file('file'));
 
-        return redirect()->back()->with('success', 'Kullanıcılar başarıyla eklendi.');
+        return redirect()->back()->with('success', 'Kullanıcılar ekleniyor. Takip etmek için kullanıcı listesine gidiniz.');
 
 //        $path = $request->file('file')->getRealPath();
 //        $data = \Excel::import(new \App\Imports\UsersImport, $path);
