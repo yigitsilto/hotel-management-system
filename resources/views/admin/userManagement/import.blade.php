@@ -32,6 +32,11 @@
                                         <p>Adı Soyadı(Tek bir satırda), T.C Numarası, E-Posta, Telefon numarası(Başında 0 olmadan)</p>
                                     </div>
 
+                                    <div class="alert alert-info" >
+                                        <p>Yüklenen excelden geri dönen hatalar için sayfayı yenileyiniz.</p>
+
+                                    </div>
+
                                     <form action="{{ route('import.file') }}" enctype="multipart/form-data" method="POST">
                                         @csrf
                                         <div class="row">
@@ -52,6 +57,26 @@
 
                             </div>
                         </div>
+
+
+
+
+                            <div class="alert alert-danger">
+                              <ul>
+                                  @foreach($failedRows as $item)
+
+                                  <li>
+                                      <p> {{$item->reason}} -  {{$item->value}}</p>
+                                  </li>
+                                  @endforeach
+
+
+                              </ul>
+                            </div>
+
+
+
+
 
                     </div>
                 </div>

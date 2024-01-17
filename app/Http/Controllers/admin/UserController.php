@@ -8,6 +8,7 @@ use App\Http\Requests\admin\HotelUpdateRequest;
 use App\Http\Requests\admin\UserCreateRequest;
 use App\Http\Requests\admin\UserUpdateEquest;
 use App\Imports\UsersImport;
+use App\Models\FailedRow;
 use App\Models\Hotel;
 use App\Models\Room;
 use App\Models\User;
@@ -18,7 +19,8 @@ use Maatwebsite\Excel\Facades\Excel;
 class UserController extends Controller
 {
     public function importFile(){
-        return view('admin.userManagement.import');
+        $failedRows = \App\Models\FailedRow::query()->get();
+        return view('admin.userManagement.import', compact('failedRows'));
     }
     public function index(): View
     {
@@ -89,6 +91,8 @@ class UserController extends Controller
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls,csv'
         ]);
+
+        FailedRow::query()->truncate();
 
         Excel::import(new UsersImport(),request()->file('file'));
 
