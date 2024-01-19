@@ -55,6 +55,7 @@ class ReservationCreateManuelPage extends Component
         'check_in_date' => 'required|date',
         'check_out_date' => 'required|date|after:check_in_date',
         'special_requests' => 'nullable|string',
+        'user' => 'nullable|exists:users,id',
         'payment_method' => 'required|in:bank_transfer,credit_card',
         'guests' => 'required|array',
         'guests.*.name' => 'required|string',
