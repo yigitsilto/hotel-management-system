@@ -1,4 +1,4 @@
-@extends('layouts.user')
+@extends('layouts.admin')
 @section('title', 'Anasayfa')
 @section('content')
     @livewire('reservation-create-manuel-page', ['room' => $room])
