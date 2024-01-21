@@ -84,11 +84,28 @@ class ReservationCreatePage extends Component
             $this->totalPriceToPay = moneyFormat(($this->calculateTotalPrice() * 30) / 100);
             $this->totalPriceToPayUnformatted = ($this->calculateTotalPrice() * 30) / 100;
             $this->totalPrice = moneyFormat($this->calculateTotalPrice());
+
+
+            $isRoomAvailable = $this->reservationControlService->isRoomAvailable($this->room, $this->check_in_date,
+                                                                                 $this->check_out_date);
+
+            if (!$isRoomAvailable['status']) {
+                foreach ($isRoomAvailable['errors'] as $error) {
+                    $this->addError('room_id', $error);
+                }
+               // $this->check_out_date = null;
+                //$this->check_in_date = null;
+               // $this->scriptUpdated();
+            }
+
+
         } else {
             $this->totalPriceToPay = moneyFormat(($this->room->price * 30) / 100);
             $this->totalPriceToPayUnformatted = ($this->room->price * 30) / 100;
             $this->totalPrice = moneyFormat($this->room->price);
         }
+
+
 
         return view('livewire.reservation-create-page', [
             'room' => $this->room,

@@ -24,7 +24,8 @@ class ReservationControlService
                                        ->orderBy('check_out_date', 'desc')
                                        ->first();
 
-        $monthsAvailabilityCheck = $this->checkMonthsAvailability($room, $checkInDate,$checkOutDate, $userReservations);
+        $monthsAvailabilityCheck = $this->checkMonthsAvailability($room, $checkInDate, $checkOutDate,
+                                                                  $userReservations);
 
         $check = $reservationCountCheck && $monthsAvailabilityCheck && $maxDayCountCheck;
 
@@ -36,9 +37,15 @@ class ReservationControlService
 
     private function checkReservationCountAvailability($room, $checkInDate): bool
     {
-        $check = ($room->same_room_count - 1) > $room->reservations()
-                                                     ->where('check_out_date', '>', $checkInDate)
-                                                     ->count();
+        $reservations = Reservation::query()
+                                   ->where('room_id', $room->id)
+                                   ->where('reservation_status', '!=', ReservationStatusEnum::Rejected->name)
+                                   ->where('check_out_date', '>=', $checkInDate)
+                                   ->where('payment_status', true)
+                                   ->count();
+
+
+        $check = ($room->same_room_count - 1) >= $reservations;
 
         if (!$check) {
             $this->errors[] = 'Seçtiğiniz oda türü seçilen tarihler arasında müsaitlik bulunmamaktadır.';
