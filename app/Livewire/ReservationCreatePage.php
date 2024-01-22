@@ -67,6 +67,8 @@ class ReservationCreatePage extends Component
     {
         // guests dizisini guestSize'a uygun olarak güncelle
         $this->guests = array_slice($this->guests, 0, $this->guestSize);
+        $this->validate();
+
     }
 
     public function boot(ReservationControlService $reservationControlService, SmsService $smsService
@@ -172,11 +174,16 @@ class ReservationCreatePage extends Component
     public function save()
     {
 
+        $this->validate();
+        if ($this->guestSize != count($this->guests)) {
+            $this->addError('guests', 'Kişi bilgileri alanı zorunludur.');
+            return;
+        }
+
         if ($this->payment_method == 'credit_card') {
             // do the validations for credit card
             $this->validateCreditCard();
         }
-        $this->validate();
 
         try {
 
@@ -222,9 +229,8 @@ class ReservationCreatePage extends Component
                 foreach ($isRoomAvailable['errors'] as $error) {
                     $this->addError('room_id', $error);
                 }
-                $this->check_out_date = null;
-                $this->check_in_date = null;
-                $this->scriptUpdated();
+//                $this->check_out_date = null;
+//                $this->check_in_date = null;
                 return;
             }
 
@@ -254,6 +260,7 @@ class ReservationCreatePage extends Component
             }
 
         } catch (\Exception $exception) {
+            dd($exception->getMessage());
             $this->addError('error', 'Bir hata oluştu. Lütfen tekrar deneyiniz.');
             return redirect()
                 ->back()
