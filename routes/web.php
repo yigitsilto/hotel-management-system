@@ -29,12 +29,22 @@ Route::get('/', function () {
         return redirect()->route('dashboard');
     }
 
+    if (Auth::check() && Auth::user()->role == 'WORKER') {
+        return redirect()->route('reservation.index');
+    }
+
     if (Auth::check() && Auth::user()->role == 'USER') {
         return redirect()->route('user-dashboard');
     }
 
     return redirect()->route('login');
 });
+
+Route::middleware(['auth', 'dashboard'])->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\admin\DashboardController::class, 'index'])->name('dashboard');
+});
+
+
 Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/import-file',[\App\Http\Controllers\admin\UserController::class,'importFile'])->name('import.file.page');
@@ -45,7 +55,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     ('import.file');
 
 
-    Route::get('/dashboard', [\App\Http\Controllers\admin\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/settings', [\App\Http\Controllers\admin\SettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings', [\App\Http\Controllers\admin\SettingsController::class, 'update'])->name('settings.update');
 
@@ -70,7 +79,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/user-dashboard', [\App\Http\Controllers\user\DashboardController::class, 'index'])->name('user-dashboard');
     Route::get('/user-reservation/{hotel}', [\App\Http\Controllers\user\RezervationController::class, 'index'])->name
     ('user-reservation');

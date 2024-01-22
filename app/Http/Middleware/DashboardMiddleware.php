@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class DashboardMiddleware
 {
     /**
      * Handle an incoming request.
@@ -21,9 +21,6 @@ class AdminMiddleware
             return $next($request);
         }
 
-        if (Auth::check() && Auth::user()->role == 'WORKER') {
-            return $next($request);
-        }
 
         // Redirect to the login page or show an unauthorized page
         return redirect('/')->with('error', 'You do not have permission to access this page.');
