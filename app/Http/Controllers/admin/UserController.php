@@ -20,7 +20,7 @@ class UserController extends Controller
     public function importFile()
     {
 
-        if (auth()->user()->role != 'ADMIN'){
+        if (auth()->user()->role != 'ADMIN') {
             return redirect()
                 ->route('hotel-management.index')
                 ->with('error', 'Yetkisiz işlem.');
@@ -44,7 +44,7 @@ class UserController extends Controller
     public function store(UserCreateRequest $request)
     {
         DB::beginTransaction();
-        try{
+        try {
 
             $validated = $request->validated();
             $authorizedHotels = $validated['authorized_hotels'] ?? null;
@@ -56,11 +56,12 @@ class UserController extends Controller
             }
 
             if ($validated['role'] == 'WORKER') {
-               if ($authorizedHotels == null) {
-                   return redirect()
-                       ->back()
-                       ->with('error', 'Resepsiyonist kullanıcı için en az bir otel seçilmelidir.')->withInput();
-               }
+                if ($authorizedHotels == null) {
+                    return redirect()
+                        ->back()
+                        ->with('error', 'Resepsiyonist kullanıcı için en az bir otel seçilmelidir.')
+                        ->withInput();
+                }
             }
             $validated['phone_number'] = str_replace('-', '', $validated['phone_number']);
 
@@ -73,7 +74,8 @@ class UserController extends Controller
             if ($existsPhone > 0) {
                 return redirect()
                     ->back()
-                    ->with('error', 'Bu telefon numarası ile kayıtlı kullanıcı bulunmaktadır.')->withInput();
+                    ->with('error', 'Bu telefon numarası ile kayıtlı kullanıcı bulunmaktadır.')
+                    ->withInput();
             }
 
 
@@ -95,13 +97,12 @@ class UserController extends Controller
             }
 
             DB::commit();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
                 ->back()
                 ->with('error', 'Bir hata meydana geldi.');
         }
-
 
 
         return redirect()
@@ -126,6 +127,9 @@ class UserController extends Controller
         $validated = $request->validated();
         $validated['phone_number'] = str_replace('-', '', $validated['phone_number']);
 
+        $authorizedHotels = $validated['authorized_hotels'] ?? null;
+        unset($validated['authorized_hotels']);
+
         if ($request->email != $user->email) {
             return redirect()
                 ->back()
@@ -145,9 +149,53 @@ class UserController extends Controller
 
         unset($validated['password_confirmation']);
 
+        if (auth()->user()->role != 'ADMIN') {
+            $validated['role'] = 'USER';
+        }
+
+        if ($validated['role'] == 'WORKER') {
+            if ($authorizedHotels == null) {
+                return redirect()
+                    ->back()
+                    ->with('error', 'Resepsiyonist kullanıcı için en az bir otel seçilmelidir.')
+                    ->withInput();
+            }
+        }
+
+        // phone number cpontrol
+        $existsPhone = User::query()
+                           ->where('phone_number', $validated['phone_number'])
+                           ->where('id', '!=', $user->id)
+                           ->count();
+
+        if ($existsPhone > 0) {
+            return redirect()
+                ->back()
+                ->with('error', 'Bu telefon numarası ile kayıtlı kullanıcı bulunmaktadır.')
+                ->withInput();
+        }
+
+
         $user->update($validated);
         $user->can_do_reservation = $validated['can_do_reservation'] == '1';
         $user->save();
+
+        AuthorizedHotel::query()
+                       ->where('user_id', $user->id)
+                       ->delete();
+
+
+        if ($authorizedHotels != null) {
+            foreach ($authorizedHotels as $hotelId) {
+                $hotel = Hotel::query()
+                              ->findOrFail($hotelId);
+                AuthorizedHotel::query()
+                               ->updateOrCreate([
+                                                    'user_id' => $user->id,
+                                                    'hotel_id' => $hotel->id,
+                                                ]);
+            }
+        }
 
         return redirect()
             ->route('user.index')
@@ -163,7 +211,7 @@ class UserController extends Controller
     public function importDownload(Request $request)
     {
 
-        if (auth()->user()->role != 'ADMIN'){
+        if (auth()->user()->role != 'ADMIN') {
             return redirect()
                 ->route('hotel-management.index')
                 ->with('error', 'Yetkisiz işlem.');
