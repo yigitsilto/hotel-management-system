@@ -13,7 +13,7 @@ class ReservationControlService
     public function isRoomAvailable($room, $checkInDate, $checkOutDate): array
     {
         // oda rezervasyon sayısı kontrolü
-        $reservationCountCheck = $this->checkReservationCountAvailability($room, $checkInDate);
+        $reservationCountCheck = $this->checkReservationCountAvailability($room, $checkInDate, $checkOutDate);
 
         // max 4 gün rezervasyon yapılabilir
         $maxDayCountCheck = $this->checkMaxDayCount($room, $checkInDate, $checkOutDate);
