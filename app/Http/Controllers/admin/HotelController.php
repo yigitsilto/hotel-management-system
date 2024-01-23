@@ -15,6 +15,7 @@ use Illuminate\View\View;
 
 class HotelController extends Controller
 {
+
     public function index(): View
     {
         $hotels = null;
@@ -106,6 +107,21 @@ class HotelController extends Controller
     {
         $hotel = Hotel::findOrFail($id);
 
+        if (auth()->user()->role == "WORKER") {
+
+            $authorizedhotels = AuthorizedHotel::query()
+                                               ->where('user_id', auth()->user()->id)
+                                               ->get();
+
+            if(!$authorizedhotels->contains('hotel_id', $hotel->id)){
+                return redirect()
+                    ->route('hotel-management.index')
+                    ->with('error', 'Yetkisiz işlem.');
+            }
+
+
+        }
+
         return view('admin.hotelManagement.edit', compact('hotel'));
     }
 
@@ -135,6 +151,23 @@ class HotelController extends Controller
     public function show($id)
     {
         $hotel = Hotel::findOrFail($id);
+       if (auth()->user()->role == "WORKER") {
+
+            $authorizedhotels = AuthorizedHotel::query()
+                                               ->where('user_id', auth()->user()->id)
+                                               ->get();
+
+            if(!$authorizedhotels->contains('hotel_id', $hotel->id)){
+                return redirect()
+                ->route('hotel-management.index')
+                ->with('error', 'Yetkisiz işlem.');
+            }
+
+
+        }
+
+
+
         $rooms = Room::query()
                      ->where('hotel_id', $hotel->id)
                      ->get();
@@ -142,5 +175,4 @@ class HotelController extends Controller
         return view('admin.hotelManagement.show', compact('hotel', 'rooms'));
     }
 
-    // TODO silme yapılacak ama odası varsa silinemez sadece pasif yapılabilri kontrolleri eklendikten sonra yapılacak
 }

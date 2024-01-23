@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\RoomCreateRequest;
 use App\Http\Requests\admin\RoomUpdateRequest;
+use App\Models\AuthorizedHotel;
 use App\Models\Hotel;
 use App\Models\Room;
 use Illuminate\Http\Request;
@@ -35,6 +36,22 @@ class RoomController extends Controller
      */
     public function create(Hotel $hotel)
     {
+
+        if (auth()->user()->role == "WORKER") {
+
+            $authorizedhotels = AuthorizedHotel::query()
+                                               ->where('user_id', auth()->user()->id)
+                                               ->get();
+
+            if(!$authorizedhotels->contains('hotel_id', $hotel->id)){
+                return redirect()
+                    ->route('hotel-management.index')
+                    ->with('error', 'Yetkisiz işlem.');
+            }
+
+
+        }
+
         return view('admin.roomManagement.create', compact('hotel'));
     }
 
@@ -118,6 +135,22 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
+
+        if (auth()->user()->role == "WORKER") {
+
+            $hotel = Hotel::query()->where('id', $room->hotel_id)->first();
+            $authorizedhotels = AuthorizedHotel::query()
+                                               ->where('user_id', auth()->user()->id)
+                                               ->get();
+
+            if(!$authorizedhotels->contains('hotel_id', $hotel->id)){
+                return redirect()
+                    ->route('hotel-management.index')
+                    ->with('error', 'Yetkisiz işlem.');
+            }
+
+
+        }
         return view('admin.roomManagement.edit', compact('room'));
     }
 
