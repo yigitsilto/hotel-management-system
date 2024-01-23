@@ -108,7 +108,7 @@
                 </a>
             </li>
 
-            @if(auth()->user()->role == 'admin')
+            @if(auth()->user()->role == 'ADMIN')
                 <li class="nav-item">
                     <a class="nav-link  " href="{{route('import.file.page')}}">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
