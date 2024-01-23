@@ -40,7 +40,7 @@ class ReservationControlService
         $reservations = Reservation::query()
                                    ->where('room_id', $room->id)
                                    ->where('reservation_status', '!=', ReservationStatusEnum::Rejected->name)
-                                   ->where('check_out_date', '>=', $checkInDate)
+                                   ->where('check_out_date', '<=', $checkInDate)
                                    ->where('payment_status', true)
                                    ->count();
 
