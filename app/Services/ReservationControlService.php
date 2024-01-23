@@ -35,25 +35,32 @@ class ReservationControlService
         ];
     }
 
-    private function checkReservationCountAvailability($room, $checkInDate): bool
+    private function checkReservationCountAvailability($room, $checkInDate, $checkOutDate): bool
     {
         $reservations = Reservation::query()
                                    ->where('room_id', $room->id)
+                                   ->where(function ($query) use ($checkInDate, $checkOutDate) {
+                                       $query->where(function ($q) use ($checkInDate, $checkOutDate) {
+                                           $q->where('check_in_date', '<', $checkOutDate)
+                                             ->where('check_out_date', '>', $checkInDate);
+                                       })->orWhere(function ($q) use ($checkInDate, $checkOutDate) {
+                                           $q->whereBetween('check_in_date', [$checkInDate, $checkOutDate])
+                                             ->orWhereBetween('check_out_date', [$checkInDate, $checkOutDate]);
+                                       });
+                                   })
                                    ->where('reservation_status', '!=', ReservationStatusEnum::Rejected->name)
-                                   ->where('check_out_date', '>=', $checkInDate)
                                    ->where('payment_status', true)
                                    ->count();
 
-
-        $check = ($room->same_room_count - 1) >= $reservations;
+        $check = $room->same_room_count > $reservations;
 
         if (!$check) {
             $this->errors[] = 'Seçtiğiniz oda türü seçilen tarihler arasında müsaitlik bulunmamaktadır.';
         }
 
         return $check;
-
     }
+
 
     private function checkMaxDayCount($room, $checkInDate, $checkOutDate): bool
     {
