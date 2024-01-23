@@ -67,8 +67,11 @@ class ReservationCreatePage extends Component
     {
         // guests dizisini guestSize'a uygun olarak güncelle
         $this->guests = array_slice($this->guests, 0, $this->guestSize);
-        $this->validate();
-
+        // If the new guest size is smaller than the current size, remove excess elements
+        while (count($this->guests) > $this->guestSize) {
+            array_pop($this->guests);
+        }
+        //dd($this->guests);
     }
 
     public function boot(ReservationControlService $reservationControlService, SmsService $smsService
@@ -107,6 +110,11 @@ class ReservationCreatePage extends Component
             $this->totalPrice = moneyFormat($this->room->price);
         }
 
+        $this->guests = array_slice($this->guests, 0, $this->guestSize);
+        // If the new guest size is smaller than the current size, remove excess elements
+        while (count($this->guests) > $this->guestSize) {
+            array_pop($this->guests);
+        }
 
 
         return view('livewire.reservation-create-page', [
