@@ -5,7 +5,6 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\RoomCreateRequest;
 use App\Http\Requests\admin\RoomUpdateRequest;
-use App\Models\AuthorizedHotel;
 use App\Models\Hotel;
 use App\Models\Room;
 use Illuminate\Http\Request;
@@ -28,7 +27,9 @@ class RoomController extends Controller
     public function deleteImages(Room $room, Media $media)
     {
         $room->deleteMedia($media);
-        return redirect()->back()->with('success', 'Başarıyla silindi.');
+        return redirect()
+            ->back()
+            ->with('success', 'Başarıyla silindi.');
     }
 
     /**
@@ -39,15 +40,9 @@ class RoomController extends Controller
 
         if (auth()->user()->role == "WORKER") {
 
-            $authorizedhotels = AuthorizedHotel::query()
-                                               ->where('user_id', auth()->user()->id)
-                                               ->get();
-
-            if(!$authorizedhotels->contains('hotel_id', $hotel->id)){
-                return redirect()
-                    ->route('hotel-management.index')
-                    ->with('error', 'Yetkisiz işlem.');
-            }
+            return redirect()
+                ->route('hotel-management.index')
+                ->with('error', 'Yetkisiz işlem.');
 
 
         }
@@ -87,15 +82,15 @@ class RoomController extends Controller
                              'same_room_count' => $request->same_room_count,
                          ]);
 
-        $this->createImage($request,$room, $hotel->name);
+        $this->createImage($request, $room, $hotel->name);
         $room->save();
 
         // Başarıyla kaydedildiğine dair bir mesaj veya yönlendirme ekleme
         return redirect()
-        ->route('room-management.upload.images.create', ['room' => $room])
-        ->with([
-                   'success' => 'Oda başarıyla oluşturuldu. Şimdi odaya ait resimleri yükleyebilirsiniz.'
-               ]);
+            ->route('room-management.upload.images.create', ['room' => $room])
+            ->with([
+                       'success' => 'Oda başarıyla oluşturuldu. Şimdi odaya ait resimleri yükleyebilirsiniz.'
+                   ]);
     }
 
     private function createImage(Request $request, Room $room, string $hotelName): void
@@ -109,10 +104,10 @@ class RoomController extends Controller
 
             // Dosyayı public/hotel_images dizinine taşı
             $request->file('image')
-                    ->move(public_path($hotelName .'/room_images'), $imageName);
+                    ->move(public_path($hotelName . '/room_images'), $imageName);
 
             // Otel modeline dosyanın yolu ekleniyor
-            $room->base_image = "/".$hotelName.'/room_images/' . $imageName;
+            $room->base_image = "/" . $hotelName . '/room_images/' . $imageName;
         }
     }
 
@@ -138,16 +133,10 @@ class RoomController extends Controller
 
         if (auth()->user()->role == "WORKER") {
 
-            $hotel = Hotel::query()->where('id', $room->hotel_id)->first();
-            $authorizedhotels = AuthorizedHotel::query()
-                                               ->where('user_id', auth()->user()->id)
-                                               ->get();
 
-            if(!$authorizedhotels->contains('hotel_id', $hotel->id)){
-                return redirect()
-                    ->route('hotel-management.index')
-                    ->with('error', 'Yetkisiz işlem.');
-            }
+            return redirect()
+                ->route('hotel-management.index')
+                ->with('error', 'Yetkisiz işlem.');
 
 
         }
@@ -176,10 +165,10 @@ class RoomController extends Controller
         $room->save();
 
         return redirect()
-        ->route('room-management.upload.images.create', ['room' => $room])
-        ->with([
-                   'success' => 'Oda başarıyla güncellendi. Şimdi odaya ait resimleri düzenleyebilirsiniz.'
-               ]);
+            ->route('room-management.upload.images.create', ['room' => $room])
+            ->with([
+                       'success' => 'Oda başarıyla güncellendi. Şimdi odaya ait resimleri düzenleyebilirsiniz.'
+                   ]);
     }
 
     /**

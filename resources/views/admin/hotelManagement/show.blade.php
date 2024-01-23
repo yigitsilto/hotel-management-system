@@ -13,9 +13,11 @@
                                     <p class="text-sm">Sisteme kayıt ettiğiniz otelin oda bilgilerini içerir.</p>
                                 </div>
                                 <div class="col-2">
-                                    <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('room-management.create',$hotel->id)}}">
-                                        Yeni Oda Kayıdı Ekle
-                                    </a>
+                                  @if(auth()->user()->role == 'ADMIN')
+                                        <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('room-management.create',$hotel->id)}}">
+                                            Yeni Oda Kayıdı Ekle
+                                        </a>
+                                  @endif
                                 </div>
                             </div>
                         </div>
