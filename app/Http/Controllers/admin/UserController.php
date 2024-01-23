@@ -47,7 +47,7 @@ class UserController extends Controller
         try{
 
             $validated = $request->validated();
-            $authorizedHotels = isset($validated['authorized_hotels']) ?? $validated['authorized_hotels'];
+            $authorizedHotels = $validated['authorized_hotels'] ?? null;
             unset($validated['authorized_hotels']);
             $validated['password'] = bcrypt($validated['password']);
 
@@ -59,13 +59,28 @@ class UserController extends Controller
                if ($authorizedHotels == null) {
                    return redirect()
                        ->back()
-                       ->with('error', 'Resepsiyonist kullanıcı için en az bir otel seçilmelidir.');
+                       ->with('error', 'Resepsiyonist kullanıcı için en az bir otel seçilmelidir.')->withInput();
                }
             }
             $validated['phone_number'] = str_replace('-', '', $validated['phone_number']);
+
+
+            $existsPhone = User::query()
+                               ->where('phone_number', $validated['phone_number'])
+                               ->count();
+
+
+            if ($existsPhone > 0) {
+                return redirect()
+                    ->back()
+                    ->with('error', 'Bu telefon numarası ile kayıtlı kullanıcı bulunmaktadır.')->withInput();
+            }
+
+
             unset($validated['password_confirmation']);
             $user = User::query()
                         ->create($validated);
+
 
             if ($authorizedHotels != null) {
                 foreach ($authorizedHotels as $hotelId) {
@@ -81,7 +96,6 @@ class UserController extends Controller
 
             DB::commit();
         }catch (\Exception $e){
-            dd($e);
             DB::rollBack();
             return redirect()
                 ->back()
