@@ -150,9 +150,7 @@ class UserController extends Controller
 
         unset($validated['password_confirmation']);
 
-        if (auth()->user()->role != 'ADMIN') {
-            $validated['role'] = 'USER';
-        }
+
 
         if ($validated['role'] == 'WORKER') {
             if ($authorizedHotels == null) {
