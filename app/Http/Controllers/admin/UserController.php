@@ -152,15 +152,17 @@ class UserController extends Controller
 
 
 
-        if ($validated['role'] == 'WORKER') {
-            if ($authorizedHotels == null) {
-                return redirect()
-                    ->back()
-                    ->with('error', 'Resepsiyonist kullanıcı için en az bir otel seçilmelidir.')
-                    ->withInput();
-            }
-        }
+       if (isset($validated['role'])){
+           if ($validated['role'] == 'WORKER') {
+               if ($authorizedHotels == null) {
+                   return redirect()
+                       ->back()
+                       ->with('error', 'Resepsiyonist kullanıcı için en az bir otel seçilmelidir.')
+                       ->withInput();
+               }
+           }
 
+       }
         // phone number cpontrol
         $existsPhone = User::query()
                            ->where('phone_number', $validated['phone_number'])
