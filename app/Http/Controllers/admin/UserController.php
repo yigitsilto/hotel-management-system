@@ -19,6 +19,13 @@ class UserController extends Controller
 {
     public function importFile()
     {
+
+        if (auth()->user()->role != 'ADMIN'){
+            return redirect()
+                ->route('hotel-management.index')
+                ->with('error', 'Yetkisiz işlem.');
+        }
+
         $failedRows = \App\Models\FailedRow::query()
                                            ->get();
         return view('admin.userManagement.import', compact('failedRows'));
@@ -141,6 +148,14 @@ class UserController extends Controller
 
     public function importDownload(Request $request)
     {
+
+        if (auth()->user()->role != 'ADMIN'){
+            return redirect()
+                ->route('hotel-management.index')
+                ->with('error', 'Yetkisiz işlem.');
+        }
+
+
         $request->validate([
                                'file' => 'required|file|mimes:xlsx,xls,csv'
                            ]);
