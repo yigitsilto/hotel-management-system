@@ -90,6 +90,9 @@ class ReservationCreateManuelPage extends Component
         $this->users = User::query()
                            ->get();
 
+        $this->totalPriceToPay = 0;
+        $this->totalPriceToPayUnformatted = 0;
+        $this->totalPrice = 0;
 
         if ($this->check_in_date && $this->check_out_date) {
             $this->totalPriceToPay = moneyFormat(($this->calculateTotalPrice() * 30) / 100);
