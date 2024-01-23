@@ -50,7 +50,7 @@ class ReservationCreateManuelPage extends Component
     public $lang;
     public $currencyVal;
     public $hash;
-    protected $listeners = ['refresh-script'];
+    protected $listeners = ['refresh-script', 'resetCheckOutDate'];
     protected $rules = [
         'check_in_date' => 'required|date',
         'check_out_date' => 'required|date|after:check_in_date',
@@ -84,15 +84,25 @@ class ReservationCreateManuelPage extends Component
         $this->smsService = $smsService;
     }
 
+    public function updatedCheckInDate($value)
+    {
+        // Giriş tarihi değiştiğinde çıkış tarihini sıfırla
+        $this->resetCheckOutDate();
+
+        // Diğer işlemleri gerçekleştir...
+    }
+
+    public function resetCheckOutDate()
+    {
+        // Çıkış tarihini sıfırla
+        $this->check_out_date = null;
+    }
+
     public function render()
     {
         $this->canDoReservation = true;
         $this->users = User::query()
                            ->get();
-
-        $this->totalPriceToPay = 0;
-        $this->totalPriceToPayUnformatted = 0;
-        $this->totalPrice = 0;
 
         if ($this->check_in_date && $this->check_out_date) {
             $this->totalPriceToPay = moneyFormat(($this->calculateTotalPrice() * 30) / 100);
