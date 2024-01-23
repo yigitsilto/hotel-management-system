@@ -48,7 +48,7 @@ class ReservationCreatePage extends Component
     public $lang;
     public $currencyVal;
     public $hash;
-    protected $listeners = ['refresh-script'];
+    protected $listeners = ['refresh-script', 'resetCheckOutDate'];
     protected $rules = [
         'check_in_date' => 'required|date',
         'check_out_date' => 'required|date|after:check_in_date',
@@ -72,6 +72,20 @@ class ReservationCreatePage extends Component
             array_pop($this->guests);
         }
         //dd($this->guests);
+    }
+
+    public function updatedCheckInDate($value)
+    {
+        // Giriş tarihi değiştiğinde çıkış tarihini sıfırla
+        $this->resetCheckOutDate();
+
+        // Diğer işlemleri gerçekleştir...
+    }
+
+    public function resetCheckOutDate()
+    {
+        // Çıkış tarihini sıfırla
+        $this->check_out_date = null;
     }
 
     public function boot(ReservationControlService $reservationControlService, SmsService $smsService
