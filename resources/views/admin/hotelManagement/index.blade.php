@@ -24,10 +24,12 @@
                                     <p class="text-sm">Sisteme kayıt ettiğiniz otel bilgilerini içerir.</p>
                                 </div>
                                 <div class="col-lg-2 col-md-12">
-                                    <a class="btn btn-outline-primary btn-sm mb-0"
-                                       href="{{route('hotel-management.create')}}">
-                                        Yeni Kayıt Ekle
-                                    </a>
+                                   @if(auth()->user()->role == "ADMIN")
+                                        <a class="btn btn-outline-primary btn-sm mb-0"
+                                           href="{{route('hotel-management.create')}}">
+                                            Yeni Kayıt Ekle
+                                        </a>
+                                   @endif
                                 </div>
                             </div>
 
@@ -66,8 +68,10 @@
                                                     <a href="{{route('hotel-management.show', $hotel->id)}}"
                                                        type="button" class="btn btn-outline-primary btn-sm mb-0">Oda
                                                         Yönetimi</a>
-                                                    <a href="{{route('hotel-management.edit', $hotel->id)}}"
-                                                       class="btn btn-outline-primary btn-sm mb-0">Düzenle</a>
+                                                   @if(auth()->user()->role =='ADMIN')
+                                                        <a href="{{route('hotel-management.edit', $hotel->id)}}"
+                                                           class="btn btn-outline-primary btn-sm mb-0">Düzenle</a>
+                                                   @endif
                                                 </div>
                                             </div>
                                         </div>

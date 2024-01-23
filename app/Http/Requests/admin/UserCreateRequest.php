@@ -25,11 +25,13 @@ class UserCreateRequest extends FormRequest
             'name' => 'required|string|max:255',
             'identity_number' => 'required|numeric|digits:11',
             'phone_number' => 'required|regex:/^\d{3}-\d{3}-\d{4}$/',
-            'gender' => 'required|in:Erkek,Kadın,Belirtmedi',
+            'gender' => 'nullable|in:Erkek,Kadın,Belirtmedi',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'password_confirmation' => 'required|string|same:password',
             'can_do_reservation' => 'required|boolean',
+            'role' => 'nullable|in:USER,ADMIN,WORKER',
+            'authorized_hotels' => 'nullable|array',
         ];
     }
 }

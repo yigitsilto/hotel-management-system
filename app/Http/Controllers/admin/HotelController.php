@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\HotelCreateRequest;
 use App\Http\Requests\admin\HotelUpdateRequest;
+use App\Models\AuthorizedHotel;
 use App\Models\Hotel;
 use App\Models\ReservationMonth;
 use App\Models\Room;
@@ -16,10 +17,27 @@ class HotelController extends Controller
 {
     public function index(): View
     {
-        $hotels = Hotel::query()
-                       ->orderBy('updated_at', 'desc')
-                       ->orderBy('created_at', 'desc')
-                       ->get();
+        $hotels = null;
+        if (auth()->user()->role == "WORKER") {
+
+            $authorizedhotels = AuthorizedHotel::query()
+                                               ->where('user_id', auth()->user()->id)
+                                               ->get();
+
+            $hotels = Hotel::query()
+                           ->whereIn('id', $authorizedhotels->pluck('hotel_id'))
+                           ->orderBy('updated_at', 'desc')
+                           ->orderBy('created_at', 'desc')
+                           ->get();
+
+        } else {
+            $hotels = Hotel::query()
+                           ->orderBy('updated_at', 'desc')
+                           ->orderBy('created_at', 'desc')
+                           ->get();
+        }
+
+
 
         return view('admin.hotelManagement.index', compact('hotels'));
     }

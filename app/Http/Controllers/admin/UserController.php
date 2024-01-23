@@ -3,33 +3,89 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\admin\HotelCreateRequest;
-use App\Http\Requests\admin\HotelUpdateRequest;
 use App\Http\Requests\admin\UserCreateRequest;
 use App\Http\Requests\admin\UserUpdateEquest;
 use App\Imports\UsersImport;
+use App\Models\AuthorizedHotel;
 use App\Models\FailedRow;
 use App\Models\Hotel;
-use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
-    public function importFile(){
-        $failedRows = \App\Models\FailedRow::query()->get();
+    public function importFile()
+    {
+        $failedRows = \App\Models\FailedRow::query()
+                                           ->get();
         return view('admin.userManagement.import', compact('failedRows'));
     }
+
     public function index(): View
     {
         $users = User::query()
-                       ->orderBy('updated_at', 'desc')
-                       ->orderBy('created_at', 'desc')
-                       ->get();
+                     ->orderBy('updated_at', 'desc')
+                     ->orderBy('created_at', 'desc')
+                     ->get();
 
         return view('admin.userManagement.index', compact('users'));
+    }
+
+    public function store(UserCreateRequest $request)
+    {
+        DB::beginTransaction();
+        try{
+
+            $validated = $request->validated();
+            $authorizedHotels = isset($validated['authorized_hotels']) ?? $validated['authorized_hotels'];
+            unset($validated['authorized_hotels']);
+            $validated['password'] = bcrypt($validated['password']);
+
+            if (auth()->user()->role != 'ADMIN') {
+                $validated['role'] = 'USER';
+            }
+
+            if ($validated['role'] == 'WORKER') {
+               if ($authorizedHotels == null) {
+                   return redirect()
+                       ->back()
+                       ->with('error', 'Resepsiyonist kullanıcı için en az bir otel seçilmelidir.');
+               }
+            }
+            $validated['phone_number'] = str_replace('-', '', $validated['phone_number']);
+            unset($validated['password_confirmation']);
+            $user = User::query()
+                        ->create($validated);
+
+            if ($authorizedHotels != null) {
+                foreach ($authorizedHotels as $hotelId) {
+                    $hotel = Hotel::query()
+                                  ->findOrFail($hotelId);
+                    AuthorizedHotel::query()
+                                   ->updateOrCreate([
+                                                        'user_id' => $user->id,
+                                                        'hotel_id' => $hotel->id,
+                                                    ]);
+                }
+            }
+
+            DB::commit();
+        }catch (\Exception $e){
+            dd($e);
+            DB::rollBack();
+            return redirect()
+                ->back()
+                ->with('error', 'Bir hata meydana geldi.');
+        }
+
+
+
+        return redirect()
+            ->route('user.index')
+            ->with('success', 'Kullanıcı başarıyla oluşturuldu.');
     }
 
     public function create(): View
@@ -37,21 +93,10 @@ class UserController extends Controller
         return view('admin.userManagement.create');
     }
 
-    public function store(UserCreateRequest $request)
-    {
-        $validated = $request->validated();
-        $validated['password'] = bcrypt($validated['password']);
-        $validated['role'] = 'USER';
-        $validated['phone_number'] = str_replace('-', '', $validated['phone_number']);
-        unset($validated['password_confirmation']);
-        User::query()->create($validated);
-
-        return redirect()->route('user.index')->with('success', 'Kullanıcı başarıyla oluşturuldu.');
-    }
-
     public function edit($userId): View
     {
-        $user = User::query()->findOrFail($userId);
+        $user = User::query()
+                    ->findOrFail($userId);
         return view('admin.userManagement.edit', compact('user'));
     }
 
@@ -59,17 +104,21 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         $validated['phone_number'] = str_replace('-', '', $validated['phone_number']);
-        
-        if ($request->email != $user->email){
-            return redirect()->back()->withErrors(['email' => 'Email değiştirilemez.']);
+
+        if ($request->email != $user->email) {
+            return redirect()
+                ->back()
+                ->withErrors(['email' => 'Email değiştirilemez.']);
         }
 
-        if ($validated['password'] != null){
+        if ($validated['password'] != null) {
             $validated['password'] = bcrypt($validated['password']);
-            if ($validated['password'] != $validated['password_confirmation']){
-                return redirect()->back()->withErrors(['password' => 'Şifreler eşleşmiyor.']);
+            if ($validated['password'] != $validated['password_confirmation']) {
+                return redirect()
+                    ->back()
+                    ->withErrors(['password' => 'Şifreler eşleşmiyor.']);
             }
-        }else{
+        } else {
             unset($validated['password']);
         }
 
@@ -79,24 +128,31 @@ class UserController extends Controller
         $user->can_do_reservation = $validated['can_do_reservation'] == '1';
         $user->save();
 
-        return redirect()->route('user.index')->with('success', 'Kullanıcı başarıyla güncellendi.');
+        return redirect()
+            ->route('user.index')
+            ->with('success', 'Kullanıcı başarıyla güncellendi.');
     }
 
 
-    public function exampleDownload(){
+    public function exampleDownload()
+    {
         return response()->download(public_path('example-file-user.xlsx'));
     }
 
-    public function importDownload(Request $request){
+    public function importDownload(Request $request)
+    {
         $request->validate([
-            'file' => 'required|file|mimes:xlsx,xls,csv'
-        ]);
+                               'file' => 'required|file|mimes:xlsx,xls,csv'
+                           ]);
 
-        FailedRow::query()->truncate();
+        FailedRow::query()
+                 ->truncate();
 
-        Excel::import(new UsersImport(),request()->file('file'));
+        Excel::import(new UsersImport(), request()->file('file'));
 
-        return redirect()->back()->with('success', 'Kullanıcılar ekleniyor. Takip etmek için kullanıcı listesine gidiniz.');
+        return redirect()
+            ->back()
+            ->with('success', 'Kullanıcılar ekleniyor. Takip etmek için kullanıcı listesine gidiniz.');
 
 //        $path = $request->file('file')->getRealPath();
 //        $data = \Excel::import(new \App\Imports\UsersImport, $path);

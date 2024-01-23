@@ -49,16 +49,18 @@
                                            <td class="align-middle text-center text-sm">
                                                <span class="badge badge-sm bg-gradient-{{$room->is_available == 1 ? 'success': 'danger'}}">{{$room->is_available == 1 ? 'Müsait': 'Müsait Değil'}}</span>
                                            </td>
-                                           <td class="align-middle">
-                                               <a href="{{route('room-management.edit', $room->id)}}" class="btn btn-sm btn-secondary text-secondary text-white font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                   Bilgeri Düzenle
-                                               </a>
-                                           </td>
-                                           <td class="align-middle">
-                                               <a href="{{route('room-management.upload.images.create', $room->id)}}" class="btn btn-sm btn-secondary text-secondary text-white font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                   Resimleri Düzenle
-                                               </a>
-                                           </td>
+                                          @if(auth()->user()->role == 'ADMIN')
+                                               <td class="align-middle">
+                                                   <a href="{{route('room-management.edit', $room->id)}}" class="btn btn-sm btn-secondary text-secondary text-white font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                       Bilgeri Düzenle
+                                                   </a>
+                                               </td>
+                                               <td class="align-middle">
+                                                   <a href="{{route('room-management.upload.images.create', $room->id)}}" class="btn btn-sm btn-secondary text-secondary text-white font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                       Resimleri Düzenle
+                                                   </a>
+                                               </td>
+                                          @endif
                                            <td class="align-middle">
                                                <a href="{{route('reservation-management.manuel.create', $room->id)}}" class="btn btn-sm btn-primary text-secondary text-white font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                                    Manuel Rezervasyon Yap

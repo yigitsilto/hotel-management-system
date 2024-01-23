@@ -48,20 +48,35 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label for="total_rooms" class="form-label">Cinsiyet</label>
-                                                    <select class="form-control" name="gender" id="">
-                                                        <option value="Erkek">Erkek</option>
-                                                        <option value="Kadın">Kadın</option>
-                                                        <option value="Belirtmedi">Belirtmek İstemiyorum</option>
-                                                    </select>
-                                                    @error('gender')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
+                                            @if(auth()->user()->role == 'ADMIN')
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="role" class="form-label">Kullanıcı Yetkisi</label>
+                                                        <select class="form-control" name="role" id="">
+                                                            <option value="ADMIN">Admin</option>
+                                                            <option value="USER">Kullanıcı</option>
+                                                            <option value="WORKER">Resepsiyon</option>
+                                                        </select>
+                                                        @error('role')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
                                                 </div>
-                                            </div>
 
+                                                <div class="col-md-12">
+                                                    <div class="mb-3 ">
+                                                        <label class="form-check-label" for="authorized_hotels">Çalışanın Sorumlu Olduğu Oteller</label>
+                                                        <select name="authorized_hotels[]" class="form-select" id="multiple-select-field" data-placeholder="Seçiniz" multiple>
+                                                            @foreach(\App\Models\Hotel::all() as $hotel)
+                                                                <option value="{{ $hotel->id }}">{{ $hotel->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('authorized_hotels')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            @endif
                                             <div class="col-md-12">
                                                 <div class="mb-3">
                                                     <label for="asd" class="form-label">Rezervasyon Yapma Durumu ?</label>
@@ -126,6 +141,12 @@
 
 @section('script')
     <script>
+        $( '#multiple-select-field' ).select2( {
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            closeOnSelect: false,
+        } );
         $(document).ready(function () {
             $('#phone_number').inputmask('999-999-9999', { placeholder: '' });
         });
