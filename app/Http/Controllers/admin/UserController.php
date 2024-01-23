@@ -34,6 +34,7 @@ class UserController extends Controller
     public function index(): View
     {
         $users = User::query()
+            ->where('role', '!=', 'ADMIN')
                      ->orderBy('updated_at', 'desc')
                      ->orderBy('created_at', 'desc')
                      ->get();
