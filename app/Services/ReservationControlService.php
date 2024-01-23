@@ -45,6 +45,7 @@ class ReservationControlService
                                    ->count();
 
 
+        dd($room->same_room_count, $reservations);
         $check = ($room->same_room_count - 1) >= $reservations;
 
         if (!$check) {
