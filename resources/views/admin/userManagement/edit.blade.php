@@ -67,7 +67,7 @@
 
                                                 <div class="col-md-12">
                                                     <div class="mb-3 ">
-                                                        <label class="form-check-label" for="authorized_hotels">Çalışanın Sorumlu Olduğu Oteller</label>
+                                                        <label class="form-check-label" for="authorized_hotels">Çalışanın Sorumlu Olduğu Oteller(Normal kullanıcı için boş bırakabilirsiniz)</label>
                                                         <select name="authorized_hotels[]" class="form-select" id="multiple-select-field" data-placeholder="Seçiniz" multiple>
                                                             @foreach(\App\Models\Hotel::all() as $hotel)
                                                                 <option value="{{ $hotel->id }}">{{ $hotel->name }}</option>

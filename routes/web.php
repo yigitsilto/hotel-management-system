@@ -48,7 +48,7 @@ Route::middleware(['auth', 'dashboard'])->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/import-file',[\App\Http\Controllers\admin\UserController::class,'importFile'])->name('import.file.page');
-    Route::get('/download-example-file-user',[\App\Http\Controllers\admin\UserController::class,'exampleDownload'])
+    Route::get('/download--example-file-user',[\App\Http\Controllers\admin\UserController::class,'exampleDownload'])
          ->name
     ('example.file.download');
     Route::post('/import-excel-file-user',[\App\Http\Controllers\admin\UserController::class,'importDownload'])->name

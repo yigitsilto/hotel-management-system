@@ -206,7 +206,7 @@ class UserController extends Controller
 
     public function exampleDownload()
     {
-        return response()->download(public_path('example-file-user.xlsx'));
+        return response()->download(public_path('examp-file--2.xlsx'));
     }
 
     public function importDownload(Request $request)
