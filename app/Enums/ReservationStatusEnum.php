@@ -6,7 +6,6 @@ enum ReservationStatusEnum: string {
     case Success = 'Onaylandı';
     case Rejected = 'Reddedildi';
 
-    case CanselledByUser = 'Kullanıcı iptali';
 
     public static function getValues(): array
     {
@@ -14,7 +13,6 @@ enum ReservationStatusEnum: string {
             'Pending' => 'Onay Bekleniyor',
             'Success' => 'Onaylandı',
             'Rejected' => 'Reddedildi',
-            'CanselledByUser' => 'Kullanıcı iptali',
         ];
     }
 
@@ -24,7 +22,6 @@ enum ReservationStatusEnum: string {
             'Pending',
             'Success',
             'Rejected',
-            'CanselledByUser',
         ];
     }
 
@@ -34,7 +31,6 @@ enum ReservationStatusEnum: string {
             'Onay Bekleniyor' => 'Pending',
             'Onaylandı' => 'Success',
             'Reddedildi' => 'Rejected',
-            'Kullanıcı iptali' => 'CanselledByUser',
         ];
     }
 
@@ -44,7 +40,6 @@ enum ReservationStatusEnum: string {
             'Pending' => 'Onay Bekleniyor',
             'Success' => 'Onaylandı',
             'Rejected' => 'Reddedildi',
-            'CanselledByUser' => 'Kullanıcı iptali',
             default => throw new \Exception("Invalid key: $key"),
         };
     }
