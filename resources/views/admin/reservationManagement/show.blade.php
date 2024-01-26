@@ -51,7 +51,7 @@
 
                             <div class="col-4">
                                 <label for="reservation_status">Alınan Toplam Ödeme Tutarı</label>
-                                <input type="text" name="paid_amount" class="form-control" id="payment_amount" value="{{$reservation->paid_amount}}">
+                                <input type="text" name="paid_amount" class="form-control" id="paid_amount" value="{{$reservation->paid_amount}}">
                                 @error('paid_amount')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Enums\ReservationStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\admin\ReservationUpdateRequest;
 use App\Jobs\SendOrderApprovedSmsJob;
 use App\Models\AuthorizedHotel;
 use App\Models\Hotel;
@@ -85,7 +86,7 @@ class RezervationManagementController extends Controller
         return view('admin.reservationManagement.show', compact('reservation', 'room', 'hotel'));
     }
 
-    public function update(Request $request, Reservation $reservation): \Illuminate\Http\RedirectResponse
+    public function update(ReservationUpdateRequest $request, Reservation $reservation)
     {
 
 
@@ -104,14 +105,17 @@ class RezervationManagementController extends Controller
             }
         }
 
+        // validate the request->paid_amount for money format without laravel validation
+        if (!preg_match('/^\d+(\.\d{1,2})?$/', $request->validated()['paid_amount'])) {
+            return redirect()
+                ->back()
+                ->with('error', 'Ödenen tutar formatı hatalı.');
+        }
 
-        $request->validate([
-                               'reservation_status' => 'required',
-                               'paid_amount' => 'required|numeric',
-                           ]);
+
         $reservation->update([
-                                 'reservation_status' => $request->reservation_status,
-                                 'paid_amount' => $request->paid_amount,
+                                 'reservation_status' => $request->validated()['reservation_status'],
+                                 'paid_amount' => $request->validated()['paid_amount']
                              ]);
 
 

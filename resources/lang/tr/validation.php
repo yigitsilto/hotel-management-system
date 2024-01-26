@@ -156,6 +156,7 @@ return [
 
     'attributes' => [
         'check_in_date' => 'Giriş Tarihi',
+        'paid_amount' => 'Ödeme Tutarı',
         'check_out_date' => 'Çıkış Tarihi',
         'special_requests' => 'Özel İstekler',
         'payment_method' => 'Ödeme Yöntemi',
