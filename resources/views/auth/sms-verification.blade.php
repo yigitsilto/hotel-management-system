@@ -7,6 +7,9 @@
         <!-- Email Address -->
         <div>
             @if($user->sms_verified_at == null)
+                <h5>Lütfen cep telefonunuza gönderilen güvenlik kodunu giriniz.</h5>
+                <hr>
+                <br>
                 <x-input-label for="code" :value="__('Sms Kodu')" />
 
                 @else

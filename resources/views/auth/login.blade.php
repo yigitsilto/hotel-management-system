@@ -16,13 +16,20 @@
             <x-text-input id="phone_number" class="block mt-1 w-full" type="number" name="phone_number" :value="old('phone_number')" required autofocus autocomplete="phone_number" />
             <x-input-error :messages="$errors->get('phone_number')" class="mt-2" />
         </div>
-
         <div class="block mt-4">
             <label for="with_sms" class="inline-flex items-center">
-                <input id="with_sms" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="with_sms">
+                <input id="with_sms" type="radio" checked class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="with_password">
+                <span class="ms-2 text-sm text-gray-600">{{ __('Şifre ile giriş yap') }}</span>
+            </label>
+        </div>
+        <div class="block mt-4">
+            <label for="with_sms" class="inline-flex items-center">
+                <input id="with_sms" type="radio" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="with_sms">
                 <span class="ms-2 text-sm text-gray-600">{{ __('Sms ile giriş yap') }}</span>
             </label>
         </div>
+
+
 
         <!-- Password -->
 {{--        <div class="mt-4">--}}

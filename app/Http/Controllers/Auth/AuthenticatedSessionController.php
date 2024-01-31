@@ -53,8 +53,11 @@ class AuthenticatedSessionController extends Controller
 
 
         if ($request->with_sms == 'on') {
-            User::where('phone_number', $request->phone_number)
-                ->update(['sms_verified_at' => null]);
+
+            if ($user->role != 'ADMIN'){
+                User::where('phone_number', $request->phone_number)
+                    ->update(['sms_verified_at' => null]);
+            }
 
             $user = User::where('phone_number', $request->phone_number)
                 ->first();
