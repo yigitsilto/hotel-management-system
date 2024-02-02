@@ -17,18 +17,18 @@
             <x-input-error :messages="$errors->get('phone_number')" class="mt-2" />
         </div>
         <div class="block mt-4">
-            <label for="with_sms" class="inline-flex items-center">
-                <input id="with_sms" type="radio" checked class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="with_password">
+            <label for="with_password" class="inline-flex items-center">
+                <input id="with_password" type="radio" value="with_password" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="authentication_method" checked>
                 <span class="ms-2 text-sm text-gray-600">{{ __('Şifre ile giriş yap') }}</span>
             </label>
         </div>
+
         <div class="block mt-4">
             <label for="with_sms" class="inline-flex items-center">
-                <input id="with_sms" type="radio" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="with_sms">
+                <input id="with_sms" type="radio" value="with_sms" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="authentication_method">
                 <span class="ms-2 text-sm text-gray-600">{{ __('Sms ile giriş yap') }}</span>
             </label>
         </div>
-
 
 
         <!-- Password -->

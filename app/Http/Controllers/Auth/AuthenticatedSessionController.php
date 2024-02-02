@@ -41,6 +41,8 @@ class AuthenticatedSessionController extends Controller
 
 
 
+        $authMethod = $request->validated()['authentication_method'];
+
         $user = User::where('phone_number', $request->phone_number)
                     ->first();
 
@@ -52,7 +54,7 @@ class AuthenticatedSessionController extends Controller
         }
 
 
-        if ($request->with_sms == 'on') {
+        if ($authMethod == 'with_sms') {
 
             if ($user->role != 'ADMIN'){
                 User::where('phone_number', $request->phone_number)
