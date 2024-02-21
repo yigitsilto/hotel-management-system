@@ -38,6 +38,7 @@ class ReservationControlService
     private function checkReservationCountAvailability($room, $checkInDate, $checkOutDate): bool
     {
         $reservations = Reservation::query()
+            ->withoutGlobalScope('payment_status')
                                    ->where('room_id', $room->id)
                                    ->where(function ($query) use ($checkInDate, $checkOutDate) {
                                        $query->where(function ($q) use ($checkInDate, $checkOutDate) {
@@ -49,7 +50,6 @@ class ReservationControlService
                                        });
                                    })
                                    ->where('reservation_status', '!=', ReservationStatusEnum::Rejected->name)
-                                   ->where('payment_status', true)
                                    ->count();
 
         $check = $room->same_room_count > $reservations;
