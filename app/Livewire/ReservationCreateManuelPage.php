@@ -385,6 +385,7 @@ class ReservationCreateManuelPage extends Component
                                                'reservation_status' => ReservationStatusEnum::Success->name,
                                                'total_amount' => $totalPriceToPay,
                                                'paid_amount' => 0,
+                                               'bank_transfer_code' => null,
                                                'transaction_id' => Str::uuid(),
                                                'payment_status' => $this->payment_method == 'credit_card' ? 0 :
                                                    1,

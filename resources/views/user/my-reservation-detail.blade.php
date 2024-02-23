@@ -118,7 +118,8 @@
                             <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Kişi Sayısı: </strong>{{$reservation->number_of_guests}}</li>
                             <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Giriş Tarihi: </strong>{{\Carbon\Carbon::make($reservation->check_in_date)->format('d-m-Y')}}</li>
                             <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Çıkış Tarihi: </strong>{{\Carbon\Carbon::make($reservation->check_out_date)->format('d-m-Y')}}</li>
-                            @if(!is_null($reservation->special_requests))
+                            <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Ödeme Bilgisi: </strong>{{$reservation->payment_method == 'credit_card' ? 'Kredi Kartı' : 'Havale - Açıklama Kodu :  '. $reservation->bank_transfer_code}}</li>
+                        @if(!is_null($reservation->special_requests))
                                 <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Not: </strong>{{$reservation->special_requests}}</li>
                             @endif
 

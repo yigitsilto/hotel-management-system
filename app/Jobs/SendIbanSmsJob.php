@@ -21,10 +21,13 @@ class SendIbanSmsJob implements ShouldQueue
     private SmsService $smsService;
     private User $user;
 
-    public function __construct(SmsService $smsService, User $user)
+    private $code;
+
+    public function __construct(SmsService $smsService, User $user, $code)
     {
         $this->smsService = $smsService;
         $this->user = $user;
+        $this->code = $code;
     }
 
 
@@ -33,6 +36,6 @@ class SendIbanSmsJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->smsService->sendBankInformationSms($this->user);
+        $this->smsService->sendBankInformationSms($this->user, $this->code);
     }
 }

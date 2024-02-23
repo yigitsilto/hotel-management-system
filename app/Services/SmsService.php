@@ -83,10 +83,12 @@ class SmsService
                                 ]);
     }
 
-    public function sendBankInformationSms($user)
+    public function sendBankInformationSms($user, $code)
     {
         $gsm = $user->phone_number;
         $msg = Setting::query()->where('key', 'iban_sms')->first()->value;
+
+        $msg .= " Rezervasyon talebinizde ki ödenmesi gereken tutarı açıklama kısmına aşağıda yazan kod ile beraber göndermeyi unutmayınız! Açıklama Kodu: " . $code;
 
         try{
             $curl = curl_init();

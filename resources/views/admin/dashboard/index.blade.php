@@ -134,6 +134,7 @@
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Giriş Tarihi</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Çıkış Tarihi</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Durumu</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Bilgi</th>
                                         <th class="text-secondary opacity-7"></th>
                                     </tr>
                                     </thead>
@@ -166,6 +167,17 @@
                                             </td>
                                             <td class="align-middle text-center text-sm">
                                                 <span class="badge badge-sm bg-gradient-info">{{\App\Enums\ReservationStatusEnum::getValueByKey($item->reservation_status)}}</span>
+                                            </td>
+                                            <td class="align-middle text-center text-sm">
+                                                @if($item->payment_method == 'bank_transfer')
+                                                    <span class="badge badge-sm bg-gradient-info">
+                                                  Iban Açıklama Kodu: {{$item->bank_transfer_code}}</span>
+
+                                                @else
+
+                                                    <span class="badge badge-sm bg-gradient-info">
+                                                  Kredi Kartı Ödemesi</span>
+                                                @endif
                                             </td>
                                             <td class="align-middle">
                                                 <a href="{{route('reservation.show', $item->id)}}" class="btn btn-sm btn-secondary text-secondary text-white font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">

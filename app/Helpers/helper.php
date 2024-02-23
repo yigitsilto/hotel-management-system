@@ -6,3 +6,10 @@ if (!function_exists('moneyFormat')) {
         return number_format($value, 2, ',', '.') . ' ₺';
     }
 }
+
+if (!function_exists('generateUniqueCode')) {
+    function generateUniqueCode($userId)
+    {
+        return $userId . 'L' . time();
+    }
+}

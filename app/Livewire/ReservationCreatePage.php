@@ -256,7 +256,8 @@ class ReservationCreatePage extends Component
                 return;
             }
 
-            $this->createReservation()
+            $code = generateUniqueCode(auth()->id());
+            $this->createReservation($code)
                  ->guests()
                  ->createMany($this->guests);
 
@@ -265,7 +266,7 @@ class ReservationCreatePage extends Component
                 $user = User::query()
                             ->where('id', auth()->id())
                             ->first();
-                SendIbanSmsJob::dispatch($this->smsService, $user);
+                SendIbanSmsJob::dispatch($this->smsService, $user, $code);
             }
 
             if ($this->payment_method == 'credit_card') {
@@ -282,7 +283,6 @@ class ReservationCreatePage extends Component
             }
 
         } catch (\Exception $exception) {
-            dd($exception->getMessage());
             $this->addError('error', 'Bir hata oluştu. Lütfen tekrar deneyiniz.');
             return redirect()
                 ->back()
@@ -292,7 +292,7 @@ class ReservationCreatePage extends Component
         return redirect()
             ->route('user-reservation.myReservations')
             ->with('success',
-                   'Rezervasyonunuz başarıyla oluşturuldu. Havale işlemleri için 10 dakika içinde göndermemeniz durumunda rezervasyonunuz iptal edilecektir.');
+                   'Rezervasyonunuz başarıyla oluşturuldu. Havale işlemleri için açıklamaya sms ile iletilen açıklama kodunu yazmayı unutmayınız! 10 dakika içinde göndermemeniz durumunda rezervasyonunuz iptal edilecektir.');
 
     }
 
@@ -375,7 +375,7 @@ class ReservationCreatePage extends Component
         $this->dispatchBrowserEvent('refresh-script');
     }
 
-    private function createReservation(): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+    private function createReservation($code): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
     {
 
         $checkInDate = Carbon::parse($this->check_in_date);
@@ -398,6 +398,7 @@ class ReservationCreatePage extends Component
                                                'total_amount' => $totalPriceToPay,
                                                'paid_amount' => 0,
                                                'transaction_id' => Str::uuid(),
+                                               'bank_transfer_code' => $this->payment_method != 'credit_card' ? $code : null,
                                                'payment_status' => $this->payment_method == 'credit_card' ? 0 :
                                                    1,
                                            ]);
