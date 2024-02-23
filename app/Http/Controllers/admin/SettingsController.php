@@ -26,6 +26,7 @@ class SettingsController extends Controller
     public function update(Request $request)
     {
 
+
         if (auth()->user()->role != 'ADMIN') {
             return redirect()
                 ->route('hotel-management.index')

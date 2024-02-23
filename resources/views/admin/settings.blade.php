@@ -19,18 +19,28 @@
                                             <form method="POST" action="{{ route('settings.update') }}">
                                                 @csrf
                                                 @foreach ($settings as $setting)
-                                                    <div class="col-md-12">
-                                                        <div class="mb-3">
-                                                            <label for="{{ $setting->key }}" class="form-label">{{ __('settings.' . $setting->key) }}</label>
-                                                            <input type="text" class="form-control" id="{{ $setting->key }}" name="{{ $setting->key }}" value="{{ $setting->value }}" required>
+                                                    @if($setting->key != 'iban_special_text')
+
+                                                        <div class="col-md-12">
+                                                            <div class="mb-3">
+                                                                <label for="{{ $setting->key }}" class="form-label">{{ __('settings.' . $setting->key) }}</label>
+                                                                <input type="text" class="form-control" id="{{ $setting->key }}" name="{{ $setting->key }}" value="{{ $setting->value }}" required>
+                                                            </div>
                                                         </div>
-                                                    </div>
+
+                                                    @else
+
+                                                        <textarea id="editor" name="{{ $setting->key }}">{!! $setting->value  !!}</textarea>
+
+                                                    @endif
                                                 @endforeach
 
-                                                <div class="col-md-12">
+
+                                                <div class="col-md-12 pt-3">
                                                     <div class="mb-3">
                                                         <button type="submit" class="btn btn-primary">Kaydet</button>
                                                     </div>
+                                                </div>
                                             </form>
 
                                 </div>
@@ -48,8 +58,17 @@
 @endsection
 
 @section('script')
-    <script>
+            <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+
+            <script>
+
         $(document).ready(function () {
+            ClassicEditor
+                .create( document.querySelector( '#editor' ) )
+                .catch( error => {
+                    console.error( error );
+                } );
+
             $('#phone_number').inputmask('999-999-9999', { placeholder: '' });
         });
         var win = navigator.platform.indexOf('Win') > -1;

@@ -385,9 +385,7 @@
 
                             @if($payment_method == 'bank_transfer')
                                 <div>
-                                    <h3 style="text-align: center">Şube : 1380/KEÇİÖĞREN FATİH ŞUBEŞİ/ANKAR</h3>
-                                    <p style="text-align: center">Hesap No: 10100733</p>
-                                    <p style="text-align: center">TR680001200138000010100733</p>
+                                   {!! \App\Models\Setting::query()->where('key', 'iban_special_text')->first()->value !!}
                                 </div>
 
                             @endif
