@@ -48,7 +48,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link  active" href="{{route('dashboard')}}">
+                <a class="nav-link  {{ Route::is('dashboard') ? 'active' : '' }}" href="{{route('dashboard')}}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>shop </title>
@@ -68,7 +68,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link  " href="{{route('hotel-management.index')}}">
+                <a class="nav-link {{ Route::is('hotel-management.index') ? 'active' : '' }} " href="{{route('hotel-management.index')}}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>office</title>
@@ -88,7 +88,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link  " href="{{route('user.index')}}">
+                <a class="nav-link {{ Route::is('user.index') ? 'active' : '' }} " href="{{route('user.index')}}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>credit-card</title>
@@ -110,7 +110,7 @@
 
             @if(auth()->user()->role == 'ADMIN')
                 <li class="nav-item">
-                    <a class="nav-link  " href="{{route('import.file.page')}}">
+                    <a class="nav-link {{ Route::is('import.file.page') ? 'active' : '' }}  " href="{{route('import.file.page')}}">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <title>credit-card</title>
@@ -132,7 +132,7 @@
             @endif
 
             <li class="nav-item">
-                <a class="nav-link  " href="{{route('reservation.index')}}">
+                <a class="nav-link {{ Route::is('reservation.index') ? 'active' : '' }} " href="{{route('reservation.index')}}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>credit-card</title>
@@ -154,7 +154,7 @@
 
            @if(auth()->user()->role == 'ADMIN')
                 <li class="nav-item">
-                    <a class="nav-link  " href="{{route('settings.index')}}">
+                    <a class="nav-link {{ Route::is('settings.index') ? 'active' : '' }}  " href="{{route('settings.index')}}">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <title>credit-card</title>

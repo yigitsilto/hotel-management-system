@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\UserCreateRequest;
 use App\Http\Requests\admin\UserUpdateEquest;
 use App\Imports\UsersImport;
+use App\Jobs\SendOrderApprovedSmsJob;
+use App\Jobs\SendUserActiveSmsJob;
 use App\Models\AuthorizedHotel;
 use App\Models\FailedRow;
 use App\Models\Hotel;
 use App\Models\User;
+use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -17,6 +20,13 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
+
+    private $smsService;
+
+public function __construct(SmsService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
     public function importFile()
     {
 
@@ -196,6 +206,12 @@ class UserController extends Controller
                                                     'hotel_id' => $hotel->id,
                                                 ]);
             }
+        }
+
+        if ($request->validated()['can_do_reservation'] == 1){
+
+            SendUserActiveSmsJob::dispatch($this->smsService, $user);
+
         }
 
         return redirect()
