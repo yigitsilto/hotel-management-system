@@ -155,6 +155,7 @@ return [
     */
 
     'attributes' => [
+        'user' => 'Kullanıcı',
         'check_in_date' => 'Giriş Tarihi',
         'paid_amount' => 'Ödeme Tutarı',
         'check_out_date' => 'Çıkış Tarihi',

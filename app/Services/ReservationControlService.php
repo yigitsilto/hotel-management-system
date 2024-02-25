@@ -11,9 +11,9 @@ class ReservationControlService
 {
     public array $errors = [];
 
-    public function isRoomAvailable($room, $checkInDate, $checkOutDate, $guests = null): array
+    public function isRoomAvailable($room, $checkInDate, $checkOutDate, $guests = null, $userId = null): array
     {
-
+       $userId = $userId != null ? $userId : auth()->id();
         // oda rezervasyon sayısı kontrolü
         $reservationCountCheck = $this->checkReservationCountAvailability($room, $checkInDate, $checkOutDate);
 
@@ -21,7 +21,7 @@ class ReservationControlService
         $maxDayCountCheck = $this->checkMaxDayCount($room, $checkInDate, $checkOutDate);
 
         $userReservations = Reservation::query()
-                                       ->where('user_id', auth()->id())
+                                       ->where('user_id', $userId)
                                        ->where('reservation_status', '!=', ReservationStatusEnum::Rejected->name)
                                        ->orderBy('check_out_date', 'desc')
                                        ->first();
@@ -31,7 +31,7 @@ class ReservationControlService
 
 
         // parent kontrolleri akraba ilişkilerinde de yapılmış ise yine aynı yaz ayları kontrolü olmalı
-        $parentCheck = $this->checkMontAvailabilityForRelationalUser($room, $checkInDate, $checkOutDate);
+        $parentCheck = $this->checkMontAvailabilityForRelationalUser($room, $checkInDate, $checkOutDate, $userId);
 
         $guestCheck = $this->checkGuestsMonthAvailability($room, $checkInDate, $checkOutDate, $guests);
 
@@ -83,9 +83,9 @@ class ReservationControlService
         return true;
     }
 
-    public function checkMontAvailabilityForRelationalUser($room, $checkInDate, $checkOutDate){
+    public function checkMontAvailabilityForRelationalUser($room, $checkInDate, $checkOutDate, $userId){
         $parentCheck = true;
-        $user = User::query()->where('id', auth()->id())->first();
+        $user = User::query()->where('id', $userId)->first();
 
         if ($user->parent_id != null) {
             $parentUserReservations =  Reservation::query()

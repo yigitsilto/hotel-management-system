@@ -57,11 +57,11 @@ class ReservationCreateManuelPage extends Component
         'check_in_date' => 'required|date',
         'check_out_date' => 'required|date|after:check_in_date',
         'special_requests' => 'nullable|string',
-        'user' => 'nullable|exists:users,id',
+        'user' => 'required|exists:users,id',
         'payment_method' => 'required|in:bank_transfer,credit_card',
         'guests' => 'required|array',
-        'guests.*.name' => 'required|string',
-        'guests.*.age' => 'required|numeric',
+        'guests.*.name' => 'required|string|min:3|max:255',
+        'guests.*.age' => 'required|numeric|min:0|max:100',
         'guests.*.tc' => 'required|numeric|digits:11',
     ];
     private ReservationControlService $reservationControlService;
@@ -117,7 +117,7 @@ class ReservationCreateManuelPage extends Component
 
 
             $isRoomAvailable = $this->reservationControlService->isRoomAvailable($this->room, $this->check_in_date,
-                                                                                 $this->check_out_date, $this->guests);
+                                                                                 $this->check_out_date, $this->guests, $this->user);
 
             if (!$isRoomAvailable['status']) {
                 foreach ($isRoomAvailable['errors'] as $error) {
@@ -145,6 +145,11 @@ class ReservationCreateManuelPage extends Component
         return view('livewire.reservation-create-manuel-page', [
             'room' => $this->room,
         ]);
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
     }
 
     public function calculateTotalPrice()
@@ -251,7 +256,7 @@ class ReservationCreateManuelPage extends Component
             $room = Room::findOrFail($this->room->id);
 
             $isRoomAvailable = $this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
-                                                                                 $this->check_out_date, $this->guests);
+                                                                                 $this->check_out_date, $this->guests, $this->user);
 
             if (!$isRoomAvailable['status']) {
                 foreach ($isRoomAvailable['errors'] as $error) {
