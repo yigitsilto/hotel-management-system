@@ -464,7 +464,7 @@
                                         <div class="form-group">
                                             <label for="cvv">CVV</label>
                                             <input type="text" class="form-control" id="cvv" name="cvv"
-                                                   wire:model="cvv">
+                                                   wire:model.live="cvv">
                                             @error('cvv') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
                                     </div>

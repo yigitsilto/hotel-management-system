@@ -80,15 +80,16 @@ class ReservationCreatePage extends Component
         //dd($this->guests);
     }
 
-//    public function updated($propertyName)
-//    {
-//        $this->validateOnly($propertyName);
-//
-//        if ($this->payment_method == 'credit_card') {
-//            // do the validations for credit card
-//            $this->validateCreditCard();
-//        }
-//    }
+    public function updated($propertyName)
+    {
+        if ($this->payment_method == 'credit_card') {
+            // do the validations for credit card
+            $this->validateCreditCard();
+        }
+        $this->validateOnly($propertyName);
+
+
+    }
 
     public function updatedCheckInDate($value)
     {
