@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\ReservationStatusEnum;
 use App\Models\Reservation;
+use App\Models\User;
 use Carbon\Carbon;
 
 class ReservationControlService
@@ -27,7 +28,23 @@ class ReservationControlService
         $monthsAvailabilityCheck = $this->checkMonthsAvailability($room, $checkInDate, $checkOutDate,
                                                                   $userReservations);
 
-        $check = $reservationCountCheck && $monthsAvailabilityCheck && $maxDayCountCheck;
+
+        // parent kontrolleri akraba ilişkilerinde de yapılmış ise yine aynı yaz ayları kontrolü olmalı
+        $user = User::query()->where('id', auth()->id())->first();
+        $parentCheck = true;
+      if ($user->parent_id != null) {
+          $parentUserReservations =  Reservation::query()
+              ->where('user_id', $user->parent_id)
+              ->where('reservation_status', '!=', ReservationStatusEnum::Rejected->name)
+              ->orderBy('check_out_date', 'desc')
+              ->first();
+
+            $parentCheck = $this->checkMonthsAvailability($room, $checkInDate, $checkOutDate,
+                $parentUserReservations);
+
+      }
+
+        $check = $reservationCountCheck && $monthsAvailabilityCheck && $maxDayCountCheck && $parentCheck;
 
         return [
             'status' => $check,
@@ -124,7 +141,7 @@ class ReservationControlService
 
 
         if (now()->lessThan($blockedUntil)) {
-            $this->errors[] = 'Seçtiğiniz oda türü için daha önce rezervasyonunuz bulunduğu için ' . $blockedYearInterval . ' yıl içerisinde yaz aylarında rezervasyon yapamazsınız.';
+            $this->errors[] = 'Seçtiğiniz oda türü için daha önce sizin veya 1. ilişkili akrabanızın rezervasyonu bulunduğu için ' . $blockedYearInterval . ' yıl içerisinde yaz aylarında rezervasyon yapamazsınız.';
             return false; // Kullanıcı engellendiği için rezervasyon yapılamaz
         }
 
