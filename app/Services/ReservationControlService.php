@@ -11,8 +11,9 @@ class ReservationControlService
 {
     public array $errors = [];
 
-    public function isRoomAvailable($room, $checkInDate, $checkOutDate): array
+    public function isRoomAvailable($room, $checkInDate, $checkOutDate, $guests = null): array
     {
+
         // oda rezervasyon sayısı kontrolü
         $reservationCountCheck = $this->checkReservationCountAvailability($room, $checkInDate, $checkOutDate);
 
@@ -30,26 +31,75 @@ class ReservationControlService
 
 
         // parent kontrolleri akraba ilişkilerinde de yapılmış ise yine aynı yaz ayları kontrolü olmalı
-        $user = User::query()->where('id', auth()->id())->first();
-        $parentCheck = true;
-      if ($user->parent_id != null) {
-          $parentUserReservations =  Reservation::query()
-              ->where('user_id', $user->parent_id)
-              ->where('reservation_status', '!=', ReservationStatusEnum::Rejected->name)
-              ->orderBy('check_out_date', 'desc')
-              ->first();
+        $parentCheck = $this->checkMontAvailabilityForRelationalUser($room, $checkInDate, $checkOutDate);
 
-            $parentCheck = $this->checkMonthsAvailability($room, $checkInDate, $checkOutDate,
-                $parentUserReservations);
+        $guestCheck = $this->checkGuestsMonthAvailability($room, $checkInDate, $checkOutDate, $guests);
 
-      }
-
-        $check = $reservationCountCheck && $monthsAvailabilityCheck && $maxDayCountCheck && $parentCheck;
+        $check = $reservationCountCheck && $monthsAvailabilityCheck && $maxDayCountCheck && $parentCheck && $guestCheck;
 
         return [
             'status' => $check,
             'errors' => $this->errors
         ];
+    }
+    public function checkGuestsMonthAvailability($room, $checkInDate, $checkOutDate, $guests) {
+
+        foreach ($guests as $guest) {
+            $tc = $guest['tc'];
+            $user = User::query()->where('identity_number', $tc)->first();
+            if ($user) {
+
+                $userReservations = Reservation::query()
+                    ->where('user_id', $user->id)
+                    ->where('reservation_status', '!=', ReservationStatusEnum::Rejected->name)
+                    ->orderBy('check_out_date', 'desc')
+                    ->first();
+
+                $monthsAvailabilityCheck = $this->checkMonthsAvailability($room, $checkInDate, $checkOutDate,
+                    $userReservations);
+
+                if (!$monthsAvailabilityCheck) {
+                    return false;
+                }
+
+                $parentUserReservations =  Reservation::query()
+                    ->where('user_id', $user->parent_id)
+                    ->where('reservation_status', '!=', ReservationStatusEnum::Rejected->name)
+                    ->orderBy('check_out_date', 'desc')
+                    ->first();
+
+                $parentCheck = $this->checkMonthsAvailability($room, $checkInDate, $checkOutDate,
+                    $parentUserReservations);
+
+                if (!$parentCheck) {
+                    return false;
+                }
+
+
+            }
+        }
+
+
+        return true;
+    }
+
+    public function checkMontAvailabilityForRelationalUser($room, $checkInDate, $checkOutDate){
+        $parentCheck = true;
+        $user = User::query()->where('id', auth()->id())->first();
+
+        if ($user->parent_id != null) {
+            $parentUserReservations =  Reservation::query()
+                ->where('user_id', $user->parent_id)
+                ->where('reservation_status', '!=', ReservationStatusEnum::Rejected->name)
+                ->orderBy('check_out_date', 'desc')
+                ->first();
+
+            $parentCheck = $this->checkMonthsAvailability($room, $checkInDate, $checkOutDate,
+                $parentUserReservations);
+
+        }
+
+        return $parentCheck;
     }
 
     private function checkReservationCountAvailability($room, $checkInDate, $checkOutDate): bool

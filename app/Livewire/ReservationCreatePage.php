@@ -122,7 +122,7 @@ class ReservationCreatePage extends Component
 
 
             $isRoomAvailable = $this->reservationControlService->isRoomAvailable($this->room, $this->check_in_date,
-                                                                                 $this->check_out_date);
+                                                                                 $this->check_out_date, $this->guests);
 
             if (!$isRoomAvailable['status']) {
                 foreach ($isRoomAvailable['errors'] as $error) {
@@ -262,7 +262,7 @@ class ReservationCreatePage extends Component
             $room = Room::findOrFail($this->room->id);
 
             $isRoomAvailable = $this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
-                                                                                 $this->check_out_date);
+                                                                                 $this->check_out_date, $this->guests);
 
             if (!$isRoomAvailable['status']) {
                 foreach ($isRoomAvailable['errors'] as $error) {
