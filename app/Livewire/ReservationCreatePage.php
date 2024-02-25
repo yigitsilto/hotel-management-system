@@ -33,7 +33,9 @@ class ReservationCreatePage extends Component
     public $Ecom_Payment_Card_ExpDate_Month;
     public $Ecom_Payment_Card_ExpDate_Year;
     public $cvv;
-    public $guests = [];
+    public $guests = [
+        ['name' => null, 'age' => null, 'tc' => null],
+    ];
     public $loading = false;
     public $amount;
     public $clientId;
@@ -55,8 +57,8 @@ class ReservationCreatePage extends Component
         'special_requests' => 'nullable|string',
         'payment_method' => 'required|in:bank_transfer,credit_card',
         'guests' => 'required|array',
-        'guests.*.name' => 'required|string',
-        'guests.*.age' => 'required|numeric',
+        'guests.*.name' => 'required|string|min:3|max:255',
+        'guests.*.age' => 'required|numeric|min:0|max:100',
         'guests.*.tc' => 'required|numeric|digits:11',
     ];
     private ReservationControlService $reservationControlService;
@@ -71,8 +73,22 @@ class ReservationCreatePage extends Component
         while (count($this->guests) > $this->guestSize) {
             array_pop($this->guests);
         }
+
+        while (count($this->guests) < $this->guestSize) {
+            $this->guests[] = ['name' => '', 'age' => '', 'tc' => ''];
+        }
         //dd($this->guests);
     }
+
+//    public function updated($propertyName)
+//    {
+//        $this->validateOnly($propertyName);
+//
+//        if ($this->payment_method == 'credit_card') {
+//            // do the validations for credit card
+//            $this->validateCreditCard();
+//        }
+//    }
 
     public function updatedCheckInDate($value)
     {
@@ -195,6 +211,10 @@ class ReservationCreatePage extends Component
 
     public function save()
     {
+        if ($this->payment_method == 'credit_card') {
+            // do the validations for credit card
+            $this->validateCreditCard();
+        }
 
         $this->validate();
         if ($this->guestSize != count($this->guests)) {
@@ -202,10 +222,7 @@ class ReservationCreatePage extends Component
             return;
         }
 
-        if ($this->payment_method == 'credit_card') {
-            // do the validations for credit card
-            $this->validateCreditCard();
-        }
+
 
         try {
 
@@ -328,12 +345,22 @@ class ReservationCreatePage extends Component
 
     public function validateCreditCard()
     {
-        $this->validate([
-                            'pan' => 'required|numeric|digits:16',
-                            'Ecom_Payment_Card_ExpDate_Month' => 'required|numeric|digits:2',
-                            'Ecom_Payment_Card_ExpDate_Year' => 'required|numeric|digits:2',
-                            'cvv' => 'required|numeric|digits:3',
-                        ]);
+
+        $this->rules = [
+            'check_in_date' => 'required|date',
+            'check_out_date' => 'required|date|after:check_in_date',
+            'special_requests' => 'nullable|string',
+            'payment_method' => 'required|in:bank_transfer,credit_card',
+            'guests' => 'required|array',
+            'guests.*.name' => 'required|string|min:3|max:255',
+            'guests.*.age' => 'required|numeric|min:0|max:100',
+            'guests.*.tc' => 'required|numeric|digits:11',
+            'name' => 'required|string',
+            'pan' => 'required|numeric|digits:16',
+            'Ecom_Payment_Card_ExpDate_Month' => 'required|numeric|digits:2',
+            'Ecom_Payment_Card_ExpDate_Year' => 'required|numeric|digits:2',
+            'cvv' => 'required|numeric|digits:3',
+        ];
     }
 
     private function reservationDuplicateCheck(): bool

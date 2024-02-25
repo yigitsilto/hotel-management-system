@@ -35,7 +35,9 @@ class ReservationCreateManuelPage extends Component
     public $Ecom_Payment_Card_ExpDate_Month;
     public $Ecom_Payment_Card_ExpDate_Year;
     public $cvv;
-    public $guests = [];
+    public $guests = [
+        ['name' => null, 'age' => null, 'tc' => null],
+    ];
     public $loading = false;
     public $amount;
     public $clientId;
@@ -73,6 +75,10 @@ class ReservationCreateManuelPage extends Component
         // If the new guest size is smaller than the current size, remove excess elements
         while (count($this->guests) > $this->guestSize) {
             array_pop($this->guests);
+        }
+
+        while (count($this->guests) < $this->guestSize) {
+            $this->guests[] = ['name' => '', 'age' => '', 'tc' => ''];
         }
         //dd($this->guests);
     }

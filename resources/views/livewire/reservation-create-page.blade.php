@@ -314,10 +314,10 @@
                                 @endif
 
                                 @for ($i = 0; $i < $guestSize; $i++)
-                                    <div class="col-md-4">
+                                    <div class="col-md-4" wire:key="guests.{{ $i }}.name">
                                         <div class="form-group">
                                             <label for="guest_name_{{ $i }}">{{$i + 1}}. Kişi İsim Soyisim:</label>
-                                            <input type="text" class="form-control" wire:model="guests.{{ $i }}.name"
+                                            <input type="text" class="form-control" wire:model.live="guests.{{ $i }}.name"
                                                    id="guest_name_{{ $i }}"
                                                    name="guests.{{ $i }}.name"/>
                                             @error('guests.'.$i.'.name')
@@ -325,10 +325,10 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4" wire:key="guests.{{ $i }}.tc">
                                         <div class="form-group">
                                             <label for="guest_tc_{{ $i }}">{{$i + 1}}. Kişi T.C:</label>
-                                            <input type="number" class="form-control" wire:model="guests.{{ $i }}.tc"
+                                            <input type="number" class="form-control" wire:model.live="guests.{{ $i }}.tc"
                                                    id="guest_tc_{{ $i }}"
                                                    name="guests.{{ $i }}.tc"/>
                                             @error('guests.'.$i.'.tc')
@@ -337,7 +337,7 @@
                                         </div>
                                     </div>
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-4" wire:key="guests.{{ $i }}.age">
                                             <div class="form-group">
                                                 <label for="guest_age_{{ $i }}">{{$i + 1}}. Kişi Yaş:</label>
                                                 <input type="number" class="form-control" wire:model.live.debounce.350ms="guests.{{ $i }}.age"
@@ -399,7 +399,7 @@
                                         <div class="form-group">
                                             <label for="name">Kart Üzerinde Yazan İsim Soyisim</label>
                                             <input type="text" class="form-control" id="name" name="name"
-                                                   wire:model="name">
+                                                   wire:model.live="name">
                                             @error('name') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
@@ -409,7 +409,7 @@
                                         <div class="form-group">
                                             <label for="pan">Kart Numarası</label>
                                             <input type="text" class="form-control" id="pan"
-                                                   name="pan" wire:model="pan">
+                                                   name="pan" wire:model.live="pan">
                                             @error('pan') <span
                                                     class="text-danger">{{ $message }}</span> @enderror
                                         </div>
@@ -419,7 +419,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="Ecom_Payment_Card_ExpDate_Month">Ay</label>
-                                            <select class="form-control"  wire:model="Ecom_Payment_Card_ExpDate_Month">
+                                            <select class="form-control"  wire:model.live="Ecom_Payment_Card_ExpDate_Month">
                                                 <option value="" selected>Seçiniz</option>
                                                 <option value="01">01</option>
                                                 <option value="02">02</option>
@@ -442,7 +442,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="year">Yıl</label>
-                                            <select class="form-control" id="Ecom_Payment_Card_ExpDate_Year" wire:model="Ecom_Payment_Card_ExpDate_Year">
+                                            <select class="form-control" id="Ecom_Payment_Card_ExpDate_Year" wire:model.live="Ecom_Payment_Card_ExpDate_Year">
                                                 <option value="" selected>Seçiniz</option>
                                                 <option value="24">24</option>
                                                 <option value="25">25</option>
