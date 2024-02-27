@@ -7,8 +7,6 @@ use App\Models\HesapEkstreRequest;
 class BankTransferCheckService
 {
 
-
-
     public function check() {
 
         //$url = 'http://webservicestest.halkbank.com.tr/HesapEkstreOrtakWS/HesapEkstreOrtak.svc';
@@ -18,7 +16,7 @@ class BankTransferCheckService
         $password = 'Li3N*wMTvi ';
 
 // İKİ TARİH ARASI DEĞERLER
-        $start_date = '2024-02-27';
+        $start_date = '2024-01-14';
         $end_date = '2024-02-29';
 
         $wsse_header = new WsseAuthHeader($username, $password);
@@ -36,6 +34,21 @@ class BankTransferCheckService
            // dd($client);
 // Burda en çok kullanılan metodu örnekledim, birde bağlı müşteri metodu var onuda göstereceğim
             $response=$client->EkstreSorgulama($requestParams);
+
+            dd($response, $response->EkstreSorgulamaResult->Hesaplar->Hesap->Hareketler);
+            // EkstreSorgulamaResult içindeki Hesaplar dizisi üzerinde döngü
+            foreach ($response->EkstreSorgulamaResult->Hesaplar->Hesap->Hareketler->Hareket as $hareket) {
+                $aciklama = $hareket->Aciklama;
+                $atmNo = $hareket->AtmNo;
+                $bakiye = $hareket->Bakiye;
+                // Diğer özellikleri de aynı şekilde alabilirsiniz
+
+                // Burada işlem yapabilirsiniz, örneğin veritabanına kaydedebilirsiniz
+                // Örnek olarak ekrana yazdırıyoruz:
+                echo "Açıklama: $aciklama, ATM No: $atmNo, Bakiye: $bakiye\n";
+            }
+
+
         }
         catch(\Exception $e)
         {
