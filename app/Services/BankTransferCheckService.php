@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\ReservationStatusEnum;
 use App\Models\HesapEkstreRequest;
 use Carbon\Carbon;
 
@@ -68,7 +69,8 @@ class BankTransferCheckService
                         $diffInMinutes = $created_at->diffInMinutes($hourCarbon);
 
                         if ($diffInMinutes > 10) {
-                           $reservation->delete();
+                            $reservation->reservation_status = ReservationStatusEnum::Rejected;
+                            $reservation->save();
                             continue;
                         }
 
@@ -77,6 +79,7 @@ class BankTransferCheckService
 
                         if ((float)$receivedAmountFormatted >= (float)$mustPaidAmount) {
                             $reservation->payment_status = true;
+                            $reservation->reservation_status = ReservationStatusEnum::Success;
                             $reservation->paid_amount = $receivedAmountFormatted;
                             $reservation->save();
                         }
