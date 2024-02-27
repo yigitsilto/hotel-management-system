@@ -67,7 +67,7 @@ class BankTransferCheckService
         } catch (\Exception $e) {
             dd($e);
         }
-        dd($response);
+        dd($response, $reservations->toArray());
     }
 
 }
