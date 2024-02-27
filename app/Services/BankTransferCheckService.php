@@ -32,6 +32,7 @@ class BankTransferCheckService
 
 
         $reservations = \App\Models\Reservation::query()
+            ->withoutGlobalScope('payment_status')
             ->where('payment_method', 'bank_transfer')
             ->where('payment_status', false)
             ->get();
