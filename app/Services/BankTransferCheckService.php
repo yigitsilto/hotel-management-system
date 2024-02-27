@@ -68,7 +68,7 @@ class BankTransferCheckService
                         $diffInMinutes = $created_at->diffInMinutes($hourCarbon);
 
                         if ($diffInMinutes > 10) {
-                            dd("10 dakikadan fazla", $diffInMinutes, $hourCarbon, $created_at);
+                           $reservation->delete();
                             continue;
                         }
 
@@ -83,7 +83,7 @@ class BankTransferCheckService
                         // $aciklama içinde $rezCode bulundu
                         // Burada istediğiniz işlemi gerçekleştirebilirsiniz
                         // Örneğin, kullanıcı açıklamasına $rezCode'u ekleyebilirsiniz
-                        dd("sadece bulundu", $rezCode, $aciklama);
+                       // dd("sadece bulundu", $rezCode, $aciklama);
                     }
 
                 }
@@ -93,9 +93,10 @@ class BankTransferCheckService
 
 
         } catch (\Exception $e) {
-            dd($e);
+          //  dd($e);
         }
-        dd($response, $reservations->toArray());
+        //dd($response, $reservations->toArray());
+        return true;
     }
 
 }
