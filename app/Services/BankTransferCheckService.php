@@ -62,17 +62,15 @@ class BankTransferCheckService
                         continue;
                     }
 
-                    $diffInMinutes = $created_at->diffInMinutes($hourCarbon);
-
-                    if ($diffInMinutes > 10) {
-                        dd("10 dakikadan fazla", $diffInMinutes, $hourCarbon, $created_at);
-                        continue;
-                    }
-
-
-
                     $rezCode = $reservation->bank_transfer_code;
                     if (strpos($aciklama, $rezCode) !== false) {
+
+                        $diffInMinutes = $created_at->diffInMinutes($hourCarbon);
+
+                        if ($diffInMinutes > 10) {
+                            dd("10 dakikadan fazla", $diffInMinutes, $hourCarbon, $created_at);
+                            continue;
+                        }
 
                         $mustPaidAmount = ($reservation->total_amount * 10) / 100; // TODO 30 olacak
                         $receivedAmountFormatted = str_replace(',', '.', $tutar); // Eğer virgül varsa noktaya dönüştür
