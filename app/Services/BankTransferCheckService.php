@@ -66,7 +66,7 @@ class BankTransferCheckService
                     $diffInMinutes = $hour->diffInMinutes($saat);
 
                     if ($diffInMinutes > 10) {
-                        dd("10 dakikadan fazla", $diffInMinutes);
+                        dd("10 dakikadan fazla", $diffInMinutes, $hourCarbon, $hour);
                         continue;
                     }
 
