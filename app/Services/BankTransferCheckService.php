@@ -50,11 +50,28 @@ class BankTransferCheckService
                 $saat = $hareket->Saat;
                 $bakiye = $hareket->Bakiye;
                 $tutar = $hareket->HareketTutari;
+                $hourCarbon = \Carbon\Carbon::parse($saat);
+                $hourCarbon = $hourCarbon->format('H:i:s');
 
                 foreach ($reservations as $reservation) {
+
+                    $created_at = $reservation->created_at;
+                    $hour = $created_at->format('H:i:s');
+
+
                     if ($reservation->bank_transfer_code == null) {
                         continue;
                     }
+
+                    $diffInMinutes = $hour->diffInMinutes($saat);
+
+                    if ($diffInMinutes > 10) {
+                        dd("10 dakikadan fazla", $diffInMinutes);
+                        continue;
+                    }
+
+
+
                     $rezCode = $reservation->bank_transfer_code;
                     if (strpos($aciklama, $rezCode) !== false) {
 
@@ -62,7 +79,9 @@ class BankTransferCheckService
                         $receivedAmountFormatted = str_replace(',', '.', $tutar); // Eğer virgül varsa noktaya dönüştür
 
                         if ((float)$receivedAmountFormatted >= (float)$mustPaidAmount) {
-                            dd("bulundu ve onaylanabilir artık", $rezCode, $aciklama);
+                            $reservation->payment_status = true;
+                            $reservation->paid_amount = $receivedAmountFormatted;
+                            $reservation->save();
                         }
                         // $aciklama içinde $rezCode bulundu
                         // Burada istediğiniz işlemi gerçekleştirebilirsiniz
