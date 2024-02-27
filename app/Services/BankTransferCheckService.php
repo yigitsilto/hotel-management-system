@@ -38,9 +38,9 @@ class BankTransferCheckService
         }
         catch(\Exception $e)
         {
-            var_dump($e);
+            dd($e);
         }
-        var_dump($response);
+        dd($response);
     }
 
 }
