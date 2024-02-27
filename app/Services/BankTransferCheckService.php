@@ -34,10 +34,8 @@ class BankTransferCheckService
 
 
         $reservations = \App\Models\Reservation::query()
-            ->withoutGlobalScope('payment_status')
             ->where('reservation_status', ReservationStatusEnum::Pending->name)
             ->where('payment_method', 'bank_transfer')
-            ->where('payment_status', false)
             ->get();
 
         try {
@@ -68,11 +66,7 @@ class BankTransferCheckService
 
                     $rezCode = $reservation->bank_transfer_code;
 
-                    dd(strpos($aciklama, $rezCode) !== false, $aciklama, $rezCode);
                     if (strpos($aciklama, $rezCode) !== false) {
-
-                        dd("bulundu");
-
 
                         $diffInMinutes = $created_at->diffInMinutes($hourCarbon);
 
