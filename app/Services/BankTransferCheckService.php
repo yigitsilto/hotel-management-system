@@ -58,7 +58,7 @@ class BankTransferCheckService
                     $rezCode = $reservation->bank_transfer_code;
                     if (strpos($aciklama, $rezCode) !== false) {
 
-                        $mustPaidAmount = ($reservation->total_amount * 30) / 100;
+                        $mustPaidAmount = ($reservation->total_amount * 10) / 100; // TODO 30 olacak
                         $receivedAmountFormatted = str_replace(',', '.', $tutar); // Eğer virgül varsa noktaya dönüştür
 
                         if ((float)$receivedAmountFormatted >= (float)$mustPaidAmount) {
