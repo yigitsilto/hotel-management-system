@@ -7,7 +7,8 @@ use App\Models\HesapEkstreRequest;
 class BankTransferCheckService
 {
 
-    public function check() {
+    public function check()
+    {
 
         //$url = 'http://webservicestest.halkbank.com.tr/HesapEkstreOrtakWS/HesapEkstreOrtak.svc';
         $url = 'https://webservice.halkbank.com.tr/HesapEkstreOrtakWS/HesapEkstreOrtak.svc?wsdl';
@@ -25,33 +26,45 @@ class BankTransferCheckService
 
 // Daha sonra sınıfımdaki objelere değerleri atadım.
         $request = new HesapEkstreRequest();
-        $request->BaslangicTarihi=$start_date;
-        $request->BitisTarihi=$end_date;
+        $request->BaslangicTarihi = $start_date;
+        $request->BitisTarihi = $end_date;
         $requestParams = array('request' => $request);
 
-        try
-        {
-           // dd($client);
-// Burda en çok kullanılan metodu örnekledim, birde bağlı müşteri metodu var onuda göstereceğim
-            $response=$client->EkstreSorgulama($requestParams);
 
-            dd($response, $response->EkstreSorgulamaResult->Hesaplar->Hesap->Hareketler);
+        $reservations = \App\Models\Reservation::query()
+            ->where('payment_method', 'bank_transfer')
+            ->where('payment_status', false)
+            ->get();
+
+        try {
+            // dd($client);
+// Burda en çok kullanılan metodu örnekledim, birde bağlı müşteri metodu var onuda göstereceğim
+            $response = $client->EkstreSorgulama($requestParams);
+
             // EkstreSorgulamaResult içindeki Hesaplar dizisi üzerinde döngü
             foreach ($response->EkstreSorgulamaResult->Hesaplar->Hesap->Hareketler->Hareket as $hareket) {
-                $aciklama = $hareket->Aciklama;
-                $atmNo = $hareket->AtmNo;
+                $aciklama = $hareket->EkstreAciklama;
+                $tarih = $hareket->Tarih;
+                $saat = $hareket->Saat;
                 $bakiye = $hareket->Bakiye;
-                // Diğer özellikleri de aynı şekilde alabilirsiniz
+                $tutar = $hareket->HareketTutari;
 
-                // Burada işlem yapabilirsiniz, örneğin veritabanına kaydedebilirsiniz
-                // Örnek olarak ekrana yazdırıyoruz:
-                echo "Açıklama: $aciklama, ATM No: $atmNo, Bakiye: $bakiye\n";
+                foreach ($reservations as $reservation) {
+                    $rezCode = $reservation->bank_transfer_code;
+                    if (strpos($aciklama, $rezCode) !== false) {
+                        // $aciklama içinde $rezCode bulundu
+                        // Burada istediğiniz işlemi gerçekleştirebilirsiniz
+                        // Örneğin, kullanıcı açıklamasına $rezCode'u ekleyebilirsiniz
+                        dd("bulundu", $rezCode, $aciklama);
+                    }
+
+                }
+
+
             }
 
 
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             dd($e);
         }
         dd($response);

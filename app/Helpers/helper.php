@@ -10,6 +10,6 @@ if (!function_exists('moneyFormat')) {
 if (!function_exists('generateUniqueCode')) {
     function generateUniqueCode($userId)
     {
-        return $userId . 'L' . time();
+        return $userId . time();
     }
 }
