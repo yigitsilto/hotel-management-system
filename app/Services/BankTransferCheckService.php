@@ -65,7 +65,10 @@ class BankTransferCheckService
                         continue;
                     }
 
+
                     $rezCode = $reservation->bank_transfer_code;
+
+                    dd(strpos($aciklama, $rezCode) !== false, $aciklama, $rezCode);
                     if (strpos($aciklama, $rezCode) !== false) {
 
                         dd("bulundu");
