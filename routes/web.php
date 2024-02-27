@@ -22,6 +22,22 @@ use Illuminate\Support\Facades\Route;
 Route::post('/fail-payment',[App\Http\Controllers\PaymentStatusController::class,'failed']);
 Route::post('/success-payment',[App\Http\Controllers\PaymentStatusController::class,'success']);
 
+Route::get('havale', function () {
+
+    $res = \App\Models\Reservation::query()->where('payment_method', 'bank_transfer')->where('payment_status', true)->get();
+
+    foreach ($res as $item) {
+
+    }
+
+
+    $test = new \App\Services\BankTransferCheckService();
+    $test->check();
+
+
+
+});
+
 
 
 Route::get('/', function () {
