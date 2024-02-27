@@ -35,6 +35,7 @@ class BankTransferCheckService
 
         $reservations = \App\Models\Reservation::query()
             ->withoutGlobalScope('payment_status')
+            ->where('reservation_status', ReservationStatusEnum::Pending->name)
             ->where('payment_method', 'bank_transfer')
             ->where('payment_status', false)
             ->get();
@@ -69,7 +70,7 @@ class BankTransferCheckService
                         $diffInMinutes = $created_at->diffInMinutes($hourCarbon);
 
                         if ($diffInMinutes > 10) {
-                            $reservation->reservation_status = ReservationStatusEnum::Rejected;
+                            $reservation->reservation_status = ReservationStatusEnum::Rejected->name;
                             $reservation->save();
                             continue;
                         }
@@ -79,7 +80,7 @@ class BankTransferCheckService
 
                         if ((float)$receivedAmountFormatted >= (float)$mustPaidAmount) {
                             $reservation->payment_status = true;
-                            $reservation->reservation_status = ReservationStatusEnum::Success;
+                            $reservation->reservation_status = ReservationStatusEnum::Success->name;
                             $reservation->paid_amount = $receivedAmountFormatted;
                             $reservation->save();
                         }
