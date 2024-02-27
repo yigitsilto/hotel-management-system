@@ -75,7 +75,7 @@ class BankTransferCheckService
                             continue;
                         }
 
-                        $mustPaidAmount = ($reservation->total_amount * 10) / 100; // TODO 30 olacak
+                        $mustPaidAmount = ($reservation->total_amount * 30) / 100;
                         $receivedAmountFormatted = str_replace(',', '.', $tutar); // Eğer virgül varsa noktaya dönüştür
 
                         if ((float)$receivedAmountFormatted >= (float)$mustPaidAmount) {
