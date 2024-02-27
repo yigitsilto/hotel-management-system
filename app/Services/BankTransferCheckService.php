@@ -38,7 +38,6 @@ class BankTransferCheckService
         }
         catch(\Exception $e)
         {
-            var_dump($client->__gsetLastRequest());
             var_dump($e);
         }
         var_dump($response);
