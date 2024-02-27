@@ -57,10 +57,17 @@ class BankTransferCheckService
                     }
                     $rezCode = $reservation->bank_transfer_code;
                     if (strpos($aciklama, $rezCode) !== false) {
+
+                        $mustPaidAmount = ($reservation->total_amount * 30) / 100;
+                        $receivedAmountFormatted = str_replace(',', '.', $tutar); // Eğer virgül varsa noktaya dönüştür
+
+                        if ((float)$receivedAmountFormatted >= (float)$mustPaidAmount) {
+                            dd("bulundu ve onaylanabilir artık", $rezCode, $aciklama);
+                        }
                         // $aciklama içinde $rezCode bulundu
                         // Burada istediğiniz işlemi gerçekleştirebilirsiniz
                         // Örneğin, kullanıcı açıklamasına $rezCode'u ekleyebilirsiniz
-                        dd("bulundu", $rezCode, $aciklama);
+                        dd("sadece bulundu", $rezCode, $aciklama);
                     }
 
                 }
