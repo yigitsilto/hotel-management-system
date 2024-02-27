@@ -23,7 +23,6 @@ class BankTransferCheckService
 
         $wsse_header = new WsseAuthHeader($username, $password);
         $client = new \SoapClient($url);
-        dd($client);
         $client->__setSoapHeaders(array($wsse_header));
 
 // Daha sonra sınıfımdaki objelere değerleri atadım.
