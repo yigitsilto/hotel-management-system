@@ -19,7 +19,7 @@ class BankTransferCheckService
 
 // İKİ TARİH ARASI DEĞERLER
         $start_date = '2024-02-27';
-        $end_date = '2024-02-30';
+        $end_date = '2024-02-29';
 
         $wsse_header = new WsseAuthHeader($username, $password);
         $client = new \SoapClient($url);
