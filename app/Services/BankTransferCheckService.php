@@ -44,6 +44,7 @@ class BankTransferCheckService
 
             // EkstreSorgulamaResult içindeki Hesaplar dizisi üzerinde döngü
             foreach ($response->EkstreSorgulamaResult->Hesaplar->Hesap->Hareketler->Hareket as $hareket) {
+
                 $aciklama = $hareket->EkstreAciklama;
                 $tarih = $hareket->Tarih;
                 $saat = $hareket->Saat;
@@ -51,6 +52,9 @@ class BankTransferCheckService
                 $tutar = $hareket->HareketTutari;
 
                 foreach ($reservations as $reservation) {
+                    if ($reservation->bank_transfer_code == null) {
+                        continue;
+                    }
                     $rezCode = $reservation->bank_transfer_code;
                     if (strpos($aciklama, $rezCode) !== false) {
                         // $aciklama içinde $rezCode bulundu
