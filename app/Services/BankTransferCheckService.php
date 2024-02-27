@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\HesapEkstreRequest;
+use Carbon\Carbon;
 
 class BankTransferCheckService
 {
@@ -50,23 +51,21 @@ class BankTransferCheckService
                 $saat = $hareket->Saat;
                 $bakiye = $hareket->Bakiye;
                 $tutar = $hareket->HareketTutari;
-                $hourCarbon = \Carbon\Carbon::parse($saat);
-                $hourCarbon = $hourCarbon->format('H:i:s');
+                $hourCarbon = Carbon::createFromFormat('H:i:s', $saat);
 
                 foreach ($reservations as $reservation) {
 
                     $created_at = $reservation->created_at;
-                    $hour = $created_at->format('H:i:s');
 
 
                     if ($reservation->bank_transfer_code == null) {
                         continue;
                     }
 
-                    $diffInMinutes = $hour->diffInMinutes($saat);
+                    $diffInMinutes = $created_at->diffInMinutes($hourCarbon);
 
                     if ($diffInMinutes > 10) {
-                        dd("10 dakikadan fazla", $diffInMinutes, $hourCarbon, $hour);
+                        dd("10 dakikadan fazla", $diffInMinutes, $hourCarbon, $created_at);
                         continue;
                     }
 
