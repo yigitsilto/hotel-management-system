@@ -33,6 +33,7 @@ class BankTransferCheckService
 
         try
         {
+            dd($client);
 // Burda en çok kullanılan metodu örnekledim, birde bağlı müşteri metodu var onuda göstereceğim
             $response=$client->EkstreSorgulama($requestParams);
         }
