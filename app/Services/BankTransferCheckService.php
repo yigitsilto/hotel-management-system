@@ -46,8 +46,9 @@ class BankTransferCheckService
         try {
             // dd($client);
 // Burda en çok kullanılan metodu örnekledim, birde bağlı müşteri metodu var onuda göstereceğim
-            dd($client->getRateLimit());
             $response = $client->EkstreSorgulama($requestParams);
+
+            dd($response, $client);
 
             // EkstreSorgulamaResult içindeki Hesaplar dizisi üzerinde döngü
             foreach ($response->EkstreSorgulamaResult->Hesaplar->Hesap->Hareketler->Hareket as $hareket) {
@@ -112,7 +113,7 @@ class BankTransferCheckService
 
 
         } catch (\Exception $e) {
-          //  dd($e);
+            dd($e);
         }
         //dd($response, $reservations->toArray());
         return true;
