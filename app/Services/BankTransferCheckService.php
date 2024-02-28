@@ -18,9 +18,13 @@ class BankTransferCheckService
         $username = "28355363EPDUSR";
         $password = 'Li3N*wMTvi ';
 
+        $start_date = Carbon::yesterday()->format('Y-m-d');
+        $end_date = Carbon::today()->addDay()->format('Y-m-d');
+
+
 // İKİ TARİH ARASI DEĞERLER
-        $start_date = '2024-01-14';
-        $end_date = '2024-02-29';
+//        $start_date = '2024-01-14';
+//        $end_date = '2024-02-29';
 
         $wsse_header = new WsseAuthHeader($username, $password);
         $client = new \SoapClient($url);
