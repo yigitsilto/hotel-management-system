@@ -46,6 +46,7 @@ class BankTransferCheckService
         try {
             // dd($client);
 // Burda en çok kullanılan metodu örnekledim, birde bağlı müşteri metodu var onuda göstereceğim
+            dd($client);
             $response = $client->EkstreSorgulama($requestParams);
 
             // EkstreSorgulamaResult içindeki Hesaplar dizisi üzerinde döngü
