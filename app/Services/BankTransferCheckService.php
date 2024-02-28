@@ -85,7 +85,7 @@ class BankTransferCheckService
                         $receivedAmountFormatted = str_replace(',', '.', $tutar); // Eğer virgül varsa noktaya dönüştür
 
 
-                        dd($mustPaidAmount, $receivedAmountFormatted);
+                        dd($response);
 
                         if ((float)$receivedAmountFormatted >= (float)$mustPaidAmount) {
                             $reservation->payment_status = true;
