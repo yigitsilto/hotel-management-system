@@ -48,7 +48,7 @@ class BankTransferCheckService
 // Burda en çok kullanılan metodu örnekledim, birde bağlı müşteri metodu var onuda göstereceğim
             $response = $client->EkstreSorgulama($requestParams);
 
-            dd($response, $client);
+            dd($response);
 
             // EkstreSorgulamaResult içindeki Hesaplar dizisi üzerinde döngü
             foreach ($response->EkstreSorgulamaResult->Hesaplar->Hesap->Hareketler->Hareket as $hareket) {
@@ -74,18 +74,9 @@ class BankTransferCheckService
 
                     if (strpos($aciklama, $rezCode) !== false) {
 
-                        $diffInMinutes = $created_at->diffInMinutes($hourCarbon);
-
-                        if ($diffInMinutes > 10) {
-                            $reservation->reservation_status = ReservationStatusEnum::Rejected->name;
-                            $reservation->save();
-                            continue;
-                        }
 
                         $mustPaidAmount = ($reservation->total_amount * 30) / 100;
                         $receivedAmountFormatted = str_replace(',', '.', $tutar); // Eğer virgül varsa noktaya dönüştür
-
-
 
 
                         if ((float)$receivedAmountFormatted >= (float)$mustPaidAmount) {
@@ -98,7 +89,6 @@ class BankTransferCheckService
 
                             SendOrderApprovedSmsJob::dispatch($smcService, $reservation->user);
 
-
                         }
                         // $aciklama içinde $rezCode bulundu
                         // Burada istediğiniz işlemi gerçekleştirebilirsiniz
@@ -108,8 +98,27 @@ class BankTransferCheckService
 
                 }
 
-
             }
+
+
+            $resChecks = \App\Models\Reservation::query()
+                ->where('reservation_status', ReservationStatusEnum::Pending->name)
+                ->where('payment_method', 'bank_transfer')
+                ->get();
+
+            $current_time = Carbon::now();
+
+            foreach ($resChecks as $rez) {
+                $created_time = Carbon::parse($rez->created_at); // Rezervasyonun oluşturulma zamanını al
+                $elapsed_time = $current_time->diffInMinutes($created_time); // Geçen süreyi dakika cinsinden hesapla
+
+                if ($elapsed_time > 10 && $rez->status === 'pending') {
+                    $rez->reservation_status = ReservationStatusEnum::Rejected->name;
+                    $rez->save();
+                }
+            }
+
+
 
 
         } catch (\Exception $e) {
