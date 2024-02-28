@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\ReservationStatusEnum;
+use App\Jobs\SendOrderApprovedSmsJob;
 use App\Models\HesapEkstreRequest;
 use Carbon\Carbon;
 
@@ -88,6 +89,12 @@ class BankTransferCheckService
                             $reservation->reservation_status = ReservationStatusEnum::Success->name;
                             $reservation->paid_amount = $receivedAmountFormatted;
                             $reservation->save();
+
+                            $smcService = new SmsService();
+
+                            SendOrderApprovedSmsJob::dispatch($smcService, $reservation->user);
+
+
                         }
                         // $aciklama içinde $rezCode bulundu
                         // Burada istediğiniz işlemi gerçekleştirebilirsiniz
