@@ -84,6 +84,9 @@ class BankTransferCheckService
                         $mustPaidAmount = ($reservation->total_amount * 30) / 100;
                         $receivedAmountFormatted = str_replace(',', '.', $tutar); // Eğer virgül varsa noktaya dönüştür
 
+
+                        dd($mustPaidAmount, $receivedAmountFormatted);
+
                         if ((float)$receivedAmountFormatted >= (float)$mustPaidAmount) {
                             $reservation->payment_status = true;
                             $reservation->reservation_status = ReservationStatusEnum::Success->name;
