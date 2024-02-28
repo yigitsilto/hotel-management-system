@@ -17,7 +17,7 @@
                             Reservasyon Durumu:  {{$room->title}} -  <span class="badge badge-xs bg-gradient-info">{{\App\Enums\ReservationStatusEnum::getValueByKey($reservation->reservation_status)}}</span>
                         </h5>
                         <p class="mb-0 font-weight-bold text-sm">
-                            Toplam Ücret: {{moneyFormat($reservation->total_amount)}} - Ödenen Ücret: {{moneyFormat($reservation->paid_amount)}}
+                            Toplam Ücret: {{moneyFormat($reservation->total_amount)}} - Ödenmesi Gereken Ücret: {{moneyFormat(($reservation->total_amount * 30) / 100)}} - Ödenen Ücret: {{moneyFormat($reservation->paid_amount)}}
                         </p>
 
 
