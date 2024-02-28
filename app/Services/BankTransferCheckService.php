@@ -48,7 +48,7 @@ class BankTransferCheckService
 // Burda en çok kullanılan metodu örnekledim, birde bağlı müşteri metodu var onuda göstereceğim
             $response = $client->EkstreSorgulama($requestParams);
 
-
+            dd($response);
             // EkstreSorgulamaResult içindeki Hesaplar dizisi üzerinde döngü
             foreach ($response->EkstreSorgulamaResult->Hesaplar->Hesap->Hareketler->Hareket as $hareket) {
 
@@ -58,7 +58,7 @@ class BankTransferCheckService
                 $bakiye = $hareket->Bakiye;
                 $tutar = $hareket->HareketTutari;
                 $hourCarbon = Carbon::createFromFormat('H:i:s', $saat);
-                dd($response);
+
                 foreach ($reservations as $reservation) {
 
                     $created_at = $reservation->created_at;
