@@ -58,7 +58,7 @@ class BankTransferCheckService
                 $bakiye = $hareket->Bakiye;
                 $tutar = $hareket->HareketTutari;
                 $hourCarbon = Carbon::createFromFormat('H:i:s', $saat);
-
+                dd($response);
                 foreach ($reservations as $reservation) {
 
                     $created_at = $reservation->created_at;
@@ -85,7 +85,7 @@ class BankTransferCheckService
                         $receivedAmountFormatted = str_replace(',', '.', $tutar); // Eğer virgül varsa noktaya dönüştür
 
 
-                        dd($response);
+
 
                         if ((float)$receivedAmountFormatted >= (float)$mustPaidAmount) {
                             $reservation->payment_status = true;
