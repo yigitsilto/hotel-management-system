@@ -48,7 +48,6 @@ class BankTransferCheckService
 // Burda en çok kullanılan metodu örnekledim, birde bağlı müşteri metodu var onuda göstereceğim
             $response = $client->EkstreSorgulama($requestParams);
 
-            dd($response);
 
             // EkstreSorgulamaResult içindeki Hesaplar dizisi üzerinde döngü
             foreach ($response->EkstreSorgulamaResult->Hesaplar->Hesap->Hareketler->Hareket as $hareket) {
