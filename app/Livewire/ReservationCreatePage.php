@@ -287,7 +287,7 @@ class ReservationCreatePage extends Component
                             ->first();
                 SendIbanSmsJob::dispatch($this->smsService, $user, $code);
 
-                BankTransferCheckJob::dispatch()->delay(Carbon::now()->addMinutes(1));
+                BankTransferCheckJob::dispatch()->delay(Carbon::now()->addMinutes(5));
 
             }
 
