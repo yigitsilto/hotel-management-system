@@ -52,7 +52,9 @@ class BankTransferCheckService
             // EkstreSorgulamaResult içindeki Hesaplar dizisi üzerinde döngü
             foreach ($response->EkstreSorgulamaResult->Hesaplar->Hesap->Hareketler->Hareket as $hareket) {
 
-                dd($response, $response->EkstreSorgulamaResult->Hesaplar->Hesap->Hareketler->Hareket, $hareket);
+                if (empty($hareket)) {
+                    $hareket = $response->EkstreSorgulamaResult->Hesaplar->Hesap->Hareketler->Hareket;
+                }
 
                 $aciklama = $hareket->EkstreAciklama;
                 $tarih = $hareket->Tarih;
