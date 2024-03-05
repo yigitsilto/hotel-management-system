@@ -24,13 +24,6 @@ Route::post('/success-payment',[App\Http\Controllers\PaymentStatusController::cl
 
 Route::get('havale', function () {
 
-    $res = \App\Models\Reservation::query()->where('payment_method', 'bank_transfer')->where('payment_status', true)->get();
-
-    foreach ($res as $item) {
-
-    }
-
-
     $test = new \App\Services\BankTransferCheckService();
     $test->check();
 
