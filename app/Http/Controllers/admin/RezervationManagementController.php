@@ -85,7 +85,7 @@ class RezervationManagementController extends Controller
 
 
 
-        $reservations = $reservations->paginate(10);
+        $reservations = $reservations->paginate(2);
 
 
         return view('admin.reservationManagement.index', compact('reservations'));

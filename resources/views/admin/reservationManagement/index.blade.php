@@ -122,7 +122,7 @@
                             </div>
 
                         </div>
-                        {{ $reservations->links('pagination::bootstrap-5') }}
+                        {{ $reservations->appends($_GET)->links('pagination::bootstrap-5') }}
 
                     </div>
                 </div>
