@@ -48,7 +48,7 @@ public function __construct(SmsService $smsService)
             ->orderBy('updated_at', 'desc')
             ->orderBy('created_at', 'desc');
 
-        if ($request->has('searchKey')){
+        if ($request->has('searchKey') && !empty($request->searchKey)){
             $searchKey = strtolower($request->input('searchKey'));
 
             $users->where(function($query) use ($searchKey) {
