@@ -131,10 +131,8 @@ class BankTransferCheckService
             $created_time = Carbon::parse($rez->created_at); // Rezervasyonun oluşturulma zamanını al
             $elapsed_time = $current_time->diffInMinutes($created_time); // Geçen süreyi dakika cinsinden hesapla
 
-            dd($elapsed_time, $elapsed_time > 10 && $rez->status === 'pending', $rez->status);
 
-
-            if ($elapsed_time > 10 && $rez->status === 'pending') {
+            if ($elapsed_time > 10 && $rez->reservation_status === 'pending') {
                 $rez->reservation_status = ReservationStatusEnum::Rejected->name;
                 $rez->save();
 
