@@ -16,11 +16,11 @@ class TransactionController extends Controller
         $details = TransactionDetail::query()->with('reservation')->whereHas('reservation')
             ->orderBy('created_at', 'desc');
 
-        if ($request->has('statusKey')) {
-            if ($request->statusKey != 'all'){
-                $details->where('status', $request->statusKey);
-            }
-        }
+//        if ($request->has('statusKey')) {
+//            if ($request->statusKey != 'all'){
+//                $details->where('status', $request->statusKey);
+//            }
+//        }
 
         if ($request->has('searchKey')) {
             $searchKey = $request->input('searchKey');
