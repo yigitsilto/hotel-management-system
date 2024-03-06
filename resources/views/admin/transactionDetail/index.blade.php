@@ -109,7 +109,7 @@
                             </div>
 
                         </div>
-                        {{ $details->links('pagination::bootstrap-5') }}
+                        {{ $details->appends($_GET)->links('pagination::bootstrap-5') }}
 
                     </div>
                 </div>
