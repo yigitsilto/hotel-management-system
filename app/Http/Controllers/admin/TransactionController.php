@@ -30,7 +30,6 @@ class TransactionController extends Controller
         }
 
         if ($request->has('searchKey') && !empty($request->searchKey)) {
-            dd(2);
             $searchKey = $request->input('searchKey');
 
             $details->where(function ($query) use ($searchKey) {
