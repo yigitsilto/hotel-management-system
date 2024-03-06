@@ -24,24 +24,20 @@ class TransactionController extends Controller
             $searchKey = $request->input('searchKey');
 
             $details->where(function ($query) use ($searchKey) {
-                $query->whereHas('reservation.user', function ($subQuery) use ($searchKey) {
-                    $subQuery->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
-                        ->orWhereRaw('LOWER(identity_number) like ?', ['%' . $searchKey . '%'])
-                        ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%'])
-                        ->orWhereRaw('LOWER(bank_transfer_code) like ?', ['%' . $searchKey . '%']);
-                });
-
                 if (!is_numeric($searchKey)) {
-                    $query->orWhereHas('reservation', function ($subQuery) use ($searchKey) {
-                        $subQuery->where('id', $searchKey);
+                    $query->whereHas('reservation.user', function ($subQuery) use ($searchKey) {
+                        $subQuery->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
+                            ->orWhereRaw('LOWER(identity_number) like ?', ['%' . $searchKey . '%'])
+                            ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%'])
+                            ->orWhereRaw('LOWER(bank_transfer_code) like ?', ['%' . $searchKey . '%']);
                     });
-                } else {
-                    $query->orWhere('id', $searchKey);
                 }
+
+                $query->orWhere('id', $searchKey);
             });
         }
 
-        $results = $details->paginate(10);
+        $details = $details->paginate(10);
 
 
 
