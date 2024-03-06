@@ -81,6 +81,6 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQu
 
     public function chunkSize(): int
     {
-        return 1000;
+        return 100;
     }
 }
