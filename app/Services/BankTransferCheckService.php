@@ -114,39 +114,37 @@ class BankTransferCheckService
             }
 
 
-            $resChecks = \App\Models\Reservation::query()
-                ->where('reservation_status', ReservationStatusEnum::Pending->name)
-                ->where('payment_method', 'bank_transfer')
-                ->get();
-
-            $current_time = Carbon::now();
-
-            foreach ($resChecks as $rez) {
-                $created_time = Carbon::parse($rez->created_at); // Rezervasyonun oluşturulma zamanını al
-                $elapsed_time = $current_time->diffInMinutes($created_time); // Geçen süreyi dakika cinsinden hesapla
-
-                if ($elapsed_time > 10 && $rez->status === 'pending') {
-                    $rez->reservation_status = ReservationStatusEnum::Rejected->name;
-                    $rez->save();
-
-                    $transactionDetail = new TransactionDetail();
-                    $transactionDetail->payment_method = 'bank_transfer';
-                    $transactionDetail->status = false;
-                    $transactionDetail->reservation_id = $rez->id;
-                    $transactionDetail->paid_amount = 0;
-                    $transactionDetail->error_reason = 'Ödenmesi gereken tutar 10 dakika içinde ödenmedi.';
-                    $transactionDetail->save();
-                }
-            }
-
-            dd($resChecks);
-
-
-
 
         } catch (\Exception $e) {
-            dd($e);
+            //dd($e);
         }
+
+        $resChecks = \App\Models\Reservation::query()
+            ->where('reservation_status', ReservationStatusEnum::Pending->name)
+            ->where('payment_method', 'bank_transfer')
+            ->get();
+
+        $current_time = Carbon::now();
+
+        foreach ($resChecks as $rez) {
+            $created_time = Carbon::parse($rez->created_at); // Rezervasyonun oluşturulma zamanını al
+            $elapsed_time = $current_time->diffInMinutes($created_time); // Geçen süreyi dakika cinsinden hesapla
+
+            if ($elapsed_time > 10 && $rez->status === 'pending') {
+                $rez->reservation_status = ReservationStatusEnum::Rejected->name;
+                $rez->save();
+
+                $transactionDetail = new TransactionDetail();
+                $transactionDetail->payment_method = 'bank_transfer';
+                $transactionDetail->status = false;
+                $transactionDetail->reservation_id = $rez->id;
+                $transactionDetail->paid_amount = 0;
+                $transactionDetail->error_reason = 'Ödenmesi gereken tutar 10 dakika içinde ödenmedi.';
+                $transactionDetail->save();
+            }
+        }
+
+        dd($resChecks);
         //dd($response, $reservations->toArray());
         return true;
     }
