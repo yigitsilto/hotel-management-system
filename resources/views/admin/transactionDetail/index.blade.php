@@ -26,7 +26,7 @@
                                         <div class="col-2">
                                             <select name="statusKey" class="form-control" id="">
                                                 <option value="all" {{ Request::get('statusKey') == 'all' ? 'selected' : '' }}>Hepsi</option>
-                                                <option value="true" {{ Request::get('statusKey') == '1' ? 'selected' : '' }}>Başarılı</option>
+                                                <option value="1" {{ Request::get('statusKey') == '1' ? 'selected' : '' }}>Başarılı</option>
                                                 <option value="false" {{ Request::get('statusKey') == 'false' ? 'selected' : '' }}>Hatalı</option>
                                             </select>
 
