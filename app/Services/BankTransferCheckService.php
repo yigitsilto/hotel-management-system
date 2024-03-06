@@ -144,7 +144,6 @@ class BankTransferCheckService
             }
         }
 
-        dd($resChecks);
         //dd($response, $reservations->toArray());
         return true;
     }
