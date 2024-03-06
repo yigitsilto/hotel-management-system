@@ -132,7 +132,7 @@ class BankTransferCheckService
             $elapsed_time = $current_time->diffInMinutes($created_time); // Geçen süreyi dakika cinsinden hesapla
 
 
-            if ($elapsed_time > 10 && $rez->reservation_status === 'pending') {
+            if ($elapsed_time > 10 && $rez->reservation_status === 'Pending') {
                 $rez->reservation_status = ReservationStatusEnum::Rejected->name;
                 $rez->save();
 
