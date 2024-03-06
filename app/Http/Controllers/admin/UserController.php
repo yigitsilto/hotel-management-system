@@ -41,13 +41,24 @@ public function __construct(SmsService $smsService)
         return view('admin.userManagement.import', compact('failedRows'));
     }
 
-    public function index(): View
+    public function index(Request $request): View
     {
         $users = User::query()
             ->where('role', '!=', 'ADMIN')
-                     ->orderBy('updated_at', 'desc')
-                     ->orderBy('created_at', 'desc')
-                     ->get();
+            ->orderBy('updated_at', 'desc')
+            ->orderBy('created_at', 'desc');
+
+        if ($request->has('searchKey')){
+            $searchKey = strtolower($request->input('searchKey'));
+
+            $users->where(function($query) use ($searchKey) {
+                $query->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
+                    ->orWhereRaw('LOWER(identity_number) like ?', ['%' . $searchKey . '%'])
+                    ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%']);
+            });
+        }
+
+        $users = $users->paginate(12);
 
         return view('admin.userManagement.index', compact('users'));
     }

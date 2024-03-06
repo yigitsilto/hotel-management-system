@@ -14,14 +14,37 @@
                                 </div>
 
 
-                                <div class="col-3">
+                                <div class=" col-sm-12 col-md-12 col-lg-3">
                                     <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('user.create')}}">
                                         Manuel Kullanıcı Kayıdı Ekle
                                     </a>
                                 </div>
+
                             </div>
                         </div>
+
                         <div class="card-body px-0 pt-0 pb-2">
+
+                           <div class="col-12">
+                               <form action="" method="GET">
+
+                                   <div class="row p-4">
+                                       <div class="col-6">
+                                           <input type="text" placeholder="Ara..." name="searchKey" class="form-control">
+                                       </div>
+                                       <div class="col-3">
+                                           <button type="submit" class="btn btn-primary" style="width: 100%">Filtrele</button>
+                                       </div>
+
+                                       <div class="col-3">
+                                           <a href="{{route('user.index')}}" style="width: 100%" class="btn btn-secondary">Sıfırla</a>
+                                       </div>
+
+
+                                   </div>
+                               </form>
+                           </div>
+
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0">
                                     <thead>
@@ -65,6 +88,8 @@
                                 </table>
                             </div>
                         </div>
+
+                        {{ $users->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>
