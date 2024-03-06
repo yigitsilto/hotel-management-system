@@ -43,4 +43,14 @@ enum ReservationStatusEnum: string {
             default => throw new \Exception("Invalid key: $key"),
         };
     }
+
+    public static function getKeyByValue(string $value): string
+    {
+        return match ($value) {
+            'Onay Bekleniyor' => 'Pending',
+            'Onaylandı' => 'Success',
+            'Reddedildi' => 'Rejected',
+            default => throw new \Exception("Invalid key: $value"),
+        };
+    }
 }

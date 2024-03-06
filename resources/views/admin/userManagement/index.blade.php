@@ -30,7 +30,7 @@
 
                                    <div class="row p-4">
                                        <div class="col-6">
-                                           <input type="text" placeholder="Ara..." name="searchKey" class="form-control">
+                                           <input type="text" value="{{Request::get('searchKey')}}" placeholder="Ara..." name="searchKey" class="form-control">
                                        </div>
                                        <div class="col-3">
                                            <button type="submit" class="btn btn-primary" style="width: 100%">Filtrele</button>

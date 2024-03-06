@@ -15,6 +15,36 @@
                             </div>
                         </div>
                         <div class="card-body px-0 pt-0 pb-2">
+
+                            <div class="col-12">
+                                <form action="" method="GET">
+
+                                    <div class="row p-4">
+                                        <div class="col-3">
+                                            <input type="text" value="{{Request::get('searchKey')}}" placeholder="Ara..." name="searchKey" class="form-control">
+                                        </div>
+                                        <div class="col-3">
+                                            <select name="statusKey" class="form-control" id="">
+                                                <option value="all" {{ Request::get('statusKey') == 'all' ? 'selected' : '' }}>Hepsi</option>
+                                                <option value="true" {{ Request::get('statusKey') == 'true' ? 'selected' : '' }}>Başarılı</option>
+                                                <option value="false" {{ Request::get('statusKey') == 'false' ? 'selected' : '' }}>Hatalı</option>
+                                            </select>
+
+                                        </div>
+                                        <div class="col-3">
+                                            <button type="submit" class="btn btn-primary" style="width: 100%">Filtrele</button>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <a href="{{route('transaction-management.index')}}" style="width: 100%" class="btn btn-secondary">Sıfırla</a>
+                                        </div>
+
+
+                                    </div>
+                                </form>
+                            </div>
+
+
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0">
                                     <thead>
