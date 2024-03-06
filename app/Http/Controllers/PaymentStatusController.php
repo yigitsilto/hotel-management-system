@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendPaymentSuccessSmsJob;
+use App\Models\TransactionDetail;
 use App\Services\SmsService;
 use Illuminate\Http\Request;
 
@@ -31,6 +32,16 @@ class PaymentStatusController extends Controller
             $reservation->reservation_status = \App\Enums\ReservationStatusEnum::Success->name;
             $reservation->payment_status = true;
             $reservation->save();
+
+
+            $mustPaidAmount = ($reservation->total_amount * 30) / 100;
+
+            $transactionDetail = new TransactionDetail();
+            $transactionDetail->payment_method = 'credit_card';
+            $transactionDetail->status = true;
+            $transactionDetail->reservation_id = $reservation->id;
+            $transactionDetail->paid_amount = $mustPaidAmount ;
+            $transactionDetail->save();
         }
 
 
@@ -53,6 +64,14 @@ class PaymentStatusController extends Controller
 
         if (!empty($reservation)){
             $reservation?->delete();
+
+            $transactionDetail = new TransactionDetail();
+            $transactionDetail->payment_method = 'credit_card';
+            $transactionDetail->status = false;
+            $transactionDetail->reservation_id = $reservation->id;
+            $transactionDetail->paid_amount = 0 ;
+            $transactionDetail->error_reason = $request->ErrMsg;
+            $transactionDetail->save();
         }
 
         $errMsg = $request->ErrMsg;

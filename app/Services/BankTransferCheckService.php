@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\ReservationStatusEnum;
 use App\Jobs\SendOrderApprovedSmsJob;
 use App\Models\HesapEkstreRequest;
+use App\Models\TransactionDetail;
 use Carbon\Carbon;
 
 class BankTransferCheckService
@@ -88,6 +89,15 @@ class BankTransferCheckService
                             $reservation->paid_amount = $receivedAmountFormatted;
                             $reservation->save();
 
+                            $transactionDetail = new TransactionDetail();
+                            $transactionDetail->payment_method = 'bank_transfer';
+                            $transactionDetail->status = true;
+                            $transactionDetail->reservation_id = $reservation->id;
+                            $transactionDetail->paid_amount = $receivedAmountFormatted;
+                            $transactionDetail->save();
+
+
+
                             $smcService = new SmsService();
 
                             SendOrderApprovedSmsJob::dispatch($smcService, $reservation->user);
@@ -118,6 +128,14 @@ class BankTransferCheckService
                 if ($elapsed_time > 10 && $rez->status === 'pending') {
                     $rez->reservation_status = ReservationStatusEnum::Rejected->name;
                     $rez->save();
+
+                    $transactionDetail = new TransactionDetail();
+                    $transactionDetail->payment_method = 'bank_transfer';
+                    $transactionDetail->status = false;
+                    $transactionDetail->reservation_id = $rez->id;
+                    $transactionDetail->paid_amount = 0;
+                    $transactionDetail->error_reason = 'Ödenmesi gereken tutar 10 dakika içinde ödenmedi.';
+                    $transactionDetail->save();
                 }
             }
 
