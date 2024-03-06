@@ -35,7 +35,6 @@ class ReservationCreatePage extends Component
     public $Ecom_Payment_Card_ExpDate_Year;
     public $cvv;
     public $guests = [
-        ['name' => null, 'age' => null, 'tc' => null],
     ];
     public $loading = false;
     public $amount;
@@ -111,6 +110,10 @@ class ReservationCreatePage extends Component
     {
         $this->reservationControlService = $reservationControlService;
         $this->smsService = $smsService;
+        if (count($this->guests) < 1) {
+            $this->guests[] = ['name' => auth()->user()->name, 'age' => calculateAge(auth()->user()->birthday), 'tc' => auth()->user()->identity_number ];
+
+        }
     }
 
     public function render()
@@ -230,6 +233,7 @@ class ReservationCreatePage extends Component
 
             $under18count = 0;
             $above18count = 0;
+            $myselfCount = 0;
             foreach ($this->guests as $item) {
                 if ($item['age'] < 18) {
                     $under18count++;
@@ -238,6 +242,15 @@ class ReservationCreatePage extends Component
                 if ($item['age'] >= 18) {
                     $above18count++;
                 }
+
+                if ($item['tc'] == auth()->user()->identity_number) {
+                    $myselfCount++;
+                }
+            }
+
+            if ($myselfCount < 1) {
+                $this->addError('guests', '1.Kişi olarak kendinizi sistem deki verileriniz ile eklemelisiniz.');
+                return;
             }
 
 
