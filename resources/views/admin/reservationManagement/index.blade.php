@@ -20,10 +20,13 @@
                                 <form action="" method="GET">
 
                                     <div class="row p-4">
-                                        <div class="col-3">
+                                        <div class="col-2">
+                                            <input type="text" value="{{Request::get('idKey')}}" placeholder="ID..." name="id" class="form-control">
+                                        </div>
+                                        <div class="col-2">
                                             <input type="text" value="{{Request::get('searchKey')}}" placeholder="Ara..." name="searchKey" class="form-control">
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-2">
                                             <select name="statusKey" class="form-control" id="">
                                                 <option value="all" {{ Request::get('statusKey') == 'all' ? 'selected' : '' }}>Hepsi</option>
                                                 @foreach(\App\Enums\ReservationStatusEnum::getValues() as $enum)

@@ -57,16 +57,16 @@ class RezervationManagementController extends Controller
 
         }
 
-        if ($request->has('statusKey')) {
-            if ($request->statusKey != 'all'){
-                $reservations->where('reservation_status', $request->statusKey);
-            }
+        if ($request->has('statusKey') && $request->statusKey != 'all' && !empty($request->statusKey)) {
+            $reservations->where('reservation_status', $request->statusKey);
         }
 
+        if ($request->has('id') && !empty($request->id)) {
+            $reservations->where('id', $request->id);
+        }
 
         if ($request->has('searchKey')) {
-            $searchKey = $request->input('searchKey');
-
+            $searchKey = strtolower($request->input('searchKey'));
 
 
             $reservations->whereHas('user', function ($query) use ($searchKey) {
@@ -75,12 +75,6 @@ class RezervationManagementController extends Controller
                     ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%'])
                     ->orWhereRaw('LOWER(bank_transfer_code) like ?', ['%' . $searchKey . '%']);
             });
-
-            if (!is_numeric($searchKey)) {
-                $searchKey = strtolower($request->input('searchKey'));
-            } else {
-                $reservations->orWhere('id', $searchKey);
-            }
         }
 
 
