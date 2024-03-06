@@ -80,6 +80,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     ('reservation-management.manuel.create');
 
 
+
+    Route::get('transcation-management/list', [\App\Http\Controllers\admin\TransactionController::class, 'index'])->name('transaction-management.index');
+
+
+
     Route::get('upload-room-images/{room}/create', [RoomController::class, 'uploadImagesCreate'])->name('room-management.upload.images.create');
     Route::get('upload-room-images/{room}/edit', [RoomController::class, 'edit'])->name('room-management.edit');
     Route::put('upload-room-images/{room}/update', [RoomController::class, 'update'])->name('room-management.update');
