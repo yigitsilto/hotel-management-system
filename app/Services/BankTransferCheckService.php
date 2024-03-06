@@ -139,6 +139,8 @@ class BankTransferCheckService
                 }
             }
 
+            dd($resChecks);
+
 
 
 
