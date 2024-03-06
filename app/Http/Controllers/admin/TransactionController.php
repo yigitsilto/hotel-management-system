@@ -16,28 +16,37 @@ class TransactionController extends Controller
         $details = TransactionDetail::query()->with('reservation')->whereHas('reservation')
             ->orderBy('created_at', 'desc');
 
-        if ($request->has('statusKey') && $request->statusKey != 'all') {
+
+        $details = TransactionDetail::query()->with('reservation');
+
+        if ($request->has('statusKey') && $request->statusKey != 'all' && !empty($request->statusKey)) {
             $details->where('status', $request->statusKey);
         }
 
-        if ($request->has('searchKey')) {
-            $searchKey = $request->input('searchKey');
-
-            $details->where(function ($query) use ($searchKey) {
-                if (!is_numeric($searchKey)) {
-                    $query->whereHas('reservation.user', function ($subQuery) use ($searchKey) {
-                        $subQuery->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
-                            ->orWhereRaw('LOWER(identity_number) like ?', ['%' . $searchKey . '%'])
-                            ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%'])
-                            ->orWhereRaw('LOWER(bank_transfer_code) like ?', ['%' . $searchKey . '%']);
-                    });
-                }
-
-                $query->orWhere('id', $searchKey);
+        if ($request->has('id') && !empty($request->id)) {
+            $details->whereHas('reservation', function ($q) use($request) {
+                $q->where('id', $request->id);
             });
         }
 
-        $details = $details->paginate(10);
+        if ($request->has('searchKey') && !empty($request->searchKey)) {
+            dd(2);
+            $searchKey = $request->input('searchKey');
+
+            $details->where(function ($query) use ($searchKey) {
+                $query->whereHas('reservation.user', function ($q) use ($searchKey) {
+                    $q->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
+                        ->orWhereRaw('LOWER(identity_number) like ?', ['%' . $searchKey . '%'])
+                        ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%'])
+                        ->orWhereRaw('LOWER(bank_transfer_code) like ?', ['%' . $searchKey . '%']);
+                });
+            });
+        }
+
+        $details->orderBy('created_at', 'desc');
+
+
+        $details = $details->paginate(12);
 
 
 

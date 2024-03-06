@@ -20,16 +20,19 @@
                                 <form action="" method="GET">
 
                                     <div class="row p-4">
-                                        <div class="col-3">
-                                            <input type="text" value="{{Request::get('searchKey')}}" placeholder="Ara..." name="searchKey" class="form-control">
+                                        <div class="col-2">
+                                            <input type="text" value="{{Request::get('idKey')}}" placeholder="ID..." name="id" class="form-control">
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-2">
                                             <select name="statusKey" class="form-control" id="">
                                                 <option value="all" {{ Request::get('statusKey') == 'all' ? 'selected' : '' }}>Hepsi</option>
                                                 <option value="true" {{ Request::get('statusKey') == 'true' ? 'selected' : '' }}>Başarılı</option>
                                                 <option value="false" {{ Request::get('statusKey') == 'false' ? 'selected' : '' }}>Hatalı</option>
                                             </select>
 
+                                        </div>
+                                        <div class="col-2">
+                                            <input type="text" value="{{Request::get('searchKey')}}" placeholder="Ara..." name="searchKey" class="form-control">
                                         </div>
                                         <div class="col-3">
                                             <button type="submit" class="btn btn-primary" style="width: 100%">Filtrele</button>
