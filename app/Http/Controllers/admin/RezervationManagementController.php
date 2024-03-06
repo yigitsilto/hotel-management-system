@@ -25,39 +25,59 @@ class RezervationManagementController extends Controller
     }
 
 
-    public function index(): View
+    public function index(Request $request): View
     {
 
         if (auth()->user()->role == 'ADMIN') {
 
             $reservations = Reservation::query()
-                                       ->with([
-                                                  'room',
-                                                  'room.hotel'
-                                              ])
-                                       ->orderBy('created_at', 'desc')
-                                       ->paginate(10);
+                ->with([
+                    'room',
+                    'room.hotel'
+                ])
+                ->orderBy('created_at', 'desc');
 
         } else {
             $authroizedHotels = AuthorizedHotel::query()
-                                               ->where('user_id', auth()->id())
-                                               ->get();
+                ->where('user_id', auth()->id())
+                ->get();
 
 
             $reservations = Reservation::query()
-                                       ->with([
-                                                  'room',
-                                                  'room.hotel' => function ($query) use ($authroizedHotels) {
-                                                      $query->whereIn('id', $authroizedHotels->pluck('hotel_id'));
-                                                  },
-                                              ])
-                                       ->whereHas('room.hotel', function ($query) use ($authroizedHotels) {
-                                           $query->whereIn('id', $authroizedHotels->pluck('hotel_id'));
-                                       })
-                                       ->orderBy('created_at', 'desc')
-                                       ->paginate(10);
+                ->with([
+                    'room',
+                    'room.hotel' => function ($query) use ($authroizedHotels) {
+                        $query->whereIn('id', $authroizedHotels->pluck('hotel_id'));
+                    },
+                ])
+                ->whereHas('room.hotel', function ($query) use ($authroizedHotels) {
+                    $query->whereIn('id', $authroizedHotels->pluck('hotel_id'));
+                })
+                ->orderBy('created_at', 'desc');
 
         }
+
+
+        if ($request->has('searchKey')) {
+            $searchKey = $request->input('searchKey');
+
+            if (!is_numeric($searchKey)) {
+                $searchKey = strtolower($request->input('searchKey'));
+            } else {
+                $reservations->where('id', $searchKey);
+            }
+
+            $reservations->orWhereHas('user', function ($query) use ($searchKey) {
+                $query->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
+                    ->orWhereRaw('LOWER(identity_number) like ?', ['%' . $searchKey . '%'])
+                    ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%']);
+            });
+        }
+
+
+        $reservations = $reservations->paginate(10);
+
+
         return view('admin.reservationManagement.index', compact('reservations'));
     }
 
@@ -65,18 +85,18 @@ class RezervationManagementController extends Controller
     {
 
         $room = Room::query()
-                    ->findOrFail($reservation->room_id);
+            ->findOrFail($reservation->room_id);
 
         $hotel = Hotel::query()
-                      ->findOrFail($room->hotel_id);
+            ->findOrFail($room->hotel_id);
 
 
-        if (auth()->user()->role != 'ADMIN'){
+        if (auth()->user()->role != 'ADMIN') {
             $authroizedHotels = AuthorizedHotel::query()
-                                               ->where('user_id', auth()->id())
-                                               ->get();
+                ->where('user_id', auth()->id())
+                ->get();
 
-            if (!$authroizedHotels->contains('hotel_id', $hotel->id)){
+            if (!$authroizedHotels->contains('hotel_id', $hotel->id)) {
                 return redirect()
                     ->back()
                     ->with('error', 'Yetkisiz işlem.');
@@ -90,15 +110,15 @@ class RezervationManagementController extends Controller
     {
 
 
-        if (auth()->user()->role != 'ADMIN'){
+        if (auth()->user()->role != 'ADMIN') {
             $room = Room::query()
-                          ->findOrFail($reservation->room_id);
+                ->findOrFail($reservation->room_id);
 
             $authroizedHotels = AuthorizedHotel::query()
-                                               ->where('user_id', auth()->id())
-                                               ->get();
+                ->where('user_id', auth()->id())
+                ->get();
 
-            if (!$authroizedHotels->contains('hotel_id', $room->hotel->id)){
+            if (!$authroizedHotels->contains('hotel_id', $room->hotel->id)) {
                 return redirect()
                     ->route('reservation.index')
                     ->with('error', 'Yetkisiz işlem.');
@@ -114,9 +134,9 @@ class RezervationManagementController extends Controller
 
 
         $reservation->update([
-                                 'reservation_status' => $request->validated()['reservation_status'],
-                                 'paid_amount' => $request->validated()['paid_amount']
-                             ]);
+            'reservation_status' => $request->validated()['reservation_status'],
+            'paid_amount' => $request->validated()['paid_amount']
+        ]);
 
 
         if ($reservation->reservation_status == ReservationStatusEnum::Success->name) {

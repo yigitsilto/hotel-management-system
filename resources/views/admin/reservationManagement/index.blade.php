@@ -15,10 +15,31 @@
                             </div>
                         </div>
                         <div class="card-body px-0 pt-0 pb-2">
+
+                            <div class="col-12">
+                                <form action="" method="GET">
+
+                                    <div class="row p-4">
+                                        <div class="col-6">
+                                            <input type="text" placeholder="Ara..." name="searchKey" class="form-control">
+                                        </div>
+                                        <div class="col-3">
+                                            <button type="submit" class="btn btn-primary" style="width: 100%">Filtrele</button>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <a href="{{route('reservation.index')}}" style="width: 100%" class="btn btn-secondary">Sıfırla</a>
+                                        </div>
+
+
+                                    </div>
+                                </form>
+                            </div>
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0">
                                     <thead>
                                     <tr>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ID</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Otel Adı</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">İsim Soyisim</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Kişi Sayısı</th>
@@ -34,6 +55,10 @@
                                     <tbody>
                                     @foreach($reservations as $item)
                                         <tr>
+                                            <td class="align-middle text-center">
+                                                <p class="text-xs font-weight-bold mb-0">{{$item->id}}</p>
+                                            </td>
+
                                             <td class="align-middle text-center">
                                                 <p class="text-xs font-weight-bold mb-0">{{$item->room->hotel->name}}</p>
                                             </td>
