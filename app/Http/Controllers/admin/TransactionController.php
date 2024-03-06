@@ -16,9 +16,6 @@ class TransactionController extends Controller
         $details = TransactionDetail::query()->with('reservation')->whereHas('reservation')
             ->orderBy('created_at', 'desc');
 
-
-        $details = TransactionDetail::query()->with('reservation');
-
         if ($request->has('statusKey') && $request->statusKey != 'all') {
             $details->where('status', $request->statusKey);
         }
@@ -27,27 +24,24 @@ class TransactionController extends Controller
             $searchKey = $request->input('searchKey');
 
             $details->where(function ($query) use ($searchKey) {
-                $query->whereHas('reservation.user', function ($q) use ($searchKey) {
-                    $q->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
+                $query->whereHas('reservation.user', function ($subQuery) use ($searchKey) {
+                    $subQuery->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
                         ->orWhereRaw('LOWER(identity_number) like ?', ['%' . $searchKey . '%'])
                         ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%'])
                         ->orWhereRaw('LOWER(bank_transfer_code) like ?', ['%' . $searchKey . '%']);
                 });
 
                 if (!is_numeric($searchKey)) {
-                    $searchKey = strtolower($searchKey);
+                    $query->orWhereHas('reservation', function ($subQuery) use ($searchKey) {
+                        $subQuery->where('id', $searchKey);
+                    });
+                } else {
+                    $query->orWhere('id', $searchKey);
                 }
-
-                $query->orWhereHas('reservation', function ($q) use ($searchKey) {
-                    $q->where('id', $searchKey);
-                });
             });
         }
 
-        $details->orderBy('created_at', 'desc');
-
-
-        $details = $details->paginate(12);
+        $results = $details->paginate(10);
 
 
 
