@@ -13,12 +13,11 @@ class TransactionController extends Controller
      */
     public function index(Request $request)
     {
+
+
+
         $details = TransactionDetail::query()->with('reservation')->whereHas('reservation')
-            ->whereHas('reservation.user')
-            ->orderBy('created_at', 'desc');
-
-
-        $details = TransactionDetail::query()->with('reservation');
+            ->whereHas('reservation.user');
 
         if ($request->has('statusKey') && $request->statusKey != 'all' && !empty($request->statusKey)) {
             $details->where('status', $request->statusKey);
