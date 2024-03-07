@@ -321,7 +321,7 @@
                                     <div class="col-md-4" wire:key="guests.{{ $i }}.name">
                                         <div class="form-group">
                                             <label for="guest_name_{{ $i }}">{{$i + 1}}. Kişi İsim Soyisim:</label>
-                                            <input type="text" class="form-control" wire:model.live="guests.{{ $i }}.name"
+                                            <input  {{$i ==0 ? 'readonly' : ''}} type="text" class="form-control" wire:model.live="guests.{{ $i }}.name"
                                                    id="guest_name_{{ $i }}"
                                                    name="guests.{{ $i }}.name"/>
                                             @error('guests.'.$i.'.name')
@@ -332,7 +332,7 @@
                                     <div class="col-md-4" wire:key="guests.{{ $i }}.tc">
                                         <div class="form-group">
                                             <label for="guest_tc_{{ $i }}">{{$i + 1}}. Kişi T.C:</label>
-                                            <input type="number" class="form-control" wire:model.live="guests.{{ $i }}.tc"
+                                            <input  {{$i ==0 ? 'readonly' : ''}} type="number" class="form-control" wire:model.live="guests.{{ $i }}.tc"
                                                    id="guest_tc_{{ $i }}"
                                                    name="guests.{{ $i }}.tc"/>
                                             @error('guests.'.$i.'.tc')
@@ -344,7 +344,7 @@
                                         <div class="col-md-4" wire:key="guests.{{ $i }}.age">
                                             <div class="form-group">
                                                 <label for="guest_age_{{ $i }}">{{$i + 1}}. Kişi Yaş:</label>
-                                                <input type="number" class="form-control" wire:model.live.debounce.350ms="guests.{{ $i }}.age"
+                                                <input  {{$i ==0 ? 'readonly' : ''}} type="number" class="form-control" wire:model.live.debounce.350ms="guests.{{ $i }}.age"
                                                        id="guest_age_{{ $i }}"
                                                        name="guests.{{ $i }}.age"/>
                                                 @error('guests.'.$i.'.age')
