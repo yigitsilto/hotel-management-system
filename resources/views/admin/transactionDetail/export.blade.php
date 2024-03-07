@@ -17,7 +17,11 @@
                 <p class="text-xs font-weight-bold mb-0">{{$item->reservation_id}}</p>
             </td>
             <td class="">
-                <p class="text-xs font-weight-bold mb-0">{{$item->reservation->user->name}}</p>
+                @if ($item->reservation && $item->reservation->user)
+                    <p class="text-xs font-weight-bold mb-0">{{$item->reservation->user->name}}</p>
+                @else
+                    <!-- Handle the case when either 'reservation' or 'user' is null -->
+                @endif
             </td>
             <td class="">
                 <p class="text-xs font-weight-bold mb-0">
