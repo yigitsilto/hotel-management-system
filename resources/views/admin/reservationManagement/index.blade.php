@@ -49,6 +49,15 @@
                                     </div>
                                 </form>
                             </div>
+
+                            <div class="col-12">
+                                        <div class="col-3 p-1">
+                                            <a href="{{route('excel-export-reservation')}}" style="width: 100%" class="btn btn-success">Excele Aktar</a>
+                                        </div>
+
+
+                                    </div>
+                            </div>
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0">
                                     <thead>

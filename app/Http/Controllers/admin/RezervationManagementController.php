@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use App\Enums\ReservationStatusEnum;
+use App\Exports\PaymentExport;
+use App\Exports\ReservationExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\ReservationUpdateRequest;
 use App\Jobs\SendOrderApprovedSmsJob;
@@ -13,6 +15,7 @@ use App\Models\Room;
 use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RezervationManagementController extends Controller
 {
@@ -150,6 +153,17 @@ class RezervationManagementController extends Controller
         return redirect()
             ->back()
             ->with('success', 'Rezervasyon güncellendi.');
+    }
+
+
+    public function exportExcel(){
+
+        return Excel::download(new ReservationExport(), 'reservation.xlsx');
+    }
+
+    public function exportExcelPayment(){
+        return Excel::download(new PaymentExport(), 'payment.xlsx');
+
     }
 
 
