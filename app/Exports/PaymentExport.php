@@ -17,6 +17,7 @@ class PaymentExport implements FromView
             'details' => TransactionDetail::query()
                 ->with(['reservation', 'reservation.user'])
                 ->whereHas('reservation')
+                ->whereHas('reservation.user')
                 ->get()
         ]);
     }

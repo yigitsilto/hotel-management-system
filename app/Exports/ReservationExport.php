@@ -14,7 +14,7 @@ class ReservationExport implements FromView
     public function view(): View
     {
         return view('admin.reservationManagement.export', [
-            'reservations' => Reservation::query()->with(['room', 'user'])->get()
+            'reservations' => Reservation::query()->with(['room', 'user'])->whereHas('user')->get()
         ]);
     }
 }
