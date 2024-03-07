@@ -1,6 +1,9 @@
 @extends('layouts.user')
 @section('title', 'Anasayfa')
 @section('content')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/js/lightbox.min.js" type="text/javascript"></script>
     <div class="container-fluid">
         <div class="page-header min-height-100 border-radius-xl mt-4" >
         </div>
@@ -58,7 +61,7 @@
                             <div class="col-md-8 d-flex align-items-center">
                                 <h6 class="mb-0">Otel Bilgisi</h6>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="card-body p-3">
@@ -117,19 +120,23 @@
                     <div class="card-header pb-0 p-3">
                         <h6 class="mb-1">Galeri</h6>
                     </div>
+
+
+
                     <div class="card-body p-3">
                         <div class="row">
                             <div class="container">
                                 <div class="row">
-                                   @foreach($room->getMedia('room_images') as $image)
-                                        <div class="col-3 mt-3 p-1">
-                                            <a href="#"  rel="noopener noreferrer">
-                                                <img src="{{$image->getUrl()}}" style="width: 400px; height: 200px; object-fit: cover; border: 2px solid #ccc; border-radius: 8px;" class="img-fluid" alt="image">
-                                            </a>
+                                    <section class="gallery">
+                                        <div class="row">
+                                                @foreach($room->getMedia('room_images') as $image)
+                                                    <div class="col-3 pt-2">
+                                                       <a href="{{$image->getUrl()}}" data-lightbox="group1" data-title="{{$image->id}}"><img style="width: 400px; height: 200px; object-fit: cover; border: 2px solid #ccc; border-radius: 8px;" class="img-fluid" src="{{$image->getUrl()}}" alt=""></a>
+                                                    </div>
+                                                @endforeach
+
                                         </div>
-
-
-                                    @endforeach
+                                    </section>
                                 </div>
                             </div>
                         </div>

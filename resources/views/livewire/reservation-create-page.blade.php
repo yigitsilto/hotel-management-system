@@ -240,15 +240,19 @@
         </div>
         <div class="container-fluid py-4">
             <div class="row">
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+                <div class="col-12">
+                    <div class="h-100">
+                        @if ($errors->any())
+                            <div class="alert alert-danger p-3">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     </div>
-                @endif
+                </div>
                 <div class="col-12 col-xl-6">
 
                     <div class="card h-100">
@@ -266,7 +270,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="check_in_date">Giriş Tarihi:</label>
-                                        <input type="date" class="form-control" id="check_in_date"
+                                        <input lang="tr" type="date" class="form-control" id="check_in_date"
                                                name="check_in_date" wire:model.live="check_in_date" wire:ignore.self>
                                         @error('check_in_date') <span
                                                 class="text-danger">{{ $message }}</span> @enderror
@@ -277,7 +281,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="check_out_date">Çıkış Tarihi:</label>
-                                        <input type="date" disabled class="form-control" id="check_out_date"
+                                        <input type="date" lang="tr" disabled class="form-control" id="check_out_date"
                                                name="check_out_date" wire:model.live="check_out_date" wire:ignore.self>
                                         @error('check_out_date') <span
                                                 class="text-danger">{{ $message }}</span> @enderror
@@ -622,6 +626,8 @@
                 checkOutDateInput.disabled = false;
             });
         }
+
+
 
         document.addEventListener("DOMContentLoaded", function () {
 

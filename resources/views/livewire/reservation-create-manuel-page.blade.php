@@ -240,15 +240,19 @@
         </div>
         <div class="container-fluid py-4">
             <div class="row">
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+               <div class="col">
+                   <div class="h-100">
+                       @if ($errors->any())
+                           <div class="alert alert-danger p-3">
+                               <ul>
+                                   @foreach ($errors->all() as $error)
+                                       <li>{{ $error }}</li>
+                                   @endforeach
+                               </ul>
+                           </div>
+                       @endif
+                   </div>
+               </div>
                 <div class="col-12 col-xl-12">
 
                     <div class="card h-100">

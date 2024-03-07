@@ -320,26 +320,41 @@
         </div>
     </nav>
 
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="height: 80px!important; overflow: scroll!important;">
-            <strong>Hata!</strong> {{session('error')}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+    <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
+        <div class="container-fluid py-4">
+            <div class="row">
+                <div class="col-12">
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Başarılı!</strong> {{session('success')}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+                    @if(session('error'))
 
-    @if(session('info'))
-        <div class="alert alert-info alert-dismissible fade show" role="alert">
-            <strong>Bilgi!</strong> {{session('info')}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Hata!</strong> {{session('error')}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Başarılı!</strong> {{session('success')}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @if(session('info'))
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <strong>Bilgi!</strong> {{session('info')}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                </div>
+
+
+
+            </div>
         </div>
-    @endif
+    </div>
+
+
+
     @yield('content')
 
 </main>
