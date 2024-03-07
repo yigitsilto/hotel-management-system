@@ -14,6 +14,7 @@ class TransactionController extends Controller
     public function index(Request $request)
     {
         $details = TransactionDetail::query()->with('reservation')->whereHas('reservation')
+            ->whereHas('reservation.user')
             ->orderBy('created_at', 'desc');
 
 
