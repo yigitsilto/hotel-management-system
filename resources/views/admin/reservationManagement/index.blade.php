@@ -9,7 +9,7 @@
                         <div class="card-header pb-0">
                             <div class="row mt-3">
                                 <div class="col-10">
-                                    <h6>Reservasyon Talepleri</h6>
+                                    <h6>Rezervasyon Talepleri</h6>
                                     <p class="text-sm">Oluşturulmuş rezervasyon taleplerini içerir.</p>
                                 </div>
                             </div>

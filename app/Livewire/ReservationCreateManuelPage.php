@@ -291,7 +291,7 @@ class ReservationCreateManuelPage extends Component
         return redirect()
             ->route('reservation.index')
             ->with('success',
-                   'Manuel Reservasyon başarıyla oluşturuldu.');
+                   'Manuel Rezervasyon başarıyla oluşturuldu.');
 
     }
 

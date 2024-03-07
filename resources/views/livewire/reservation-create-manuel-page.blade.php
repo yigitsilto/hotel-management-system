@@ -424,7 +424,7 @@
                                                 </g>
                                             </g>
                                         </svg>
-                                        <span class="ms-1">Reservasyon Yapılamaz</span>
+                                        <span class="ms-1">Rezervasyon Yapılamaz</span>
                                     </button>
                                 @endif
                             </div>

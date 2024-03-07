@@ -14,7 +14,7 @@
                 <div class="col-auto my-auto">
                     <div class="h-100">
                         <h5 class="mb-1">
-                            Reservasyon Durumu:  {{$room->title}} -  <span class="badge badge-xs bg-gradient-info">{{\App\Enums\ReservationStatusEnum::getValueByKey($reservation->reservation_status)}}</span>
+                            Rezervasyon Durumu:  {{$room->title}} -  <span class="badge badge-xs bg-gradient-info">{{\App\Enums\ReservationStatusEnum::getValueByKey($reservation->reservation_status)}}</span>
                         </h5>
                         <p class="mb-0 font-weight-bold text-sm">
                             Toplam Ücret: {{moneyFormat($reservation->total_amount)}} - Ödenmesi Gereken Ücret: {{moneyFormat(($reservation->total_amount * 30) / 100)}} - Ödenen Ücret: {{moneyFormat($reservation->paid_amount)}}
@@ -108,7 +108,7 @@
                     <div class="card-header pb-0 p-3">
                         <div class="row">
                             <div class="col-md-8 d-flex align-items-center">
-                                <h6 class="mb-0">Reservasyon Bilgisi</h6>
+                                <h6 class="mb-0">Rezervasyon Bilgisi</h6>
                             </div>
 
                         </div>

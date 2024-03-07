@@ -103,7 +103,7 @@
 
                                             <div class="col-md-6">
                                                 <div class="mb-3 ">
-                                                    <label class="form-check-label" for="reservation_months">Reservasyonun Açık Olacağı Aylar</label>
+                                                    <label class="form-check-label" for="reservation_months">Rezervasyonun Açık Olacağı Aylar</label>
                                                     <select name="reservation_months[]" class="form-select" id="multiple-select-field" data-placeholder="Seçiniz" multiple>
                                                         <option value="01">Ocak</option>
                                                         <option value="02">Şubat</option>
@@ -136,7 +136,7 @@
 
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label for="max_stayed_count" class="form-label">İki Reservasyon Arası Yıl Sayısı</label>
+                                                    <label for="max_stayed_count" class="form-label">İki Rezervasyon Arası Yıl Sayısı</label>
                                                     <input type="number" class="form-control @error('blocked_year') is-invalid @enderror" required id="blocked_year" name="blocked_year">
                                                     @error('blocked_year')
                                                     <div class="invalid-feedback">{{ $message }}</div>

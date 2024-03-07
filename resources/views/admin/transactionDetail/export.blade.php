@@ -1,7 +1,7 @@
 <table class="table align-items-center mb-0">
     <thead>
     <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Reservasyon ID</th>
+        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Rezervasyon ID</th>
         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Kullanıcı</th>
         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Ödeme Tipi</th>
         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Durum</th>

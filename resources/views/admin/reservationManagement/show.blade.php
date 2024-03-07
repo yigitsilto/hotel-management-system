@@ -41,7 +41,7 @@
                         @method('PUT')
                         <div class="row">
                             <div class="col-4">
-                                <label for="reservation_status">Reservasyon Durumu</label>
+                                <label for="reservation_status">Rezervasyon Durumu</label>
                                 <select name="reservation_status" class="form-control" id="reservation_status">
                                     @foreach(\App\Enums\ReservationStatusEnum::getValues() as $key => $item)
                                         <option value="{{$key}}" @if($key == $reservation->reservation_status) selected @endif>{{$item}}</option>
@@ -136,7 +136,7 @@
                     <div class="card-header pb-0 p-3">
                         <div class="row">
                             <div class="col-md-8 d-flex align-items-center">
-                                <h6 class="mb-0">Reservasyon Bilgisi</h6>
+                                <h6 class="mb-0">Rezervasyon Bilgisi</h6>
                             </div>
 
                         </div>
