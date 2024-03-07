@@ -14,7 +14,12 @@ class PaymentExport implements FromView
     public function view(): View
     {
         return view('admin.transactionDetail.export', [
-            'details' => TransactionDetail::query()->with(['reservation', 'reservation.user'])->whereHas('reservation')->whereHas('reservation.user')->get()
+            'details' => TransactionDetail::query()
+                ->with(['reservation', 'reservation.user'])
+                ->whereHas('reservation')
+                ->whereHas('reservation.user')
+                ->has('reservation') // sadece reservation ilişkisi olanları al
+                ->get()
         ]);
     }
 }
