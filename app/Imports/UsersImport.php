@@ -46,19 +46,22 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQu
             return null;
         }
 
-        $user = User::where('email', $row['eposta'])->first();
+        //$user = User::where('email', $row['eposta'])->first();
 
-        if($user){
-            FailedRow::query()->create([
-                'reason' => 'Bu eposta adresi ile kayıtlı kullanıcı zaten var',
-                'value' => $row['tc'] . " ". $row['eposta'],
-                'row_number' => 0
-            ]);
-            return null;
-        }
+//        if($user){
+//            FailedRow::query()->create([
+//                'reason' => 'Bu eposta adresi ile kayıtlı kullanıcı zaten var',
+//                'value' => $row['tc'] . " ". $row['eposta'],
+//                'row_number' => 0
+//            ]);
+//            return null;
+//        }
 
         // validate phone number without 0 at the beginning
-        if(strlen($row['telefon']) != 10){
+        $phone = preg_replace('/[^0-9]/', '', $row['telefon']); // Sadece rakamları al
+        $phone = ltrim($phone, '0');
+
+        if(strlen($phone) != 10){
             FailedRow::query()->create([
                 'reason' => 'Telefon numarası başında 0 olmadan 10 haneli olmalıdır.',
                 'value' => $row['telefon'] . " ". $row['eposta'],
@@ -71,7 +74,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQu
               'name'     => $row['adsoyad'],
               'identity_number'    => $row['tc'],
               'email' => $row['eposta'],
-              'phone_number' => $row['telefon'],
+              'phone_number' => $phone,
               'role' => 'USER',
               'password' => Hash::make(12121221128997645),
               'sms_verified_at' => null,
