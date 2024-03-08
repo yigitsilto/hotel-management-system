@@ -68,7 +68,7 @@ class RezervationManagementController extends Controller
             $reservations->where('id', $request->id);
         }
 
-        if ($request->has('searchKey')) {
+        if ($request->has('searchKey') && !empty($request->searchKey)) {
             $searchKey = strtolower($request->input('searchKey'));
 
 
@@ -79,6 +79,22 @@ class RezervationManagementController extends Controller
                     ->orWhereRaw('LOWER(bank_transfer_code) like ?', ['%' . $searchKey . '%']);
             });
         }
+
+        if ($request->has('checkIn') && !empty($request->checkIn) && empty($request->checkOut)) {
+            $reservations->where('check_in_date', $request->checkIn);
+        }
+
+        if ($request->has('checkIn') && !empty($request->checkIn) && !empty($request->checkOut)) {
+                $reservations->where(function ($q) use($request) {
+                    $q->whereBetween('check_in_date', [$request->checkIn, $request->checkOut])
+                        ->orWhereBetween('check_out_date', [$request->checkIn, $request->checkOut]);
+            });
+        }
+
+        if (!empty($request->checkOut) && empty($request->checkIn)) {
+            $reservations->where('check_out_date', $request->checkOut);
+        }
+
 
 
 

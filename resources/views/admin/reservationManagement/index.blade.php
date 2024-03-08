@@ -20,13 +20,19 @@
                                 <form action="" method="GET">
 
                                     <div class="row p-4">
-                                        <div class="col-2">
+                                        <div class="col-md-1 col-sm-12">
                                             <input type="text" value="{{Request::get('idKey')}}" placeholder="ID..." name="id" class="form-control">
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-md-2 col-sm-12">
                                             <input type="text" value="{{Request::get('searchKey')}}" placeholder="Ara..." name="searchKey" class="form-control">
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-md-2 col-sm-12">
+                                            <input type="date" value="{{Request::get('checkIn')}}"  name="checkIn" class="form-control">
+                                        </div>
+                                        <div class="col-md-2 col-sm-12">
+                                            <input type="date" value="{{Request::get('checkOut')}}"  name="checkOut" class="form-control">
+                                        </div>
+                                        <div class="col-md-1 col-sm-12">
                                             <select name="statusKey" class="form-control" id="">
                                                 <option value="all" {{ Request::get('statusKey') == 'all' ? 'selected' : '' }}>Hepsi</option>
                                                 @foreach(\App\Enums\ReservationStatusEnum::getValues() as $enum)
@@ -37,11 +43,11 @@
                                             </select>
 
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-md-2 col-sm-12">
                                             <button type="submit" class="btn btn-primary" style="width: 100%">Filtrele</button>
                                         </div>
 
-                                        <div class="col-3">
+                                        <div class="col-md-2 col-sm-12">
                                             <a href="{{route('reservation.index')}}" style="width: 100%" class="btn btn-secondary">Sıfırla</a>
                                         </div>
 
