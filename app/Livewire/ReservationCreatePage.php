@@ -138,9 +138,9 @@ class ReservationCreatePage extends Component
             $this->guestCount = $isRoomAvailable['availableMaxGuestCount'];
 
             if ($isRoomAvailable['availableMaxGuestCount'] < 1){
-//                $this->addError('room_id', 'Seçtiğiniz tarihler arası müsaitlik bulunmamaktadır');
-//                $this->check_out_date = null;
-//                $this->check_in_date = null;
+                $this->addError('room_id', 'Seçtiğiniz tarihler arası müsaitlik bulunmamaktadır');
+                $this->check_out_date = null;
+                $this->check_in_date = null;
             }
 
             if (!$isRoomAvailable['status']) {
