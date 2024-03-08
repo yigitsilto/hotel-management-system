@@ -288,29 +288,34 @@
                                     </div>
                                 </div>
 
-                                <!-- Kişi Sayısı -->
-                                <div class="col-md-6">
-                                    <label for="guestSize">Kişi Sayısı:</label>
-                                    <select class="form-control" id="guestSize" wire:model.live="guestSize">
-                                        @for ($i = 1; $i <= $room->capacity; $i++)
-                                            <option value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
-                                    </select>
-                                    @error('guestSize') <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>
+                              @if(!empty($check_out_date) && !empty($check_in_date))
 
-                                <!-- Not -->
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="special_requests">Not:</label>
-                                        <input type="text" class="form-control" id="note" name="special_requests"
-                                               wire:model="special_requests">
-                                        @error('special_requests') <span
-                                                class="text-danger">{{ $message }}</span> @enderror
+
+                                    <!-- Kişi Sayısı -->
+                                    <div class="col-md-6">
+                                        <label for="guestSize">Kişi Sayısı:</label>
+                                        <select class="form-control" id="guestSize" wire:model.live="guestSize">
+                                            @for ($i = 1; $i <= $guestCount; $i++)
+                                                <option value="{{ $i }}">{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                        @error('guestSize') <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
-                                </div>
+
+                                    <!-- Not -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="special_requests">Not:</label>
+                                            <input type="text" class="form-control" id="note" name="special_requests"
+                                                   wire:model="special_requests">
+                                            @error('special_requests') <span
+                                                class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+                                    </div>
+                              @endif
                             </div>
 
+                            @if(!empty($check_out_date) && !empty($check_in_date))
 
                             <div class="row">
                                 @if($guestSize > 0)
@@ -355,7 +360,7 @@
                                 @endfor
 
                             </div>
-
+                            @endif
 
                         </div>
                     </div>
@@ -601,30 +606,34 @@
         }
 
         function initDate() {
-            var checkInDateInput = document.getElementById("check_in_date");
-            var checkOutDateInput = document.getElementById("check_out_date");
+                var checkInDateInput = document.getElementById("check_in_date");
+                var checkOutDateInput = document.getElementById("check_out_date");
 
-            // Bugünden önceki tarihleri pasif yapmak için
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-            var yyyy = today.getFullYear();
-            today = yyyy + '-' + mm + '-' + dd;
+                // Bugünden önceki tarihleri pasif yapmak için
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+                var yyyy = today.getFullYear();
+                today = yyyy + '-' + mm + '-' + dd;
 
-            checkInDateInput.setAttribute("min", today);
-            checkOutDateInput.setAttribute("min", today);
 
-            checkInDateInput.addEventListener("change", function () {
-                var checkInDate = new Date(this.value);
-                var checkOutDate = new Date(checkOutDateInput.value);
+                // Başlangıç min değeri 1 Mayıs olarak ayarlanıyor, ancak bugünün tarihine göre değiştiriliyor
+                var startDate = (mm < '05' || (mm === '05' && dd < '01')) ? '2024-05-01' : today;
 
-                if (checkInDate > checkOutDate) {
-                    checkOutDateInput.value = this.value;
-                }
+                checkInDateInput.setAttribute("min", startDate);
+                checkOutDateInput.setAttribute("min", startDate);
 
-                checkOutDateInput.setAttribute("min", this.value);
-                checkOutDateInput.disabled = false;
-            });
+                checkInDateInput.addEventListener("change", function () {
+                    var checkInDate = new Date(this.value);
+                    var checkOutDate = new Date(checkOutDateInput.value);
+
+                    if (checkInDate > checkOutDate) {
+                        checkOutDateInput.value = this.value;
+                    }
+
+                    checkOutDateInput.setAttribute("min", this.value);
+                    checkOutDateInput.disabled = false;
+                });
         }
 
 

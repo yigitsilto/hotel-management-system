@@ -65,6 +65,8 @@ class ReservationCreatePage extends Component
     private SmsService $smsService;
     private $reservation;
 
+    public $guestCount = 1;
+
     public function updatedGuestSize()
     {
         // guests dizisini guestSize'a uygun olarak güncelle
@@ -114,7 +116,11 @@ class ReservationCreatePage extends Component
             $this->guests[] = ['name' => auth()->user()->name, 'age' => calculateAge(auth()->user()->birthday), 'tc' => auth()->user()->identity_number ];
 
         }
+
+        $this->guestCount = $this->room->capacity;
     }
+
+
 
     public function render()
     {
@@ -128,6 +134,15 @@ class ReservationCreatePage extends Component
 
             $isRoomAvailable = $this->reservationControlService->isRoomAvailable($this->room, $this->check_in_date,
                                                                                  $this->check_out_date, $this->guests);
+
+//            $this->guestCount = $isRoomAvailable['availableMaxGuestCount'];
+            $this->guestCount = 6;
+
+            if ($isRoomAvailable['availableMaxGuestCount'] < 1){
+//                $this->addError('room_id', 'Seçtiğiniz tarihler arası müsaitlik bulunmamaktadır');
+//                $this->check_out_date = null;
+//                $this->check_in_date = null;
+            }
 
             if (!$isRoomAvailable['status']) {
                 foreach ($isRoomAvailable['errors'] as $error) {
@@ -278,6 +293,23 @@ class ReservationCreatePage extends Component
 
             $isRoomAvailable = $this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
                                                                                  $this->check_out_date, $this->guests);
+
+
+            $availableCapac = $isRoomAvailable['availableMaxGuestCount'];
+
+            if ($availableCapac < 1){
+                $this->addError('guests', 'Bu tarihler için müsaitlik bulunmamaktadır.');
+                return;
+            }
+
+            $sumAvailableCapAndGuest = count($this->guests);
+
+            if ($sumAvailableCapAndGuest > $availableCapac) {
+                $this->addError('guests', 'Bu tarihler için maksimum '. $availableCapac . ' kadar kişi ekleyebilirsiniz.');
+                return;
+            }
+
+
 
             if (!$isRoomAvailable['status']) {
                 foreach ($isRoomAvailable['errors'] as $error) {

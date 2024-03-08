@@ -80,6 +80,7 @@ class RoomController extends Controller
                              'price' => $request->price,
                              'is_available' => $request->is_available,
                              'same_room_count' => $request->same_room_count,
+            'max_person' => $request->max_person
                          ]);
 
         $this->createImage($request, $room, $hotel->name);
@@ -157,6 +158,7 @@ class RoomController extends Controller
         $room->price = $validated['price'];
         $room->is_available = $validated['is_available'];
         $room->same_room_count = $validated['same_room_count'];
+        $room->max_person = $validated['max_person'];
 
         if ($request->hasFile('image')) {
             $this->createImage($request, $room, $room->hotel->name);

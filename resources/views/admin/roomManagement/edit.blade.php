@@ -89,11 +89,20 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label for="same_room_count" class="form-label">Aynı odadan kaç tane var ?</label>
                                                     <input type="number" class="form-control @error('same_room_count') is-invalid @enderror" id="same_room_count" value="{{$room->same_room_count}}" required name="same_room_count">
                                                     @error('same_room_count')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="mb-3">
+                                                    <label for="max_person" class="form-label">Maksimum Kişi Sayısı Bir Oda İçin</label>
+                                                    <input type="number" class="form-control @error('max_person') is-invalid @enderror" id="max_person" value="{{$room->max_person}}" required name="max_person">
+                                                    @error('max_person')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>

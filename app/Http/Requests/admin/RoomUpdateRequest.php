@@ -31,6 +31,7 @@ class RoomUpdateRequest extends FormRequest
                 'is_available' => 'required|boolean',
                 'price' => 'required|numeric|min:0',
                 'same_room_count' => 'required|integer|min:1',
+                'max_person' => 'required|integer|min:1',
         ];
     }
 }

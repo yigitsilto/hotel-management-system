@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\ReservationStatusEnum;
 use App\Models\Reservation;
+use App\Models\ReservationGuest;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -14,6 +15,8 @@ class ReservationControlService
     public function isRoomAvailable($room, $checkInDate, $checkOutDate, $guests = null, $userId = null): array
     {
        $userId = $userId != null ? $userId : auth()->id();
+       $mayCheck = $this->mayCheck($checkInDate);
+
         // oda rezervasyon sayısı kontrolü
         $reservationCountCheck = $this->checkReservationCountAvailability($room, $checkInDate, $checkOutDate);
 
@@ -35,12 +38,67 @@ class ReservationControlService
 
         $guestCheck = $this->checkGuestsMonthAvailability($room, $checkInDate, $checkOutDate, $guests);
 
-        $check = $reservationCountCheck && $monthsAvailabilityCheck && $maxDayCountCheck && $parentCheck && $guestCheck;
+        $check = $reservationCountCheck && $monthsAvailabilityCheck && $maxDayCountCheck && $parentCheck && $guestCheck && $mayCheck;
 
         return [
             'status' => $check,
-            'errors' => $this->errors
+            'errors' => $this->errors,
+            'availableMaxGuestCount' => $this->checkAvailableMaxGuestCount($room, $checkInDate, $checkOutDate)
         ];
+    }
+
+    public function checkAvailableMaxGuestCount($room, $checkInDate, $checkOutDate)
+    {
+        $reservations = Reservation::query()
+            ->where('room_id', $room->id)
+            ->where(function ($query) use ($checkInDate, $checkOutDate) {
+                $query->where(function ($q) use ($checkInDate, $checkOutDate) {
+                    $q->where('check_in_date', '<', $checkOutDate)
+                        ->where('check_out_date', '>', $checkInDate);
+                })->orWhere(function ($q) use ($checkInDate, $checkOutDate) {
+                    $q->whereBetween('check_in_date', [$checkInDate, $checkOutDate])
+                        ->orWhereBetween('check_out_date', [$checkInDate, $checkOutDate]);
+                });
+            })
+            ->where('reservation_status', '!=', ReservationStatusEnum::Rejected->name)
+            ->where('payment_status', true)
+            ->pluck('id');
+
+        $reservationGuestCount = ReservationGuest::query()->whereIn('reservation_id', $reservations)->count();
+        $maxCapacity = $room->max_person;
+        $availableCapacity = $maxCapacity - $reservationGuestCount;
+
+
+        if ($availableCapacity >= $room->capacity) {
+            return $room->capacity;
+        }
+
+        return $availableCapacity;
+
+
+    }
+
+    public function mayCheck($checkInDate){
+        $checkInDateCarbon = Carbon::parse($checkInDate);
+
+// Bugünün tarihi
+        $today = Carbon::now();
+
+
+// 1 Mayıs'ı temsil eden bir Carbon nesnesi oluşturuyoruz
+        $mayFirst = Carbon::createFromDate($today->year, 4, 1);
+
+// $checkInDate, 1 Mayıs'tan önce mi kontrol ediyoruz
+        if ($checkInDateCarbon->lessThan($mayFirst)) {
+            // $checkInDate 1 Mayıs'tan önceyse buraya girer
+            // Burada gerekli işlemleri yapabilirsiniz
+            // Örneğin, hata mesajı döndürebilir veya isteği reddedebilirsiniz
+            // Örnek olarak bir hata mesajı döndürüyorum:
+            $this->errors[] = '1 Mayıstan önce rezervasyon açık değildir.';
+            return false;
+        }
+
+        return true;
     }
     public function checkGuestsMonthAvailability($room, $checkInDate, $checkOutDate, $guests) {
 
