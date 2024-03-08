@@ -58,7 +58,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQu
 //        }
 
 
-        $nonEmptyPhone =  str_replace(' ', '',  $row['teleon']);
+        $nonEmptyPhone =  str_replace(' ', '',  $row['telefon']);
         $phone = substr($nonEmptyPhone, -10);
 
 
