@@ -57,14 +57,15 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQu
 //            return null;
 //        }
 
-        // validate phone number without 0 at the beginning
-        $phone = preg_replace('/[^0-9]/', '', $row['telefon']); // Sadece rakamları al
-        $phone = ltrim($phone, '0');
+
+        $nonEmptyPhone =  str_replace(' ', '',  $row['teleon']);
+        $phone = substr($nonEmptyPhone, -10);
+
 
         if(strlen($phone) != 10){
             FailedRow::query()->create([
                 'reason' => 'Telefon numarası başında 0 olmadan 10 haneli olmalıdır.',
-                'value' => $row['telefon'] . " ". $row['eposta'],
+                'value' => $row['telefon'] . " ". $row['eposta'] . " - ". $phone,
                 'row_number' => 0
             ]);
             return null;
