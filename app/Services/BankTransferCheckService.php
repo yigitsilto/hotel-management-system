@@ -122,7 +122,6 @@ class BankTransferCheckService
         $resChecks = \App\Models\Reservation::query()
             ->where('reservation_status', ReservationStatusEnum::Pending->name)
             ->where('payment_method', 'bank_transfer')
-            ->where('id', 55)
             ->get();
 
         $current_time = Carbon::now();
