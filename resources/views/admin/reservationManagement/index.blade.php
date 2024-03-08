@@ -21,18 +21,35 @@
 
                                     <div class="row p-4">
                                         <div class="col-md-1 col-sm-12">
+                                            <label for="">ID</label>
                                             <input type="text" value="{{Request::get('idKey')}}" placeholder="ID..." name="id" class="form-control">
                                         </div>
                                         <div class="col-md-2 col-sm-12">
+                                            <label for="">Ara</label>
                                             <input type="text" value="{{Request::get('searchKey')}}" placeholder="Ara..." name="searchKey" class="form-control">
                                         </div>
-                                        <div class="col-md-2 col-sm-12">
+                                        <div class="col-md-1 col-sm-12">
+                                            <label for="">Giriş</label>
                                             <input type="date" value="{{Request::get('checkIn')}}"  name="checkIn" class="form-control">
                                         </div>
-                                        <div class="col-md-2 col-sm-12">
+                                        <div class="col-md-1 col-sm-12">
+                                            <label for="">Çıkış</label>
                                             <input type="date" value="{{Request::get('checkOut')}}"  name="checkOut" class="form-control">
                                         </div>
+                                        <div class="col-md-2 col-sm-12">
+                                            <label for="">Oda</label>
+                                            <select name="roomId" class="form-control" id="">
+                                                <option value="all" {{ Request::get('roomId') == 'all' ? 'selected' : '' }}>Hepsi</option>
+                                                @foreach(\App\Models\Room::all() as $item)
+                                                    <option value="{{$item->id}}" {{ Request::get('roomId') == $item->id ? 'selected' : '' }}>
+                                                       {{$item->hotel->name}} - {{ $item->title }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
                                         <div class="col-md-1 col-sm-12">
+                                            <label for="">Durum</label>
                                             <select name="statusKey" class="form-control" id="">
                                                 <option value="all" {{ Request::get('statusKey') == 'all' ? 'selected' : '' }}>Hepsi</option>
                                                 @foreach(\App\Enums\ReservationStatusEnum::getValues() as $enum)
@@ -44,10 +61,12 @@
 
                                         </div>
                                         <div class="col-md-2 col-sm-12">
+                                            <label for=""></label>
                                             <button type="submit" class="btn btn-primary" style="width: 100%">Filtrele</button>
                                         </div>
 
                                         <div class="col-md-2 col-sm-12">
+                                            <label for=""></label>
                                             <a href="{{route('reservation.index')}}" style="width: 100%" class="btn btn-secondary">Sıfırla</a>
                                         </div>
 
@@ -65,6 +84,7 @@
                                     </div>
                             </div>
                             <div class="table-responsive p-0">
+                                <h6 class="p-3">Toplam Kayıt : {{$reservations->total()}}</h6>
                                 <table class="table align-items-center mb-0">
                                     <thead>
                                     <tr>

@@ -14,6 +14,7 @@ use App\Models\Reservation;
 use App\Models\Room;
 use App\Services\SmsService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -95,10 +96,20 @@ class RezervationManagementController extends Controller
             $reservations->where('check_out_date', $request->checkOut);
         }
 
+        if ($request->has('roomId') && !empty($request->roomId)) {
+            if ($request->roomId != 'all'){
+                $reservations->where('room_id', $request->roomId);
+
+            }
+        }
+
 
 
 
         $reservations = $reservations->paginate(12);
+
+
+
 
 
         return view('admin.reservationManagement.index', compact('reservations'));
@@ -179,6 +190,21 @@ class RezervationManagementController extends Controller
 
     public function exportExcelPayment(){
         return Excel::download(new PaymentExport(), 'payment.xlsx');
+
+    }
+
+    public function groupByList(Request $request){
+
+        $checkIn = $request->input('checkIn');
+        $checkOut = $request->input('checkOut');
+
+        // Rezervasyonları tarihlerine göre gruplamak için sorguyu oluşturun
+        $reservations = Reservation::query()
+            ->select('check_in_date', 'check_out_date', DB::raw('COUNT(*) as reservation_count'))
+            ->groupBy('check_in_date', 'check_out_date')
+            ->get();
+
+        return view('admin.reservationManagement.groupByList', compact('reservations'));
 
     }
 

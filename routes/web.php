@@ -83,6 +83,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('transcation-management/list', [\App\Http\Controllers\admin\TransactionController::class, 'index'])->name('transaction-management.index');
     Route::get('reservation-excel-export', [\App\Http\Controllers\admin\RezervationManagementController::class, 'exportExcel'])->name('excel-export-reservation');
+    Route::get('reservation-status-group', [\App\Http\Controllers\admin\RezervationManagementController::class, 'groupByList'])->name('groupByList');
     Route::get('payment-excel-export', [\App\Http\Controllers\admin\RezervationManagementController::class, 'exportExcelPayment'])->name('excel-export-payment');
 
 
