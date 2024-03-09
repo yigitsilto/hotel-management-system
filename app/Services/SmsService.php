@@ -132,6 +132,7 @@ class SmsService
             curl_close($curl);
 
         }catch (\Exception $exception) {
+            dd($exception);
             return false;
         }
 
