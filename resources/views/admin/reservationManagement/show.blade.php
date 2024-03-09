@@ -149,7 +149,7 @@
 
                         </div>
                     </div>
-                    <div class="card-body p-3">
+                    <div class="card-body p-3 ">
                         <ul class="list-group">
                             <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Kişi Sayısı: </strong>{{$reservation->number_of_guests}}</li>
                             <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Giriş Tarihi: </strong>{{\Carbon\Carbon::make($reservation->check_in_date)->format('d-m-Y')}}</li>
@@ -159,7 +159,7 @@
                                 <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Not: </strong>{{$reservation->special_requests}}</li>
                             @endif
 
-                            <table class="table table-responsive">
+                            <table class="table table-responsive table ">
                                 <thead>
                                 <tr>
                                     <th>İsim</th>
@@ -167,13 +167,12 @@
                                     <th>Yaş</th>
                                 </tr>
                                 </thead>
-
                                 <tbody>
                                 @foreach($reservation->guests as $guest)
                                     <tr>
-                                        <td>{{$guest->name}}</td>
-                                        <td>{{$guest->tc}}</td>
-                                        <td>{{$guest->age}}</td>
+                                        <td style="font-size: 14px">{{$guest->name}}</td>
+                                        <td style="font-size: 14px">{{$guest->tc}}</td>
+                                        <td style="font-size: 14px">{{$guest->age}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
