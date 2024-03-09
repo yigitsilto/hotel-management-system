@@ -240,6 +240,13 @@ class ReservationCreateManuelPage extends Component
                 if ($item['age'] >= 18) {
                     $above18count++;
                 }
+
+
+                if ($item['age'] < 1){
+                    $this->addError('guests', 'Yaş değeri 0 olamaz');
+                    return;
+                }
+
             }
 
 
