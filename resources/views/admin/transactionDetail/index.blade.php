@@ -49,7 +49,11 @@
 
                             <div class="col-12">
                                 <div class="col-3 p-1">
-                                    <a href="{{route('excel-export-payment')}}" style="width: 100%" class="btn btn-success">Excele Aktar</a>
+                                    <a href="{{ route('excel-export-payment', [
+    'id' => request()->query('id'),
+    'statusKey' => request()->query('statusKey', 'all'),
+    'searchKey' => request()->query('searchKey')
+]) }}" style="width: 100%" class="btn btn-success">Excele Aktar</a>
                                 </div>
 
 

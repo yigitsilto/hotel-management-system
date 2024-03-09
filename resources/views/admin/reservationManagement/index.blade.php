@@ -77,7 +77,14 @@
 
                             <div class="col-12">
                                         <div class="col-3 p-1">
-                                            <a href="{{route('excel-export-reservation')}}" style="width: 100%" class="btn btn-success">Excele Aktar</a>
+                                            <a href="{{ route('excel-export-reservation', [
+    'id' => request()->query('id'),
+    'searchKey' => request()->query('searchKey'),
+    'checkIn' => request()->query('checkIn'),
+    'checkOut' => request()->query('checkOut'),
+    'roomId' => request()->query('roomId', 'all'),
+    'statusKey' => request()->query('statusKey')
+]) }}" style="width: 100%" class="btn btn-success">Excele Aktar</a>
                                         </div>
 
 

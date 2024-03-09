@@ -12,6 +12,7 @@ use App\Models\AuthorizedHotel;
 use App\Models\Hotel;
 use App\Models\Reservation;
 use App\Models\Room;
+use App\Models\TransactionDetail;
 use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -110,8 +111,6 @@ class RezervationManagementController extends Controller
 
 
 
-
-
         return view('admin.reservationManagement.index', compact('reservations'));
     }
 
@@ -183,13 +182,124 @@ class RezervationManagementController extends Controller
     }
 
 
-    public function exportExcel(){
+    public function exportExcel(Request $request){
 
-        return Excel::download(new ReservationExport(), 'reservation.xlsx');
+        if (auth()->user()->role == 'ADMIN') {
+
+            $reservations = Reservation::query()
+                ->with([
+                    'room',
+                    'room.hotel'
+                ])
+                ->orderBy('created_at', 'desc');
+
+        } else {
+            $authroizedHotels = AuthorizedHotel::query()
+                ->where('user_id', auth()->id())
+                ->get();
+
+
+            $reservations = Reservation::query()
+                ->with([
+                    'room',
+                    'room.hotel' => function ($query) use ($authroizedHotels) {
+                        $query->whereIn('id', $authroizedHotels->pluck('hotel_id'));
+                    },
+                ])
+                ->whereHas('room.hotel', function ($query) use ($authroizedHotels) {
+                    $query->whereIn('id', $authroizedHotels->pluck('hotel_id'));
+                })
+                ->orderBy('created_at', 'desc');
+
+        }
+
+        if ($request->has('statusKey') && $request->statusKey != 'all' && !empty($request->statusKey)) {
+            $reservations->where('reservation_status', $request->statusKey);
+        }
+
+        if ($request->has('id') && !empty($request->id)) {
+            $reservations->where('id', $request->id);
+        }
+
+        if ($request->has('searchKey') && !empty($request->searchKey)) {
+            $searchKey = strtolower($request->input('searchKey'));
+
+
+            $reservations->whereHas('user', function ($query) use ($searchKey) {
+                $query->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
+                    ->orWhereRaw('LOWER(identity_number) like ?', ['%' . $searchKey . '%'])
+                    ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%'])
+                    ->orWhereRaw('LOWER(bank_transfer_code) like ?', ['%' . $searchKey . '%']);
+            });
+        }
+
+        if ($request->has('checkIn') && !empty($request->checkIn) && empty($request->checkOut)) {
+            $reservations->where('check_in_date', $request->checkIn);
+        }
+
+        if ($request->has('checkIn') && !empty($request->checkIn) && !empty($request->checkOut)) {
+            $reservations->where(function ($q) use($request) {
+                $q->whereBetween('check_in_date', [$request->checkIn, $request->checkOut])
+                    ->orWhereBetween('check_out_date', [$request->checkIn, $request->checkOut]);
+            });
+        }
+
+        if (!empty($request->checkOut) && empty($request->checkIn)) {
+            $reservations->where('check_out_date', $request->checkOut);
+        }
+
+        if ($request->has('roomId') && !empty($request->roomId)) {
+            if ($request->roomId != 'all'){
+                $reservations->where('room_id', $request->roomId);
+
+            }
+        }
+
+
+
+
+        $reservations = $reservations->get();
+
+
+        return Excel::download(new ReservationExport($reservations), 'reservation.xlsx');
     }
 
-    public function exportExcelPayment(){
-        return Excel::download(new PaymentExport(), 'payment.xlsx');
+    public function exportExcelPayment(Request $request){
+
+        $details = TransactionDetail::query()->with('reservation')->whereHas('reservation')
+            ->whereHas('reservation.user');
+
+        if ($request->has('statusKey') && $request->statusKey != 'all' && !empty($request->statusKey)) {
+            $details->where('status', $request->statusKey);
+        }
+
+        if ($request->has('id') && !empty($request->id)) {
+            $details->whereHas('reservation', function ($q) use($request) {
+                $q->where('id', $request->id);
+            });
+        }
+
+        if ($request->has('searchKey') && !empty($request->searchKey)) {
+            $searchKey = $request->input('searchKey');
+
+            $details->where(function ($query) use ($searchKey) {
+                $query->whereHas('reservation.user', function ($q) use ($searchKey) {
+                    $q->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
+                        ->orWhereRaw('LOWER(identity_number) like ?', ['%' . $searchKey . '%'])
+                        ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%'])
+                        ->orWhereRaw('LOWER(bank_transfer_code) like ?', ['%' . $searchKey . '%']);
+                });
+            });
+        }
+
+        $details->orderBy('created_at', 'desc');
+
+
+        $details = $details->get();
+
+
+
+        return Excel::download(new PaymentExport($details), 'payment.xlsx');
 
     }
 
