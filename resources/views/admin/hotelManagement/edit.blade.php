@@ -16,7 +16,7 @@
                         </div>
                         <div class="card-body p-3">
                             <div class="row">
-                                <div class="col-2 mt-2">
+                                <div class="col-md-2 col-lg-2 col-sm-12 mt-2">
                                     <div id="image-preview-container">
                                         <img src="{{ asset($hotel->image) }}" alt="img-blur-shadow"
                                              style="width: 100%; height: 150px; object-fit: cover"
@@ -24,7 +24,7 @@
                                     </div>
 
                                 </div>
-                                <div class="col-10">
+                                <div class="col-lg-10 col-md-10 col-sm-12">
                                     <form action="{{ route('hotel-management.update', $hotel->id) }}"
                                           enctype="multipart/form-data" method="post">
                                         @csrf

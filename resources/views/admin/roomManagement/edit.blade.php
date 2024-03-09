@@ -14,7 +14,7 @@
                         </div>
                         <div class="card-body p-3">
                             <div class="row">
-                                <div class="col-3 mt-2">
+                                <div class="col-md-3 col-lg-3 col-sm-12 mt-2">
                                     <div id="image-preview-container">
                                         <div class="text-white" id="preview-text">
                                             <img src="{{ asset($room->base_image) }}" alt="img-blur-shadow"
@@ -24,7 +24,7 @@
                                     </div>
 
                                 </div>
-                                <div class="col-9">
+                                <div class="col-lg-9 col-md-9 col-sm-12">
                                     <form action="{{ route('room-management.update', $room->id) }}" enctype="multipart/form-data" method="post">
                                         @method('PUT')
                                         @csrf

@@ -29,14 +29,14 @@
                                <form action="" method="GET">
 
                                    <div class="row p-4">
-                                       <div class="col-6">
+                                       <div class="col-md-6 col-sm-12 col-lg-6 pb-3">
                                            <input type="text" value="{{Request::get('searchKey')}}" placeholder="Ara..." name="searchKey" class="form-control">
                                        </div>
-                                       <div class="col-3">
+                                       <div class="col-md-3 col-sm-12 col-lg-3 pb-2">
                                            <button type="submit" class="btn btn-primary" style="width: 100%">Filtrele</button>
                                        </div>
 
-                                       <div class="col-3">
+                                       <div class="col-md-3 col-sm-12 col-lg-3 ">
                                            <a href="{{route('user.index')}}" style="width: 100%" class="btn btn-secondary">Sıfırla</a>
                                        </div>
 

@@ -8,11 +8,11 @@
                     <div class="card mb-4">
                         <div class="card-header pb-0">
                             <div class="row mt-3">
-                                <div class="col-10">
+                                <div class="col-md-10 col-sm-12 col-lg-10">
                                     <h6>{{$hotel->name}} - Kayıtlı Oda Bilgileri</h6>
                                     <p class="text-sm">Sisteme kayıt ettiğiniz otelin oda bilgilerini içerir.</p>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-md-2 col-lg-2 col-sm-12">
                                   @if(auth()->user()->role == 'ADMIN')
                                         <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('room-management.create',$hotel->id)}}">
                                             Yeni Oda Kayıdı Ekle
