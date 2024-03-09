@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Reservation;
 use App\Models\Setting;
 use App\Models\SmsVerification;
 use App\Models\User;
@@ -88,7 +89,10 @@ class SmsService
         $gsm = $user->phone_number;
         $msg = Setting::query()->where('key', 'iban_sms')->first()->value;
 
-        $msg .= " Rezervasyon talebinizde ki ödenmesi gereken tutarı açıklama kısmına aşağıda yazan kod ile beraber göndermeyi unutmayınız! Açıklama Kodu: " . $code;
+        $reservation = Reservation::query()->where('bank_transfer_code', $code)->first();
+        $price = moneyFormat(($reservation->total_amount * 30) / 100);
+
+        $msg .= " Rezervasyonun onaylanması için ödenmesi gereketen tutar:  ". $price ."  açıklama kısmına aşağıda yazan kodu eklemeyi göndermeyi unutmayınız. Aksi takdirde iptal edilecektir! Açıklama Kodu: " . $code;
 
         try{
             $curl = curl_init();
