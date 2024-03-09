@@ -150,6 +150,7 @@ class ReservationCreateManuelPage extends Component
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
+        $this->dispatch('refresh-script');
     }
 
     public function calculateTotalPrice()
@@ -386,10 +387,7 @@ class ReservationCreateManuelPage extends Component
         return false;
     }
 
-    public function scriptUpdated()
-    {
-        $this->dispatchBrowserEvent('refresh-script');
-    }
+
 
     private function createReservation(): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
     {

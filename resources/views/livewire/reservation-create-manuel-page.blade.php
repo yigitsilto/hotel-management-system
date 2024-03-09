@@ -532,7 +532,10 @@
         });
 
         document.addEventListener('refresh-script', event => {
-            initDate();
+           setTimeout(function () {
+               $("#user-select").select2();
+           },1000)
         })
+
     </script>
 </div>
