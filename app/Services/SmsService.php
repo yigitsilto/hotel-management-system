@@ -90,9 +90,9 @@ class SmsService
         $msg = Setting::query()->where('key', 'iban_sms')->first()->value;
 
         $reservation = Reservation::query()->where('bank_transfer_code', $code)->first();
-        $price = moneyFormat(($reservation->total_amount * 30) / 100);
+        $price = moneyFormatF(($reservation->total_amount * 30) / 100);
 
-        $msg .= " Rezervasyonun onaylanması için ödenmesi gereketen tutar:  ". $price ."  açıklama kısmına aşağıda yazan kodu eklemeyi göndermeyi unutmayınız. Aksi takdirde iptal edilecektir! Açıklama Kodu: " . $code;
+        $msg .= " Rezervasyonun onaylanması için ödenecek tutar: ". $price ." açıklama kısmına aşağıdaki kodu eklemeyi unutmayınız aksi takdirde iptal edilecektir! Kod: " . $code;
 
         try{
             $curl = curl_init();
@@ -128,6 +128,7 @@ class SmsService
             ));
 
             $response = curl_exec($curl);
+
 
             curl_close($curl);
 

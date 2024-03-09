@@ -9,6 +9,14 @@ if (!function_exists('moneyFormat')) {
     }
 }
 
+if (!function_exists('moneyFormatF')) {
+    function moneyFormatF($value)
+    {
+        return number_format($value, 2, ',', '.') . 'TL';
+    }
+}
+
+
 if (!function_exists('generateUniqueCode')) {
     function generateUniqueCode($userId)
     {
