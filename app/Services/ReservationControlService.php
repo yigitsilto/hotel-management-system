@@ -86,7 +86,7 @@ class ReservationControlService
 
 
 // 1 Mayıs'ı temsil eden bir Carbon nesnesi oluşturuyoruz
-        $mayFirst = Carbon::createFromDate($today->year, 4, 1);
+        $mayFirst = Carbon::createFromDate($today->year, 4, 30);
 
 // $checkInDate, 1 Mayıs'tan önce mi kontrol ediyoruz
         if ($checkInDateCarbon->lessThan($mayFirst)) {
