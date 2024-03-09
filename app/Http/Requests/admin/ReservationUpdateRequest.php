@@ -24,6 +24,7 @@ class ReservationUpdateRequest extends FormRequest
         return [
             'reservation_status' => 'required',
             'paid_amount' => 'required',
+            'total_amount' => 'required',
         ];
     }
 }

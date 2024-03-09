@@ -40,13 +40,21 @@
                         @csrf
                         @method('PUT')
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-2">
                                 <label for="reservation_status">Rezervasyon Durumu</label>
                                 <select name="reservation_status" class="form-control" id="reservation_status">
                                     @foreach(\App\Enums\ReservationStatusEnum::getValues() as $key => $item)
                                         <option value="{{$key}}" @if($key == $reservation->reservation_status) selected @endif>{{$item}}</option>
                                     @endforeach
                                 </select>
+                            </div>
+
+                            <div class="col-2">
+                                <label for="reservation_status">Toplam Ödeme Tutarı</label>
+                                <input type="text" name="total_amount" class="form-control" id="total_amount" value="{{$reservation->total_amount}}">
+                                @error('total_amount')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="col-4">

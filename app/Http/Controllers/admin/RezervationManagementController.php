@@ -168,7 +168,8 @@ class RezervationManagementController extends Controller
 
         $reservation->update([
             'reservation_status' => $request->validated()['reservation_status'],
-            'paid_amount' => $request->validated()['paid_amount']
+            'paid_amount' => $request->validated()['paid_amount'],
+            'total_amount' => $request->validated()['total_amount']
         ]);
 
 
