@@ -3,6 +3,8 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- Ek kütüphane bağlantıları -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.min.js"></script>
 
     <style>
         /* Absolute Center Spinner */
@@ -289,8 +291,8 @@
                                 </div>
 
                                 <div class="col-md-12">
-                                    <label for="user">Kullanıcı Seç</label>
-                                    <select class="form-control" id="user" wire:model.live="user">
+                                    <label for="user-select">Kullanıcı Seç</label>
+                                    <select class="form-control" id="user-select" wire:model.live="user">
                                         <option value="">Seçiniz</option>
                                         @foreach($users as $user)
                                             <option value="{{ $user->id }}">{{ $user->name }} {{ $user->surname }}</option>
@@ -473,6 +475,10 @@
 
     <script>
 
+        $(function () {
+            $("#user-select").select2();
+        });
+
         document.addEventListener('creditCardRedirection', function () {
             setTimeout(function () {
                 document.getElementsByClassName("loading")[0].classList.remove("d-none");
@@ -520,6 +526,8 @@
         document.addEventListener("DOMContentLoaded", function () {
 
             initDate();
+
+            $("#user-select").select2();
 
         });
 
