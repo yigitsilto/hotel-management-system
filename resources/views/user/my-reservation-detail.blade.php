@@ -123,25 +123,27 @@
                                 <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Not: </strong>{{$reservation->special_requests}}</li>
                             @endif
 
-                            <table class="table table-responsive">
-                                <thead>
-                                <tr>
-                                    <th>İsim</th>
-                                    <th>T.C.</th>
-                                    <th>Yaş</th>
-                                </tr>
-                                </thead>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>İsim</th>
+                                <th>T.C.</th>
+                                <th>Yaş</th>
+                            </tr>
+                            </thead>
 
-                                <tbody>
-                                @foreach($reservation->guests as $guest)
-                                    <tr>
-                                        <td>{{$guest->name}}</td>
-                                        <td>{{$guest->tc}}</td>
-                                        <td>{{$guest->age}}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                            <tbody>
+                            @foreach($reservation->guests as $guest)
+                                <tr>
+                                    <td>{{$guest->name}}</td>
+                                    <td>{{$guest->tc}}</td>
+                                    <td>{{$guest->age}}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
                             <hr>
                         </ul>

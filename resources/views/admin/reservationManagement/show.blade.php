@@ -40,7 +40,7 @@
                         @csrf
                         @method('PUT')
                         <div class="row">
-                            <div class="col-2">
+                            <div class="col-lg-2 col-md-2 col-sm-12">
                                 <label for="reservation_status">Rezervasyon Durumu</label>
                                 <select name="reservation_status" class="form-control" id="reservation_status">
                                     @foreach(\App\Enums\ReservationStatusEnum::getValues() as $key => $item)
@@ -49,7 +49,7 @@
                                 </select>
                             </div>
 
-                            <div class="col-2">
+                            <div class="col-lg-2 col-md-2 col-sm-12">
                                 <label for="reservation_status">Toplam Ödeme Tutarı</label>
                                 <input type="text" name="total_amount" class="form-control" id="total_amount" value="{{$reservation->total_amount}}">
                                 @error('total_amount')
@@ -57,7 +57,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-4">
+                            <div class="col-lg-4 col-md-4 col-sm-12 ">
                                 <label for="reservation_status">Alınan Toplam Ödeme Tutarı</label>
                                 <input type="text" name="paid_amount" class="form-control" id="paid_amount" value="{{$reservation->paid_amount}}">
                                 @error('paid_amount')
@@ -65,7 +65,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-4">
+                            <div class="col-lg-4 col-md-4 col-sm-12 ">
                                 <label for=""></label>
                                 <button  class="form-control btn btn-sm btn-primary mt-1" href="{{route('user-reservation.myReservations.requestCancelReservation', $room->id)}}" role="tab" aria-selected="true">
                                     <svg class="text-dark" width="16px" height="16px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -159,24 +159,26 @@
                                 <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Not: </strong>{{$reservation->special_requests}}</li>
                             @endif
 
-                            <table class="table table-responsive table ">
-                                <thead>
-                                <tr>
-                                    <th>İsim</th>
-                                    <th>T.C.</th>
-                                    <th>Yaş</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($reservation->guests as $guest)
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
                                     <tr>
-                                        <td style="font-size: 14px">{{$guest->name}}</td>
-                                        <td style="font-size: 14px">{{$guest->tc}}</td>
-                                        <td style="font-size: 14px">{{$guest->age}}</td>
+                                        <th>İsim</th>
+                                        <th>T.C.</th>
+                                        <th>Yaş</th>
                                     </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($reservation->guests as $guest)
+                                        <tr>
+                                            <td style="font-size: 14px">{{$guest->name}}</td>
+                                            <td style="font-size: 14px">{{$guest->tc}}</td>
+                                            <td style="font-size: 14px">{{$guest->age}}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
 
                             <hr>
                         </ul>
