@@ -213,8 +213,8 @@ class ReservationCreatePage extends Component
 
         //  12-18 yaş arası misafir var ise her misafir başına 0.5 ücret alınır.
         if ($between12and18Count > 0) {
-//            $extraCharge += $between12and18Count * ($this->room->price / 2);
-            $extraCharge += 0;
+            $extraCharge += $between12and18Count * ($this->room->price / 2);
+//            $extraCharge += 0;
         }
 
         // 18 yaşından büyük misafir kendisi dışında var ise 1 günlük ücret alınır
