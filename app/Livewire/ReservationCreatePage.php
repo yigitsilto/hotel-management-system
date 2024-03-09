@@ -196,7 +196,7 @@ class ReservationCreatePage extends Component
                 $under12Count++;
             }
 
-            if ($age >= 12 && $age < 18) {
+            if ($age >= 13 && $age < 18) {
                 $between12and18Count++;
             }
 
