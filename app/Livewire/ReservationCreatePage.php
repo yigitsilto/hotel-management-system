@@ -179,6 +179,7 @@ class ReservationCreatePage extends Component
 
         $basePrice = $this->room->price * $totalDayCount;
 
+
         // Ek ücretler için başlangıç değeri
         $extraCharge = 0;
 
@@ -190,6 +191,10 @@ class ReservationCreatePage extends Component
         foreach ($this->guests as $guest) {
             if (!isset($guest['age'])) {
                 continue;
+            }
+
+            if ($guest['age'] < 1){
+                $above18Count++;
             }
             $age = $guest['age'];
             if ($age < 12) {
