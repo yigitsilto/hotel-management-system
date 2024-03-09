@@ -265,6 +265,11 @@ class ReservationCreatePage extends Component
                 }
             }
 
+            if ($item['age'] < 1){
+                $this->addError('guests', 'Yaş değeri 0 olamaz');
+                return;
+            }
+
             if ($myselfCount < 1) {
                 $this->addError('guests', '1.Kişi olarak kendinizi sistem deki verileriniz ile eklemelisiniz.');
                 return;

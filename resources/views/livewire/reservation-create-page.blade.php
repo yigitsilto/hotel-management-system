@@ -349,7 +349,7 @@
                                         <div class="col-md-4" wire:key="guests.{{ $i }}.age">
                                             <div class="form-group">
                                                 <label for="guest_age_{{ $i }}">{{$i + 1}}. Kişi Yaş:</label>
-                                                <input  {{$i ==0 ? 'readonly' : ''}} type="number" class="form-control" wire:model.live.debounce.350ms="guests.{{ $i }}.age"
+                                                <input  type="number" class="form-control" wire:model.live.debounce.350ms="guests.{{ $i }}.age"
                                                        id="guest_age_{{ $i }}"
                                                        name="guests.{{ $i }}.age"/>
                                                 @error('guests.'.$i.'.age')
