@@ -155,7 +155,7 @@
                                 {{$room->title}}
                             </h5>
                             <p class="mb-0 text-md">
-                                Bugün Ödenmesi Gereken Ücret: <span
+                                Rezervasyon onayı için ödenmesi gereken kısmi tutar: <span
                                         class="font-weight-bold">{{$totalPriceToPay}}</span>
                             </p>
 
