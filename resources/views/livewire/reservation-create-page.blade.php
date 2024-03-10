@@ -293,7 +293,7 @@
 
                                     <!-- Kişi Sayısı -->
                                 <div class="alert alert-warning pt-2">
-                                    <span>Rezervasyon tarihinizde çocuğunuzun yaşı 13 yaş üstü ise fiyat farkı çıkabilir.</span>
+                                    <span>Rezervasyon tarihinizde çocuğunuzun yaşı 13 yaş ve üzeri ise fiyat farkı çıkabilir.</span>
                                 </div>
                                     <div class="col-md-6">
                                         <label for="guestSize">Kişi Sayısı:</label>
