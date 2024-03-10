@@ -292,6 +292,9 @@
 
 
                                     <!-- Kişi Sayısı -->
+                                <div class="alert alert-warning pt-2">
+                                    <span>Rezervasyon tarihinizde çocuğunuzun yaşı 13 yaş üstü ise fiyat farkı çıkabilir.</span>
+                                </div>
                                     <div class="col-md-6">
                                         <label for="guestSize">Kişi Sayısı:</label>
                                         <select class="form-control" id="guestSize" wire:model.live="guestSize">
