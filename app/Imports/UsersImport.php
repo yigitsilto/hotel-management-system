@@ -43,16 +43,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQu
             return null;
         }
 
-        $user = User::where('phone_number', $row['telefon'])->first();
 
-        if($user){
-            FailedRow::query()->create([
-                'reason' => 'Bu telefon numarası ile kayıtlı kullanıcı zaten var',
-                'value' => $row['telefon'] . " ". $row['eposta'],
-                'row_number' => 0
-            ]);
-            return null;
-        }
 
         //$user = User::where('email', $row['eposta'])->first();
 
@@ -68,6 +59,17 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQu
 
         $nonEmptyPhone =  str_replace(' ', '',  $row['telefon']);
         $phone = substr($nonEmptyPhone, -10);
+
+        $user = User::where('phone_number', $phone)->first();
+
+        if($user){
+            FailedRow::query()->create([
+                'reason' => 'Bu telefon numarası ile kayıtlı kullanıcı zaten var',
+                'value' => $row['telefon'] . " ". $row['eposta'],
+                'row_number' => 0
+            ]);
+            return null;
+        }
 
 
         if(strlen($phone) != 10){
