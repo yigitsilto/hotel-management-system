@@ -20,7 +20,15 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQu
     public function model(array $row)
     {
         // validate rows
-        if($row['adsoyad'] == null || $row['tc'] == null || $row['eposta'] == null || $row['telefon'] == null){
+//        if($row['adsoyad'] == null || $row['tc'] == null || $row['eposta'] == null || $row['telefon'] == null){
+//            return null;
+//        }
+
+        if ($row['eposta'] != null) {
+            return;
+        }
+
+        if($row['adsoyad'] == null || $row['tc'] == null || $row['telefon'] == null){
             return null;
         }
 
@@ -74,7 +82,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQu
         return new User([
               'name'     => $row['adsoyad'],
               'identity_number'    => $row['tc'],
-              'email' => $row['eposta'],
+              'email' => 'noemail@mail.com',
               'phone_number' => $phone,
               'role' => 'USER',
               'password' => Hash::make(12121221128997645),

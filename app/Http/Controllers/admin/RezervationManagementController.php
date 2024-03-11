@@ -190,7 +190,8 @@ class RezervationManagementController extends Controller
             $reservations = Reservation::query()
                 ->with([
                     'room',
-                    'room.hotel'
+                    'room.hotel',
+                    'guests'
                 ])
                 ->orderBy('created_at', 'desc');
 
@@ -203,6 +204,7 @@ class RezervationManagementController extends Controller
             $reservations = Reservation::query()
                 ->with([
                     'room',
+                    'guests',
                     'room.hotel' => function ($query) use ($authroizedHotels) {
                         $query->whereIn('id', $authroizedHotels->pluck('hotel_id'));
                     },

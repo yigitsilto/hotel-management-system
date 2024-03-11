@@ -11,6 +11,7 @@
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Çıkış Tarihi</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Durumu</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Bilgi</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Müşteri Bilgileri</th>
         <th class="text-secondary opacity-7"></th>
     </tr>
     </thead>
@@ -59,10 +60,19 @@
                                                   Kredi Kartı Ödemesi</span>
                 @endif
             </td>
-            <td class="align-middle">
-                <a href="{{route('reservation.show', $item->id)}}" class="btn btn-sm btn-secondary text-secondary text-white font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                    Detay
-                </a>
+
+            <td class="align-middle text-center text-sm" style="font-size: 10px">
+                <ul>
+
+                    @foreach($item->guests as $guest)
+                        <li>İsim: {{$guest->name}}</li>
+                        <li>Yaş: {{$guest->age}}</li>
+                        <li>TC: {{$guest->tc}}</li>
+                        <li>---------------------------</li>
+                    @endforeach
+
+                </ul>
+
             </td>
         </tr>
 
