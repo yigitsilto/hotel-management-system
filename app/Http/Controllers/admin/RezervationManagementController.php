@@ -74,11 +74,17 @@ class RezervationManagementController extends Controller
             $searchKey = strtolower($request->input('searchKey'));
 
 
-            $reservations->whereHas('user', function ($query) use ($searchKey) {
-                $query->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
-                    ->orWhereRaw('LOWER(identity_number) like ?', ['%' . $searchKey . '%'])
-                    ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%'])
-                    ->orWhereRaw('LOWER(bank_transfer_code) like ?', ['%' . $searchKey . '%']);
+            $reservations->where(function ($query) use ($searchKey) {
+                $query->whereHas('user', function ($query) use ($searchKey) {
+                    $query->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
+                        ->orWhereRaw('LOWER(identity_number) like ?', ['%' . $searchKey . '%'])
+                        ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%'])
+                        ->orWhereRaw('LOWER(bank_transfer_code) like ?', ['%' . $searchKey . '%']);
+                })
+                    ->orWhereHas('guests', function ($query) use ($searchKey) {
+                        $query->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
+                            ->orWhereRaw('LOWER(tc) like ?', ['%' . $searchKey . '%']);
+                    });
             });
         }
 
@@ -228,11 +234,17 @@ class RezervationManagementController extends Controller
             $searchKey = strtolower($request->input('searchKey'));
 
 
-            $reservations->whereHas('user', function ($query) use ($searchKey) {
-                $query->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
-                    ->orWhereRaw('LOWER(identity_number) like ?', ['%' . $searchKey . '%'])
-                    ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%'])
-                    ->orWhereRaw('LOWER(bank_transfer_code) like ?', ['%' . $searchKey . '%']);
+            $reservations->where(function ($query) use ($searchKey) {
+                $query->whereHas('user', function ($query) use ($searchKey) {
+                    $query->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
+                        ->orWhereRaw('LOWER(identity_number) like ?', ['%' . $searchKey . '%'])
+                        ->orWhereRaw('LOWER(phone_number) like ?', ['%' . $searchKey . '%'])
+                        ->orWhereRaw('LOWER(bank_transfer_code) like ?', ['%' . $searchKey . '%']);
+                })
+                    ->orWhereHas('guests', function ($query) use ($searchKey) {
+                        $query->whereRaw('LOWER(name) like ?', ['%' . $searchKey . '%'])
+                            ->orWhereRaw('LOWER(tc) like ?', ['%' . $searchKey . '%']);
+                    });
             });
         }
 

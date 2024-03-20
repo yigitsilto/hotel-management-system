@@ -119,7 +119,15 @@
                                                 <p class="text-xs font-weight-bold mb-0">{{$item->room->hotel->name}}</p>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <p class="text-xs font-weight-bold mb-0">{{$item->user->name}}</p>
+                                                <p class="text-xs font-weight-bold mb-0">
+
+                                                    @if($item->user->role != 'USER')
+                                                        Manuel Rez. - {{$item->guests[0]->name}}
+                                                        @else
+                                                        {{$item->user->name}}
+
+                                                    @endif
+                                                </p>
                                             </td>
                                             <td class="align-middle text-center">
                                                 <p class="text-xs font-weight-bold mb-0">{{$item->number_of_guests}}</p>

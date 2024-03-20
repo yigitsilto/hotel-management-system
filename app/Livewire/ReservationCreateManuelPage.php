@@ -52,12 +52,14 @@ class ReservationCreateManuelPage extends Component
     public $lang;
     public $currencyVal;
     public $hash;
+
+    public $total_price;
     protected $listeners = ['refresh-script', 'resetCheckOutDate'];
     protected $rules = [
         'check_in_date' => 'required|date',
         'check_out_date' => 'required|date|after:check_in_date',
         'special_requests' => 'nullable|string',
-        'user' => 'required|exists:users,id',
+        'total_price' => 'required',
         'payment_method' => 'required|in:bank_transfer,credit_card',
         'guests' => 'required|array',
         'guests.*.name' => 'required|string|min:3|max:255',
@@ -110,30 +112,30 @@ class ReservationCreateManuelPage extends Component
         $this->users = User::query()
                            ->get();
 
-        if ($this->check_in_date && $this->check_out_date) {
-            $this->totalPriceToPay = moneyFormat(($this->calculateTotalPrice() * 30) / 100);
-            $this->totalPriceToPayUnformatted = ($this->calculateTotalPrice() * 30) / 100;
-            $this->totalPrice = moneyFormat($this->calculateTotalPrice());
-
-
-            $isRoomAvailable = $this->reservationControlService->isRoomAvailable($this->room, $this->check_in_date,
-                                                                                 $this->check_out_date, $this->guests, $this->user);
-
-            if (!$isRoomAvailable['status']) {
-                foreach ($isRoomAvailable['errors'] as $error) {
-                    $this->addError('room_id', $error);
-                }
-                // $this->check_out_date = null;
-                //$this->check_in_date = null;
-                // $this->scriptUpdated();
-            }
-
-
-        } else {
-            $this->totalPriceToPay = moneyFormat(($this->room->price * 30) / 100);
-            $this->totalPriceToPayUnformatted = ($this->room->price * 30) / 100;
-            $this->totalPrice = moneyFormat($this->room->price);
-        }
+//        if ($this->check_in_date && $this->check_out_date) {
+//            $this->totalPriceToPay = moneyFormat(($this->calculateTotalPrice() * 30) / 100);
+//            $this->totalPriceToPayUnformatted = ($this->calculateTotalPrice() * 30) / 100;
+//            $this->totalPrice = moneyFormat($this->calculateTotalPrice());
+//
+//
+//            $isRoomAvailable = $this->reservationControlService->isRoomAvailable($this->room, $this->check_in_date,
+//                                                                                 $this->check_out_date, $this->guests, $this->user);
+//
+//            if (!$isRoomAvailable['status']) {
+//                foreach ($isRoomAvailable['errors'] as $error) {
+//                    $this->addError('room_id', $error);
+//                }
+//                // $this->check_out_date = null;
+//                //$this->check_in_date = null;
+//                // $this->scriptUpdated();
+//            }
+//
+//
+//        } else {
+//            $this->totalPriceToPay = moneyFormat(($this->room->price * 30) / 100);
+//            $this->totalPriceToPayUnformatted = ($this->room->price * 30) / 100;
+//            $this->totalPrice = moneyFormat($this->room->price);
+//        }
 
 
         $this->guests = array_slice($this->guests, 0, $this->guestSize);
@@ -153,72 +155,72 @@ class ReservationCreateManuelPage extends Component
         $this->dispatch('refresh-script');
     }
 
-    public function calculateTotalPrice()
-    {
-        $checkInDate = Carbon::parse($this->check_in_date);
-        $checkOutDate = Carbon::parse($this->check_out_date);
-        $totalDayCount = $checkInDate->diffInDays($checkOutDate) == 0 ? 1 : $checkInDate->diffInDays($checkOutDate);
-
-        $basePrice = $this->room->price * $totalDayCount;
-
-
-        // Ek ücretler için başlangıç değeri
-        $extraCharge = 0;
-
-        $under12Count = 0;
-        $between12and18Count = 0;
-        $above18Count = 0;
-
-        // find under 12 age guests
-        foreach ($this->guests as $guest) {
-            if (!isset($guest['age'])) {
-                continue;
-            }
-
-            if ($guest['age'] < 1){
-                $above18Count++;
-            }
-
-            $age = $guest['age'];
-            if ($age < 12) {
-                $under12Count++;
-            }
-
-//            if ($age >= 13 && $age < 18) {
-//                $between12and18Count++;
+//    public function calculateTotalPrice()
+//    {
+//        $checkInDate = Carbon::parse($this->check_in_date);
+//        $checkOutDate = Carbon::parse($this->check_out_date);
+//        $totalDayCount = $checkInDate->diffInDays($checkOutDate) == 0 ? 1 : $checkInDate->diffInDays($checkOutDate);
+//
+//        $basePrice = $this->room->price * $totalDayCount;
+//
+//
+//        // Ek ücretler için başlangıç değeri
+//        $extraCharge = 0;
+//
+//        $under12Count = 0;
+//        $between12and18Count = 0;
+//        $above18Count = 0;
+//
+//        // find under 12 age guests
+//        foreach ($this->guests as $guest) {
+//            if (!isset($guest['age'])) {
+//                continue;
 //            }
-
-            if ($age >= 13) {
-                $above18Count++;
-            }
-        }
-
-        // 2 den fazla 12 yaşından küçük misafir var ise her misafir başına 0.5 günlük ücret alınır.
-        if ($under12Count > 2) {
-//            $extraCharge += ($under12Count - 2) * ($this->room->price / 2);
-            $extraCharge += 0;
-        }
-
-        //  12-18 yaş arası misafir var ise her misafir başına 0.5 ücret alınır.
-//        if ($between12and18Count > 0) {
-//            $extraCharge += $between12and18Count * ($this->room->price / 2);
-//            $extraCharge = $extraCharge * $totalDayCount;
-////            $extraCharge += 0;
+//
+//            if ($guest['age'] < 1){
+//                $above18Count++;
+//            }
+//
+//            $age = $guest['age'];
+//            if ($age < 12) {
+//                $under12Count++;
+//            }
+//
+////            if ($age >= 13 && $age < 18) {
+////                $between12and18Count++;
+////            }
+//
+//            if ($age >= 13) {
+//                $above18Count++;
+//            }
 //        }
-
-        // 18 yaşından büyük misafir kendisi dışında var ise 1 günlük ücret alınır
-        if ($above18Count > 1) {
-//            $extraCharge += ($above18Count - 1) * $this->room->price;
-            $extraCharge += ($above18Count - 1) * ($this->room->price / 2);
-            $extraCharge = $extraCharge * $totalDayCount;
-        }
-
-
-
-        $totalPrice = $basePrice + $extraCharge;
-
-        return $totalPrice;
-    }
+//
+//        // 2 den fazla 12 yaşından küçük misafir var ise her misafir başına 0.5 günlük ücret alınır.
+//        if ($under12Count > 2) {
+////            $extraCharge += ($under12Count - 2) * ($this->room->price / 2);
+//            $extraCharge += 0;
+//        }
+//
+//        //  12-18 yaş arası misafir var ise her misafir başına 0.5 ücret alınır.
+////        if ($between12and18Count > 0) {
+////            $extraCharge += $between12and18Count * ($this->room->price / 2);
+////            $extraCharge = $extraCharge * $totalDayCount;
+//////            $extraCharge += 0;
+////        }
+//
+//        // 18 yaşından büyük misafir kendisi dışında var ise 1 günlük ücret alınır
+//        if ($above18Count > 1) {
+////            $extraCharge += ($above18Count - 1) * $this->room->price;
+//            $extraCharge += ($above18Count - 1) * ($this->room->price / 2);
+//            $extraCharge = $extraCharge * $totalDayCount;
+//        }
+//
+//
+//
+//        $totalPrice = $basePrice + $extraCharge;
+//
+//        return $totalPrice;
+//    }
 
     public function save()
     {
@@ -228,6 +230,12 @@ class ReservationCreateManuelPage extends Component
             $this->addError('guests', 'Kişi bilgileri alanı zorunludur.');
             return;
         }
+
+        if (!preg_match('/^\d+(\.\d{1,2})?$/', $this->total_price)) {
+            $this->addError('guests', 'Ödenen tutar formatı hatalı. Virgül değil nokta kullanınız.');
+            return;
+        }
+
 
         try {
 
@@ -273,18 +281,18 @@ class ReservationCreateManuelPage extends Component
             // Kontrol etmek istediğimiz oda bilgisi
             $room = Room::findOrFail($this->room->id);
 
-            $isRoomAvailable = $this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
-                                                                                 $this->check_out_date, $this->guests, $this->user);
+//            $isRoomAvailable = $this->reservationControlService->isRoomAvailable($room, $this->check_in_date,
+//                                                                                 $this->check_out_date, $this->guests, $this->user);
 
-            if (!$isRoomAvailable['status']) {
-                foreach ($isRoomAvailable['errors'] as $error) {
-                    $this->addError('room_id', $error);
-                }
-//                $this->check_out_date = null;
-//                $this->check_in_date = null;
-//                $this->scriptUpdated();
-                return;
-            }
+//            if (!$isRoomAvailable['status']) {
+//                foreach ($isRoomAvailable['errors'] as $error) {
+//                    $this->addError('room_id', $error);
+//                }
+////                $this->check_out_date = null;
+////                $this->check_in_date = null;
+////                $this->scriptUpdated();
+//                return;
+//            }
 
             $this->createReservation()
                  ->guests()
@@ -396,13 +404,13 @@ class ReservationCreateManuelPage extends Component
         $checkOutDate = Carbon::parse($this->check_out_date);
         $totalDayCount = $checkInDate->diffInDays($checkOutDate);
 
-        $totalPriceToPay = $this->calculateTotalPrice();
+        $totalPriceToPay = $this->total_price;
 
 
         $reservation = Reservation::query()
                                   ->create([
                                                'room_id' => $this->room->id,
-                                               'user_id' =>  $this->user,
+                                               'user_id' =>  auth()->user()->id,
                                                'number_of_guests' => $this->guestSize,
                                                'check_in_date' => $this->check_in_date,
                                                'check_out_date' => $this->check_out_date,
