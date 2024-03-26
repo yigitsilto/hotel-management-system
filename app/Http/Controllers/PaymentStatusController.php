@@ -63,7 +63,6 @@ class PaymentStatusController extends Controller
         $reservation = \App\Models\Reservation::query()->withoutGlobalScope('payment_status')->where('id', $oidValue)->first();
 
         if (!empty($reservation)){
-            $reservation?->delete();
 
             $transactionDetail = new TransactionDetail();
             $transactionDetail->payment_method = 'credit_card';
@@ -72,6 +71,10 @@ class PaymentStatusController extends Controller
             $transactionDetail->paid_amount = 0 ;
             $transactionDetail->error_reason = $request->ErrMsg;
             $transactionDetail->save();
+
+            $reservation?->delete();
+
+
         }
 
         $errMsg = $request->ErrMsg;
