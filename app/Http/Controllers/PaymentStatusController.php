@@ -69,7 +69,7 @@ class PaymentStatusController extends Controller
             $transactionDetail->status = false;
             $transactionDetail->reservation_id = $reservation->id;
             $transactionDetail->paid_amount = 0 ;
-            $transactionDetail->error_reason = $request->ErrMsg;
+            $transactionDetail->error_reason = isset($request->ErrMsg) ?  $request->ErrMsg : 'Ödeme hatası';
             $transactionDetail->save();
 
             $reservation?->delete();
