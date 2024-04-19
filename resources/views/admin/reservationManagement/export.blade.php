@@ -12,6 +12,7 @@
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Durumu</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Bilgi</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Müşteri Bilgileri</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">İşlem Tarihi</th>
         <th class="text-secondary opacity-7"></th>
     </tr>
     </thead>
@@ -65,7 +66,6 @@
                                                   Kredi Kartı Ödemesi</span>
                 @endif
             </td>
-
             <td class="align-middle text-center text-sm" style="font-size: 10px">
                 <ul>
 
@@ -78,6 +78,10 @@
 
                 </ul>
 
+            </td>
+
+            <td class="align-middle text-center text-sm">
+                {{\Carbon\Carbon::make($item->created_at)->format('d-m-Y H:i:s')}}
             </td>
         </tr>
 
